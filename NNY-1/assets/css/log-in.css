@@ -1,0 +1,142 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+.login-container {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f4f4f4;
+}
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.login-box h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+.input-group img {
+  position: absolute;
+  left: 10px;
+  width: 24px;
+  height: 24px;
+}
+.input-group input {
+  width: 100%;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  box-sizing: border-box;
+}
+.input-group .toggle-password {
+  position: absolute;
+  right: 20px;
+  cursor: pointer;
+}
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.options label {
+  font-size: 14px;
+}
+.options a {
+  font-size: 14px;
+  color: #9b4caf;
+  text-decoration: none;
+}
+.options a:hover {
+  text-decoration: underline;
+}
+button {
+  width: 100%;
+  padding: 15px;
+  background-color: #9b4caf;
+  border: none;
+  border-radius: 25px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+button:hover {
+  background-color: #800080;
+}
+.divider {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+.divider:before,
+.divider:after {
+  content: "";
+  width: 40%;
+  height: 1px;
+  background-color: #ccc;
+  position: absolute;
+  top: 50%;
+}
+.divider:before {
+  left: 0;
+}
+.divider:after {
+  right: 0;
+}
+.divider span {
+  background-color: #fff;
+  padding: 0 10px;
+  font-size: 14px;
+  color: #777;
+}
+.google-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  color: #444;
+  font-size: 16px;
+  cursor: pointer;
+}
+.google-login img {
+  width: 20px;
+  height: 20px;
+  margin-right: 20px;
+}
+.register-link {
+  text-align: center;
+  font-size: 14px;
+}
+.register-link a {
+  color: #9b4caf;
+  text-decoration: none;
+}
+.register-link a:hover {
+  text-decoration: underline;
+}
+.login-image {
+  width: 50%;
+  background-image: url("/assets/images/hand.png");
+  background-size: cover;
+  background-position: center;
+}

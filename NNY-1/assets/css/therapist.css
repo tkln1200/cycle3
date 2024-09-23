@@ -1,0 +1,79 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#shared-header-patient ul {
+  display: flex;
+  justify-content: flex-end;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+  height: 50px;
+}
+
+#shared-header-patient li {
+  margin-right: 1rem;
+}
+
+#shared-header-patient li:last-child {
+  margin-right: 1rem;
+}
+
+#shared-header-patient a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #333;
+}
+
+#shared-header-patient a:hover {
+  text-decoration: underline;
+}
+
+#shared-header-patient img {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+/*Main section*/
+
+.footer-container {
+  display: flex;
+  padding: 1rem;
+}
+
+.footer-section {
+  flex: 1;
+  margin: 0 1rem;
+}
+
+.footer-section ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section li {
+  margin-top: 1rem;
+}
+
+.footer-section p {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+  text-decoration: none;
+  color: #333;
+}
+
+.footer-section a:hover {
+  text-decoration: underline;
+}
+
+.footer-copyright {
+  text-align: center;
+  margin-top: 20px;
+}

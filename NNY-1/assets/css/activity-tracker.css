@@ -1,0 +1,81 @@
+.activity-tracker-main {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.activity-tracker-section {
+  margin-bottom: 40px;
+}
+
+.activity-tracker-section h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.activity-tracker-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-tracker-form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.activity-tracker-form .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.activity-tracker-form .form-group label {
+  margin-bottom: 5px;
+}
+
+.activity-tracker-form .form-group textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.activity-tracker-form input[type="date"],
+.activity-tracker-form input[type="number"],
+.activity-tracker-form input[type="text"],
+.activity-tracker-form select {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.activity-tracker-form button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.activity-tracker-form button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Vertical layout for Record Eating Habits */
+.vertical-layout .form-group {
+  display: flex;
+  flex-direction: column;
+}
