@@ -46,7 +46,6 @@
       <?php
       include_once ("../footer/patient_footer.php")
       ?>
-
     </footer>
     <script src="../../components/patient/activity-dashboard.js"></script>
   </body>

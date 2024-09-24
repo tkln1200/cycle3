@@ -10,7 +10,7 @@
     <div class="login-container">
       <div class="login-box">
         <h2>Login as a Therapist</h2>
-        <form action="../therapist/patient-list.php" method="get">
+        <form action="../therapist/patient_list.php" method="get">
           <div class="input-group">
             <input type="email" name="email" placeholder="Email" required />
           </div>

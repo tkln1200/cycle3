@@ -4,21 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Therapist Dashboard</title>
-    <link rel="stylesheet" href="/assets/css/patient-list.css" />
+    <link rel="stylesheet" href="../../assets/css/patient-list.css" />
     <link rel="stylesheet" href="../../assets/css/therapist.css" />
-    <link rel="stylesheet" href="/assets/css/shared.css">
+    <link rel="stylesheet" href="../../assets/css/shared.css">
   </head>
   <body>
-    <header>
-      <nav id="shared-header-patient">
-        <ul>
-          <!-- <li><a href="/pages/patient-list.html">Dashboard</a></li> -->
-          <li><a href="/pages/patient-list.html">Patient List</a></li>
-          <li><a href="/pages/group-page.html">Group</a></li>
-          <li><a href="#">Logout</a></li>
-          <li><img src="../assets/images/therapist.jpg" alt="#" /></li>
-        </ul>
-      </nav>
+  <header>
+    <?php include_once ("../navigation/therapist_nav.php")
+    ?> 
     </header>
     <div class="main-content">
       <h2>Patient List</h2>
@@ -51,7 +44,7 @@
           <tbody>
             <tr>
               <td><a href="group-page.html">Group 1</a></td>
-              <td><a href="patient_profile.html">01</a></td>
+              <td><a href="patient_profile.php">01</a></td>
               <td>John Anders </td>
               <td>Depression</td>
               <td>33%</td>
@@ -66,7 +59,7 @@
               <td>
                 <button
                   class="journal-btn"
-                  onclick="location.href='/pages/patient-journal.html'"
+                  onclick="location.href='./patient_profile.php'"
                 >
                   View
                 </button>
@@ -90,7 +83,7 @@
               <td>
                 <button
                   class="journal-btn"
-                  onclick="location.href='/pages/patient-journal.html'"
+                  onclick="location.href='./patient_profile.php'"
                 >
                   View
                 </button>
@@ -99,7 +92,7 @@
             </tr>
             <tr>
               <td><a href="group-page.html">Group 3</a></td>
-              <td><a href="patient_profile.html">03</a></td>
+              <td><a href="patient_profile.php">03</a></td>
               <td>Emma Harris </td>
               <td>Bipolar Disorder</td>
               <td>98%</td>
@@ -114,7 +107,7 @@
               <td>
                 <button
                   class="journal-btn"
-                  onclick="location.href='/pages/patient-journal.html'"
+                  onclick="location.href='./patient_profile.php'"
                 >
                   View
                 </button>
@@ -123,7 +116,7 @@
             </tr>
             <tr></tr>
               <td><a href="group-page.html">Group 2</a></td>
-              <td><a href="patient_profile.html">04</a></td>
+              <td><a href="patient_profile.php">04</a></td>
               <td>James Foster</td>
               <td>Generalized Anxiety Disorder</td>
               <td>58%</td>
@@ -138,7 +131,7 @@
               <td>
                 <button
                   class="journal-btn"
-                  onclick="location.href='/pages/patient-journal.html'"
+                  onclick="location.href='./patient_profile.php'"
                 >
                   View
                 </button>
@@ -177,55 +170,11 @@
             </form>
         </div>
     </div>
-    </div>
-      <footer>
-        <div class="footer-container">
-          <div class="footer-section">
-            <p>Patient Management</p>
-            <ul>
-              <li><a href="#">Paitient List</a></li>
-              <li><a href="#">Paitient Detail</a></li>
-              <li><a href="#">Communication</a></li>
-            </ul>
-          </div>
-          <div class="footer-section">
-            <p>Group Management</p>
-            <ul>
-              <li><a href="#">Group Overview</a></li>
-              <li><a href="#">Create Group</a></li>
-              <li><a href="#">Group Schedule</a></li>
-            </ul>
-          </div>
-          <div class="footer-section">
-            <p>Dashboard</p>
-            <ul>
-              <li><a href="#">Patient Tracking</a></li>
-              <li><a href="#">Group Session Tracking</a></li>
-              <li><a href="#">Compliance and Documentation</a></li>
-            </ul>
-          </div>
-          <div class="footer-section">
-            <p>Setting</p>
-            <ul>
-              <li><a href="#">Profile Settings</a></li>
-              <li><a href="#">Data Privacy</a></li>
-            </ul>
-          </div>
-          <div class="footer-section">
-            <p>Support</p>
-            <ul>
-              <li><a href="#">FAQs</a></li>
-              <li><a href="#">Contact Support</a></li>
-              <li><a href="#">User Guide</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="footer-copyright">
-          <p>Copyright &copy; 2024 Flinders University. All rights reserved.</p>
-        </div>
+   <footer>
+   <?php include_once ("../footer/therapist_footer.php")
+    ?> 
+    </footer>
       </footer>
-    </div>
-  
   </div>
     <script src="../../components/therapist/therapist.js"></script>
   </body>

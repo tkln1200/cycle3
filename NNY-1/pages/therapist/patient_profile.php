@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,18 +11,11 @@
 
 </head>
 <body>
-  <header>
-    <nav id="shared-header-patient">
-      <ul>
-        <!-- <li><a href="/pages/patient-list.html">Dashboard</a></li> -->
-        <li><a href="/pages/patient-list.html">Patient List</a></li>
-        <li><a href="/pages/group-page.html">Group</a></li>
-        <li><a href="#">Logout</a></li>
-        <li><img src="../../assets/images/therapist.jpg" alt="#" /></li>
-      </ul>
-    </nav>
-  </header>
-    <div class="container">
+<header>
+    <?php include_once ("../navigation/therapist_nav.php")
+    ?> 
+</header>
+  <div class="container">
         <!-- Top-left patient profile section -->
         <div class="patient-profile">
             <h1>Patient Details</h1>
@@ -118,66 +110,13 @@
                 </div>
             </div>
         </div>
-        
       </div>
     </div>
+  </div>
     <footer>
-      <div class="footer-container">
-        <div class="footer-section">
-          <p>Patient Management</p>
-          <ul>
-            <li><a href="#">Paitient List</a></li>
-            <li><a href="#">Paitient Detail</a></li>
-            <li><a href="#">Communication</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <p>Group Management</p>
-          <ul>
-            <li><a href="#">Group Overview</a></li>
-            <li><a href="#">Create Group</a></li>
-            <li><a href="#">Group Schedule</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <p>Dashboard</p>
-          <ul>
-            <li><a href="#">Patient Tracking</a></li>
-            <li><a href="#">Group Session Tracking</a></li>
-            <li><a href="#">Compliance and Documentation</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <p>Setting</p>
-          <ul>
-            <li><a href="#">Profile Settings</a></li>
-            <li><a href="#">Data Privacy</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <p>Support</p>
-          <ul>
-            <li><a href="#">FAQs</a></li>
-            <li><a href="#">Contact Support</a></li>
-            <li><a href="#">User Guide</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-copyright">
-        <p>Copyright &copy; 2024 Flinders University. All rights reserved.</p>
-      </div>
+    <?php include_once ("../footer/therapist_footer.php")
+    ?> 
     </footer>
-    <div id="popupForm" class="popup-form">
-      <div class="form-container">
-          <span class="close-btn" id="closePopup">&times;</span>
-          <h2>Patient Notes</h2>
-          <form id="form">
-              <!-- Prefilled Fields -->
-              <textarea name="notes" id="details" cols="30" rows="10"></textarea>
-            
-              <button type="submit" class="save-group-btn">Save Notes</button>
-          </form>
-      </div>
     <script src="../../assets/js/patient-profile.js"></script>
     <script src="../../assets/js/patient-profile-charts.js"></script>
 
