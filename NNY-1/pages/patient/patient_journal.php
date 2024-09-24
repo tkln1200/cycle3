@@ -4,22 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Journal</title>
-    <link rel="stylesheet" href="/assets/css/patient.css" />
-    <link rel="stylesheet" href="/assets/css/shared.css" />
+    <link rel="stylesheet" href="../../assets/css/patient.css" />
+    <link rel="stylesheet" href="../../assets/css/shared.css" />
   </head>
   <body>
     <header>
-      <nav id="shared-header-patient">
-        <ul>
-          <li><a href="patient-dashboard.html">Dashboard</a></li>
-          <li><a href="patient-journal.html">Journal</a></li>
-          <li><a href="/components/patient/activity-dashboard.html">Log</a></li>
-          <li>
-            <a href="/components/patient/affirmations.html">Affirmation</a>
-          </li>
-          <li><img src="/assets/images/patient.png" alt="#" /></li>
-        </ul>
-      </nav>
+    <?php include_once ("../navigation/patient_nav.php")
+      ?>
     </header>
     <main>
       <div class="container">
@@ -29,7 +20,7 @@
             <input type="text" id="searchInput" placeholder="Search entry..." />
             <button type="submit" id="searchJournal">
               <img
-                src="../assets/images/search-interface-symbol.png"
+                src="../../assets/images/search-interface-symbol.png"
                 width="15px"
               />
             </button>
@@ -195,52 +186,11 @@
     </main>
 
     <footer>
-      <div class="footer-container">
-        <div class="footer-section">
-          <p>Patient Management</p>
-          <ul>
-            <li><a href="#">Paitient List</a></li>
-            <li><a href="#">Paitient Detail</a></li>
-            <li><a href="#">Communication</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <p>Group Management</p>
-          <ul>
-            <li><a href="#">Group Overview</a></li>
-            <li><a href="#">Create Group</a></li>
-            <li><a href="#">Group Schedule</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <p>Dashboard</p>
-          <ul>
-            <li><a href="#">Patient Tracking</a></li>
-            <li><a href="#">Group Session Tracking</a></li>
-            <li><a href="#">Compliance and Documentation</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <p>Setting</p>
-          <ul>
-            <li><a href="#">Profile Settings</a></li>
-            <li><a href="#">Data Privacy</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <p>Support</p>
-          <ul>
-            <li><a href="#">FAQs</a></li>
-            <li><a href="#">Contact Support</a></li>
-            <li><a href="#">User Guide</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-copyright">
-        <p>Copyright &copy; 2024 Flinders University. All rights reserved.</p>
-      </div>
+    <?php
+      include_once ("../footer/patient_footer.php")
+      ?>
     </footer>
-    <script src="/components/patient/patient.js"></script>
-    <script src="/components/patient/journal.js"></script>
+    <script src="../../components/patient/patient.js"></script>
+    <script src="../../components/patient/journal.js"></script>
   </body>
 </html>
