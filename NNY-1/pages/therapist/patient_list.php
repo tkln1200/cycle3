@@ -43,7 +43,7 @@
           </thead>
           <tbody>
             <tr>
-              <td><a href="group-page.html">Group 1</a></td>
+              <td><a href="group_page.php">Group 1</a></td>
               <td><a href="patient_profile.php">01</a></td>
               <td>John Anders </td>
               <td>Depression</td>
@@ -67,7 +67,7 @@
               <td><input type="checkbox" name="" class="select-patient"></td>
             </tr>
             <tr>
-              <td><a href="group-page.html">Group 2</a></td>
+              <td><a href="group_page.php">Group 2</a></td>
               <td><a href="patient_profile.html">02</a></td>
               <td>Zoe Ashford</td>
               <td>Generalized Anxiety Disorder</td>
@@ -91,7 +91,7 @@
               <td><input type="checkbox" name="" class="select-patient"></td>
             </tr>
             <tr>
-              <td><a href="group-page.html">Group 3</a></td>
+              <td><a href="group_page.php">Group 3</a></td>
               <td><a href="patient_profile.php">03</a></td>
               <td>Emma Harris </td>
               <td>Bipolar Disorder</td>
@@ -115,7 +115,7 @@
               <td><input type="checkbox" name="patient" class="select-patient"></td>
             </tr>
             <tr></tr>
-              <td><a href="group-page.html">Group 2</a></td>
+              <td><a href="group_page.php">Group 2</a></td>
               <td><a href="patient_profile.php">04</a></td>
               <td>James Foster</td>
               <td>Generalized Anxiety Disorder</td>
