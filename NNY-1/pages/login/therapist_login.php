@@ -4,15 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Therapist Login</title>
-    <link rel="stylesheet" href="../assets/css/global.css" />
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="/assets/css/log-in.css" />
+    <link rel="stylesheet" href="../../assets/css/log-in.css" />
   </head>
   <body>
     <div class="login-container">
       <div class="login-box">
         <h2>Login as a Therapist</h2>
-        <form action="/pages/patient-list.html" method="get">
+        <form action="../therapist/patient-list.php" method="get">
           <div class="input-group">
             <input type="email" name="email" placeholder="Email" required />
           </div>

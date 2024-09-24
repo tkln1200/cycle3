@@ -4,18 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Auditor Login</title>
-    <link rel="stylesheet" href="../assets/css/global.css" />
-    <link rel="stylesheet" href="/assets/css/log-in.css" />
+    <link rel="stylesheet" href="../../assets/css/log-in.css" />
   </head>
   <body>
     <div class="login-container">
       <div class="login-box">
         <h2>Login as an Auditor</h2>
+        <form action="../auditor/auditor_dashboard.php" method="get">
         <div class="input-group">
-          <input type="email" placeholder="Email" required />
+          <input type="email" name="email" placeholder="Email" required />
         </div>
         <div class="input-group">
-          <input type="password" placeholder="Password" required />
+          <input type="password" name="password" placeholder="Password" required />
           <span class="toggle-password">👁️</span>
         </div>
         <div class="options">
@@ -28,6 +28,7 @@
         <div class="register-link">
           Don't have an account? <a href="#">Register</a>
         </div>
+        </form>
       </div>
     </div>
     <div class="login-image"></div>

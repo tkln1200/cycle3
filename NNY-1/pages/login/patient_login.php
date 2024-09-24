@@ -4,9 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Patient Login</title>
-    <link rel="stylesheet" href="../assets/css/global.css" />
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="/NNY-1/assets/css/log-in.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/css/log-in.css" />
   </head>
   <body>
     <div class="login-container">
