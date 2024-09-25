@@ -19,9 +19,26 @@ body {
 }
 
 .right-panel {
-  width: 33.33%;
-  padding-left: 20px;
+  width: 100%; 
+  max-width: 400px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 20px;
 }
+
+.chart-container {
+  margin-top: 20px;
+  width: 100%;
+}
+
+#mood-chart img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
 
 .greetings {
   font-size: x-large;
@@ -31,7 +48,6 @@ body {
 }
 
 .affirmation-slider {
-  /* background-color: none; */
   padding: 20px;
   border-radius: 10px;
   border: solid 1px #a13295;
@@ -48,8 +64,8 @@ body {
   font-size: 24px;
   color: #555;
   display: none;
-  text-align: center; /* Center text horizontally */
-  width: 100%; /* Ensure the quote takes full width */
+  text-align: center;
+  width: 100%;
 }
 
 .affirmation-slider .quote.active {
@@ -242,77 +258,10 @@ body {
   }
 }
 
-.calendar {
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-
-.calendar h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.calendar-view {
-  display: flex;
-  flex-direction: column;
-}
-
-.calendar .days {
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-}
-
-.calendar .dates {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding-top: 10px;
-}
-
-.calendar .dates span {
-  width: 14%;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.month-navigation {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
 .nav-arrow {
   cursor: pointer;
   font-size: 24px;
   user-select: none;
-}
-
-.calendar .dates span.selected {
-  background-color: #e0e0e0;
-  font-weight: bold;
-}
-
-.mood-chart {
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.mood-chart h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-#moodChart {
-  max-width: 100%;
-  height: 200px;
 }
 
 .journal-left-panel {
@@ -352,9 +301,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  /* background-color: white; */
   border-radius: 5px;
-  /* box-shadow: 0px 0.5px 0px 1px #f0f0f0; */
 }
 
 div .journal-title {
@@ -391,7 +338,6 @@ div.journal-title:hover {
   padding: 10px;
   text-align: justify;
   border-radius: 5px;
-  /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); */
 }
 
 .journal-details p {
@@ -518,45 +464,6 @@ div.journal-title:hover {
     margin-right: 20px;
     box-shadow: 0px 0.5px 0px 1px #f0f0f0;
   }
-
-  .moodInput {
-    align-self: flex-end;
-    /* display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: center; */
-    margin-right: 20px;
-    margin-bottom: 5px;
-
-    label {
-      font-size: small;
-      align-self: flex-end;
-    }
-
-    .moodbtn {
-      padding: 10px;
-      margin: 2px;
-      border-radius: 50%;
-      border: solid #f0f0f0 0.1px;
-      font-size: x-small;
-      align-self: flex-end;
-      background-color: white;
-    }
-    .moodbtn:hover {
-      background-color: #f0f0f0;
-      cursor: pointer;
-    }
-
-    .moodbtn.selected {
-      background-color: rgb(161, 50, 149);
-      color: white;
-      border: 2px solid white;
-      transform: scale(1.1);
-    }
-    .moodbtn:active {
-      transform: scale(1.05);
-    }
-  }
 }
 
 #fileUpload {
@@ -603,19 +510,6 @@ div.journal-title:hover {
   background-color: #75246c;
 }
 
-#chartContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-canvas {
-  border-radius: 10px;
-  background-color: #f3e7fc;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* New goal modal styling */
 .new-modal-content {
   background-color: #ffffff;
   margin: 15% auto;
@@ -672,4 +566,76 @@ canvas {
 
 .new-modal-content .close:hover {
   color: #000;
+}
+
+.calendar-container {
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.calendar-header button {
+  background-color: #B79CEB;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.weekday {
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.day {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ecf0f1;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.day:hover {
+  background-color: #B79CEB;
+  color: white;
+}
+
+.day.empty {
+  visibility: hidden;
+}
+
+#mood-chart {
+  margin-top: 20px;
+}
+
+.mood-chart img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
 }
