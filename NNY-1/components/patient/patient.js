@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeGoalSetting() {
     const setGoalButton = document.getElementById("setGoalButton");
     const newGoalModal = document.getElementById("newGoalModal");
-    const goalInput = document.getElementById("goalInput");
+    const goalInput = document.getElementById("goalTitle");
     const closeButtons = document.querySelectorAll(".close");
 
     setGoalButton.addEventListener("click", () => {
@@ -32,11 +32,12 @@ function initializeGoalSetting() {
     });
 
     document.getElementById("goalForm").onsubmit = (event) => {
-        event.preventDefault();
+        //event.preventDefault();
         const goal = goalInput.value;
         console.log("New Goal:", goal);
         document.getElementById("weeklyGoalText").textContent = goal;
         newGoalModal.style.display = "none";
+        //document.getElementById("goalForm").submit();
     };
 }
 
@@ -79,6 +80,7 @@ function initializeGoalModal() {
         goalModal.style.display = "none";
         showCongratulations();
     });
+
 }
 
 function showCongratulations() {

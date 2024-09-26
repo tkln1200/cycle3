@@ -11,8 +11,60 @@
 
 <body>
   <header>
-    <?php include_once("../navigation/patient_nav.php")
+    <?php
+    include_once("../navigation/patient_nav.php");
+    require_once "patient-dashboard-connect.php";
+
+    // Check if the request is a POST request and handle the form submission
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      $title = isset($_POST['goalTitle']) ? $_POST['goalTitle'] : '';
+      $category = isset($_POST['goalCategory']) ? $_POST['goalCategory'] : '';
+      $dueDate = isset($_POST['dueDate']) ? $_POST['dueDate'] : '';
+
+      if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+      }
+
+      // Prepare the SQL insert statement
+      $sql = "INSERT INTO GOAL (title, category, dueDate) VALUES (?, ?, ?)";
+      $stmt = $conn->prepare($sql);
+
+      // Check if the statement was prepared successfully
+      if ($stmt === false) {
+        die("Error preparing the statement: " . $conn->error);
+      }
+
+      // Bind parameters to the prepared statement
+      $stmt->bind_param("sss", $title, $category, $dueDate);
+
+      // Execute the statement and check for errors
+      if ($stmt->execute()) {
+        echo "New goal record inserted successfully.";
+      } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+      }
+
+      // Close the statement
+      $stmt->close();
+    }
+
+    // Fetch the latest goal
+    $latestGoal = "";
+    $latestGoalCategory = "";
+    $latestGoalDueDate = "";
+
+    $sql = "SELECT title FROM GOAL ORDER BY goalId DESC LIMIT 1";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      $latestGoal = $row['title'];
+    }
+
+    // Close the connection after all queries have been executed
+    $conn->close();
     ?>
+
   </header>
   <main>
     <div class="container">
@@ -41,19 +93,43 @@
         <div class="goal-for-week">
           <h2><a href="#" id="goalLink">Your goal for this week:</a></h2>
           <p id="weeklyGoalText">
-            “I am going to control my alcoholism and shall be more positive.”
+
           </p>
           <button id="setGoalButton">Set a Goal</button>
         </div>
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            const latestGoal = "<?php echo isset($latestGoal) ? $latestGoal : ''; ?>";
+            const latestGoalCategory = "<?php echo isset($latestGoalCategory) ? $latestGoalCategory : ''; ?>";
+            const latestGoalDueDate = "<?php echo isset($latestGoalDueDate) ? $latestGoalDueDate : ''; ?>";
+
+            // Update the weeklyGoalText with the latest goal
+            if (latestGoal) {
+              document.getElementById('weeklyGoalText').textContent = latestGoal;
+            } else {
+              document.getElementById('weeklyGoalText').textContent = "No goal set for this week.";
+            }
+          });
+        </script>
 
         <div id="newGoalModal" class="new-modal">
           <div class="new-modal-content">
             <span class="close">&times;</span>
             <h2>Set a New Goal</h2>
-            <form id="goalForm">
-              <label for="goalInput">Goal:</label>
-              <input type="text" id="goalInput" name="goalInput" required />
-              <button type="submit">Submit</button>
+            <form id="goalForm" method="POST" action="patient_dashboard.php">
+              <label for="goalTitle">Title:</label>
+              <input type="text" id="goalTitle" name="goalTitle" required>
+              <label for="goalCategory">Category:</label>
+              <!-- <input type="text" id="goalCategory" name="goalCategory" required> -->
+              <select name="goalCategory" id="goalCategory">
+                <option value="generalGoal">General Goal</option>
+                <option value="eatingGoal">Eating Goal</option>
+                <option value="exerciseGoal">Exercise Goal</option>
+                <option value="careerGoal">Career Goal</option>
+              </select>
+              <label for="dueDate">Due Date:</label>
+              <input type="date" id="dueDate" name="dueDate" required>
+              <button type="submit" id="submitGoalButton">Save Goal</button>
             </form>
           </div>
         </div>
@@ -107,11 +183,23 @@
       </div>
   </main>
   <footer>
-    <?php
-    include_once("../footer/patient_footer.php")
+    <?php include_once("../footer/patient_footer.php")
     ?>
+
   </footer>
   <script src="../../components/patient/patient.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+      var savedGoalTitle = "<?php echo isset($goalTitle) ? $goalTitle : ''; ?>";
+      var savedGoalCategory = "<?php echo isset($goalCategory) ? $goalCategory : ''; ?>";
+      var savedGoalDueDate = "<?php echo isset($goalDueDate) ? $goalDueDate : ''; ?>";
+
+      if (savedGoalTitle) {
+        document.getElementById('weeklyGoalText').textContent = savedGoalTitle;
+      }
+    });
+  </script>
 </body>
 
 </html>
