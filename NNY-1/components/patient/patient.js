@@ -32,12 +32,10 @@ function initializeGoalSetting() {
     });
 
     document.getElementById("goalForm").onsubmit = (event) => {
-        //event.preventDefault();
         const goal = goalInput.value;
         console.log("New Goal:", goal);
         document.getElementById("weeklyGoalText").textContent = goal;
         newGoalModal.style.display = "none";
-        //document.getElementById("goalForm").submit();
     };
 }
 
