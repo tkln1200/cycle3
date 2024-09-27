@@ -50,11 +50,10 @@
         $stmt->execute();
         $stmt->close();
       }
-      echo "<script>alert('Selected goals marked as complete!');</script>";
     }
 
     $incompleteGoals = [];
-    $sql = "SELECT goalId, title, category, dueDate FROM GOAL WHERE isCompleted = 0 ORDER BY goalId ASC";
+    $sql = "SELECT goalId, title, category, dueDate FROM GOAL WHERE isCompleted = 0 ORDER BY goalId DESC";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
