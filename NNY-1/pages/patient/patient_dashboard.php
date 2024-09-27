@@ -15,8 +15,7 @@
     include_once("../navigation/patient_nav.php");
     require_once "patient-dashboard-connect.php";
 
-    // Check if the request is a POST request and handle the form submission
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['goalTitle'])) {
       $title = isset($_POST['goalTitle']) ? $_POST['goalTitle'] : '';
       $category = isset($_POST['goalCategory']) ? $_POST['goalCategory'] : '';
       $dueDate = isset($_POST['dueDate']) ? $_POST['dueDate'] : '';
@@ -25,93 +24,134 @@
         die("Connection failed: " . $conn->connect_error);
       }
 
-      // Prepare the SQL insert statement
       $sql = "INSERT INTO GOAL (title, category, dueDate) VALUES (?, ?, ?)";
       $stmt = $conn->prepare($sql);
 
-      // Check if the statement was prepared successfully
       if ($stmt === false) {
         die("Error preparing the statement: " . $conn->error);
       }
 
-      // Bind parameters to the prepared statement
       $stmt->bind_param("sss", $title, $category, $dueDate);
 
-      // Execute the statement and check for errors
       if ($stmt->execute()) {
-        echo "New goal record inserted successfully.";
       } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
       }
 
-      // Close the statement
       $stmt->close();
     }
 
-    // Fetch the latest goal
-    $latestGoal = "";
-    $latestGoalCategory = "";
-    $latestGoalDueDate = "";
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['completedGoals'])) {
+      $completedGoals = $_POST['completedGoals'];
+      foreach ($completedGoals as $goalId) {
+        $updateSql = "UPDATE GOAL SET isCompleted = 1 WHERE goalId = ?";
+        $stmt = $conn->prepare($updateSql);
+        $stmt->bind_param("i", $goalId);
+        $stmt->execute();
+        $stmt->close();
+      }
+      echo "<script>alert('Selected goals marked as complete!');</script>";
+    }
 
-    $sql = "SELECT title FROM GOAL ORDER BY goalId DESC LIMIT 1";
+    $incompleteGoals = [];
+    $sql = "SELECT goalId, title, category, dueDate FROM GOAL WHERE isCompleted = 0 ORDER BY goalId ASC";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-      $row = $result->fetch_assoc();
-      $latestGoal = $row['title'];
+      while ($row = $result->fetch_assoc()) {
+        $incompleteGoals[] = $row;
+      }
     }
 
-    // Close the connection after all queries have been executed
+    $selectedAffirmations = [];
+    $sql = "SELECT description FROM affirmation WHERE isSelected = 1";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+      while ($row = $result->fetch_assoc()) {
+        $selectedAffirmations[] = $row['description'];
+      }
+    }
+
     $conn->close();
     ?>
 
   </header>
   <main>
     <div class="container">
-      <!-- Left Panel -->
       <div class="left-panel">
         <div class="greetings">Hi, Zoe!</div>
+
+        <!-- Affirmation Slider -->
         <div class="affirmation-slider">
-          <div class="quote active">
-            “I am grateful for the life I am living.”
-          </div>
-          <div class="quote">
-            “I choose to be happy and love myself today.”
-          </div>
-          <div class="quote">
-            “I am in control of my emotions and thoughts.”
-          </div>
-          <div class="quote">“I am becoming the best version of myself.”</div>
+          <?php if (!empty($selectedAffirmations)): ?>
+            <?php foreach ($selectedAffirmations as $index => $affirmation): ?>
+              <div class="quote <?php echo $index === 0 ? 'active' : ''; ?>">
+                <?php echo htmlspecialchars($affirmation); ?>
+              </div>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <div class="quote active">No affirmations selected.</div>
+          <?php endif; ?>
         </div>
 
+        <!-- Slider Dots -->
         <div class="dots">
-          <span class="dot active" data-quote="0"></span>
-          <span class="dot" data-quote="1"></span>
-          <span class="dot" data-quote="2"></span>
-          <span class="dot" data-quote="3"></span>
+          <?php if (!empty($selectedAffirmations)): ?>
+            <?php foreach ($selectedAffirmations as $index => $affirmation): ?>
+              <span class="dot <?php echo $index === 0 ? 'active' : ''; ?>" data-quote="<?php echo $index; ?>"></span>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <span class="dot active" data-quote="0"></span>
+          <?php endif; ?>
         </div>
+
+        <!-- Weekly Goal Section -->
         <div class="goal-for-week">
           <h2><a href="#" id="goalLink">Your goal for this week:</a></h2>
           <p id="weeklyGoalText">
-
+            <?php echo !empty($incompleteGoals) ? $incompleteGoals[0]['title'] : 'No goal set for this week.'; ?>
           </p>
           <button id="setGoalButton">Set a Goal</button>
         </div>
-        <script>
-          document.addEventListener("DOMContentLoaded", () => {
-            const latestGoal = "<?php echo isset($latestGoal) ? $latestGoal : ''; ?>";
-            const latestGoalCategory = "<?php echo isset($latestGoalCategory) ? $latestGoalCategory : ''; ?>";
-            const latestGoalDueDate = "<?php echo isset($latestGoalDueDate) ? $latestGoalDueDate : ''; ?>";
 
-            // Update the weeklyGoalText with the latest goal
-            if (latestGoal) {
-              document.getElementById('weeklyGoalText').textContent = latestGoal;
-            } else {
-              document.getElementById('weeklyGoalText').textContent = "No goal set for this week.";
-            }
-          });
-        </script>
+        <!-- Modal for Viewing and Completing Goals -->
+        <div id="goalModal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Weekly Goal Details</h2>
 
+            <?php if (!empty($incompleteGoals)): ?>
+              <form id="completeGoalForm" method="POST" action="">
+                <?php foreach ($incompleteGoals as $goal): ?>
+                  <div class="goal-item">
+                    <input type="checkbox" name="completedGoals[]" value="<?php echo $goal['goalId']; ?>">
+                    <label for="goal-<?php echo $goal['goalId']; ?>">
+                      <?php echo htmlspecialchars($goal['title']); ?>
+                      <span>(<?php
+                              if ($goal['category'] == "generalGoal") {
+                                echo "General Goal";
+                              } elseif ($goal['category'] == "eatingGoal") {
+                                echo "Eating Goal";
+                              } elseif ($goal['category'] == "exerciseGoal") {
+                                echo "Exercise Goal";
+                              } else {
+                                echo "Career Goal";
+                              }
+                              ?>, Due: <?php echo htmlspecialchars($goal['dueDate']); ?>)</span>
+                    </label>
+                  </div>
+                <?php endforeach; ?>
+                <button type="submit" id="completeGoal">Complete</button>
+              </form>
+            <?php else: ?>
+              <p>No incomplete goals.</p>
+              <button id="completeGoal" disabled>Complete</button>
+            <?php endif; ?>
+          </div>
+        </div>
+
+        <!-- Modal for Setting Goals -->
         <div id="newGoalModal" class="new-modal">
           <div class="new-modal-content">
             <span class="close">&times;</span>
@@ -120,7 +160,6 @@
               <label for="goalTitle">Title:</label>
               <input type="text" id="goalTitle" name="goalTitle" required>
               <label for="goalCategory">Category:</label>
-              <!-- <input type="text" id="goalCategory" name="goalCategory" required> -->
               <select name="goalCategory" id="goalCategory">
                 <option value="generalGoal">General Goal</option>
                 <option value="eatingGoal">Eating Goal</option>
@@ -134,25 +173,12 @@
           </div>
         </div>
 
-        <div id="goalModal" class="modal">
-          <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Weekly Goal Details</h2>
-            <p>
-              “I am going to control my alcoholism and shall be more
-              positive.”
-            </p>
-            <button id="completeGoal">Complete</button>
-          </div>
-        </div>
-
         <div id="congratsMessage" class="congrats-message">
           <div id="confetti"></div>
           <h2>Well done, Zoe!</h2>
         </div>
       </div>
 
-      <!-- Right Panel -->
       <div class="right-panel">
         <div class="calendar-container">
           <div class="calendar-header">
@@ -162,7 +188,6 @@
           </div>
           <div class="calendar-wrapper">
             <div class="calendar-grid" id="calendar-grid">
-              <!-- Weekdays -->
               <div class="weekday">Sun</div>
               <div class="weekday">Mon</div>
               <div class="weekday">Tue</div>
@@ -170,8 +195,6 @@
               <div class="weekday">Thu</div>
               <div class="weekday">Fri</div>
               <div class="weekday">Sat</div>
-
-              <!-- Days of the month will be generated by JavaScript -->
             </div>
           </div>
         </div>
@@ -183,23 +206,27 @@
       </div>
   </main>
   <footer>
-    <?php include_once("../footer/patient_footer.php")
-    ?>
-
+    <?php include_once("../footer/patient_footer.php") ?>
   </footer>
   <script src="../../components/patient/patient.js"></script>
+
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener("DOMContentLoaded", () => {
+      const goalLink = document.getElementById("goalLink");
+      const goalModal = document.getElementById("goalModal");
+      const closeModal = document.querySelector(".modal .close");
 
-      var savedGoalTitle = "<?php echo isset($goalTitle) ? $goalTitle : ''; ?>";
-      var savedGoalCategory = "<?php echo isset($goalCategory) ? $goalCategory : ''; ?>";
-      var savedGoalDueDate = "<?php echo isset($goalDueDate) ? $goalDueDate : ''; ?>";
+      goalLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        goalModal.style.display = "block";
+      });
 
-      if (savedGoalTitle) {
-        document.getElementById('weeklyGoalText').textContent = savedGoalTitle;
-      }
+      closeModal.addEventListener("click", () => {
+        goalModal.style.display = "none";
+      });
     });
   </script>
+
 </body>
 
 </html>
