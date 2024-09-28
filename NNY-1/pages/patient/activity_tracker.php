@@ -103,7 +103,6 @@
             } else {
               echo "No goal set for this week.";
             }
-            $conn->close();
             ?>
           </p>
         </div>
