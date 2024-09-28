@@ -1,118 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Activity Tracker</title>
-    <link rel="stylesheet" href="../../assets/css/shared.css" />
-    <link rel="stylesheet" href="../../assets/css/patient.css" />
-    <link rel="stylesheet" href="../../assets/css/activity-tracker.css" />
-  </head>
-  <body>
-    <header>
-      <nav id="shared-header-patient">
-      <?php include_once ("../navigation/patient_nav.php")
-      ?> 
-      </nav>
-    </header>
-    <main class="activity-tracker-main">
-      <h2>Activity Tracker</h2>
-      <form id="activity-tracker-form" class="activity-tracker-form">
-        <section id="sleeping-cycles" class="activity-tracker-section">
-          <h3>Record Sleeping Cycles</h3>
-          <div class="form-group">
-            <label for="sleep-date">Date:</label>
-            <input type="date" id="sleep-date" name="sleep-date" required />
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Activity Tracker</title>
+  <link rel="stylesheet" href="../../assets/css/shared.css" />
+  <link rel="stylesheet" href="../../assets/css/patient.css" />
+  <link rel="stylesheet" href="../../assets/css/activity-tracker.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+  <header>
+    <nav id="shared-header-patient">
+      <?php include_once("../navigation/patient_nav.php") ?>
+    </nav>
+  </header>
+
+  <main class="activity-tracker-main">
+    <h2>Activity Tracker</h2>
+
+    <div class="content-container">
+      <form id="activity-tracker-form" class="activity-tracker-section" method="POST" action="activity_tracker.php">
+        <section class="activity-tracker-section">
+          <h3><span class="icon sleep-icon"><i class="fas fa-bed"></i></span> Sleep</h3>
+          <div class="rating-buttons">
+            <?php for ($i = 10; $i >= 1; $i--): ?>
+              <button type="button" data-rating="<?php echo $i; ?>"><?php echo $i; ?></button>
+            <?php endfor; ?>
           </div>
-          <div class="form-group">
-            <label for="sleep-duration">Duration (hours):</label>
-            <input
-              type="number"
-              id="sleep-duration"
-              name="sleep-duration"
-              min="0"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="sleep-quality">Quality:</label>
-            <select id="sleep-quality" name="sleep-quality" required>
-              <option value="excellent">Excellent</option>
-              <option value="good">Good</option>
-              <option value="average">Average</option>
-              <option value="poor">Poor</option>
-            </select>
-          </div>
+          <input type="hidden" name="sleepRating" id="sleepRating" />
+          <textarea class="activity-notes" name="sleepNotes" placeholder="Your notes here"></textarea>
         </section>
 
-        <section
-          id="eating-habits"
-          class="activity-tracker-section vertical-layout"
-        >
-          <h3>Record Eating Habits</h3>
-          <div class="form-group">
-            <label for="meal-date">Date:</label>
-            <input type="date" id="meal-date" name="meal-date" required />
+        <section class="activity-tracker-section">
+          <h3><span class="icon food-icon"><i class="fas fa-utensils"></i></span> Food</h3>
+          <div class="rating-buttons">
+            <?php for ($i = 10; $i >= 1; $i--): ?>
+              <button type="button" data-rating="<?php echo $i; ?>"><?php echo $i; ?></button>
+            <?php endfor; ?>
           </div>
-          <div class="form-group">
-            <label for="meal-type">Meal Type:</label>
-            <select id="meal-type" name="meal-type" required>
-              <option value="breakfast">Breakfast</option>
-              <option value="lunch">Lunch</option>
-              <option value="dinner">Dinner</option>
-              <option value="snack">Snack</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="meal-description">Description:</label>
-            <textarea
-              id="meal-description"
-              name="meal-description"
-              required
-            ></textarea>
-          </div>
+          <input type="hidden" name="foodRating" id="foodRating" />
+          <textarea class="activity-notes" name="foodNotes" placeholder="Your notes here"></textarea>
         </section>
 
-        <section id="exercise" class="activity-tracker-section">
-          <h3>Record Exercise</h3>
-          <div class="form-group">
-            <label for="exercise-date">Date:</label>
-            <input
-              type="date"
-              id="exercise-date"
-              name="exercise-date"
-              required
-            />
+        <section class="activity-tracker-section">
+          <h3><span class="icon water-icon"><i class="fas fa-tint"></i></span> Water</h3>
+          <div class="rating-buttons">
+            <?php for ($i = 10; $i >= 1; $i--): ?>
+              <button type="button" data-rating="<?php echo $i; ?>"><?php echo $i; ?></button>
+            <?php endfor; ?>
           </div>
-          <div class="form-group">
-            <label for="exercise-type">Exercise Type:</label>
-            <input
-              type="text"
-              id="exercise-type"
-              name="exercise-type"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="exercise-duration">Duration (minutes):</label>
-            <input
-              type="number"
-              id="exercise-duration"
-              name="exercise-duration"
-              min="0"
-              required
-            />
-          </div>
+          <input type="hidden" name="waterRating" id="waterRating" />
+          <textarea class="activity-notes" name="waterNotes" placeholder="Your notes here"></textarea>
         </section>
 
-        <button type="submit">Submit All Records</button>
+        <section class="activity-tracker-section">
+          <h3><span class="icon exercise-icon"><i class="fas fa-dumbbell"></i></span> Exercise</h3>
+          <div class="rating-buttons">
+            <?php for ($i = 10; $i >= 1; $i--): ?>
+              <button type="button" data-rating="<?php echo $i; ?>"><?php echo $i; ?></button>
+            <?php endfor; ?>
+          </div>
+          <input type="hidden" name="exerciseRating" id="exerciseRating" />
+          <textarea class="activity-notes" name="exerciseNotes" placeholder="Your notes here"></textarea>
+        </section>
+
+        <button class="publish-btn" type="submit">Publish</button>
       </form>
-    </main>
-    <footer>
-    <?php
-      include_once ("../footer/patient_footer.php")
-      ?>
-    </footer>
-    <script src="activity-tracker.js"></script>
-  </body>
+
+      <div class="side-section">
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <button id="prevMonth" onclick="prevMonth()">&lt;</button>
+            <h2 id="month-name">September 2024</h2>
+            <button id="nextMonth" onclick="nextMonth()">&gt;</button>
+          </div>
+          <div class="calendar-wrapper">
+            <div class="calendar-grid" id="calendar-grid">
+              <div class="weekday">Sun</div>
+              <div class="weekday">Mon</div>
+              <div class="weekday">Tue</div>
+              <div class="weekday">Wed</div>
+              <div class="weekday">Thu</div>
+              <div class="weekday">Fri</div>
+              <div class="weekday">Sat</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="goalSection">
+          <h2>Your goal for this week:</h2>
+          <p id="weeklyGoalText">
+            <?php
+            require_once "patient-dashboard-connect.php";
+            $sql = "SELECT title FROM GOAL ORDER BY goalId DESC LIMIT 1";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+              $row = $result->fetch_assoc();
+              echo $row['title'];
+            } else {
+              echo "No goal set for this week.";
+            }
+            $conn->close();
+            ?>
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <?php include_once("../footer/patient_footer.php") ?>
+  </footer>
+  <script src="../../components/patient/activity-tracker.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const buttons = document.querySelectorAll('.rating-buttons button');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', function() {
+          const ratingValue = this.getAttribute('data-rating');
+          const section = this.closest('section');
+          const hiddenInput = section.querySelector('input[type="hidden"]');
+
+          const siblings = this.parentNode.querySelectorAll('button');
+          siblings.forEach(sibling => sibling.classList.remove('active'));
+
+          this.classList.add('active');
+          hiddenInput.value = ratingValue;
+        });
+      });
+    });
+  </script>
+</body>
+
 </html>
+
+<?php
+require_once "patient-dashboard-connect.php";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $sleepRating = $_POST['sleepRating'] ?: 0;
+  $sleepNotes = $_POST['sleepNotes'] ?: null;
+  $foodRating = $_POST['foodRating'] ?: 0;
+  $foodNotes = $_POST['foodNotes'] ?: null;
+  $waterRating = $_POST['waterRating'] ?: 0;
+  $waterNotes = $_POST['waterNotes'] ?: null;
+  $exerciseRating = $_POST['exerciseRating'] ?: 0;
+  $exerciseNotes = $_POST['exerciseNotes'] ?: null;
+  $createdDate = date('Y-m-d');
+
+  $sql = "INSERT INTO activity (sleepRating, sleepNotes, foodRating, foodNotes, waterRate, waterNotes, exerciseRating, exerciseNotes, createdDate)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param("isisisiss", $sleepRating, $sleepNotes, $foodRating, $foodNotes, $waterRating, $waterNotes, $exerciseRating, $exerciseNotes, $createdDate);
+
+  if ($stmt->execute()) {
+    echo "<script>alert('Activity log saved successfully!');</script>";
+  } else {
+    echo "<script>alert('Error saving activity log: " . $stmt->error . "');</script>";
+  }
+
+  $stmt->close();
+  $conn->close();
+}
+?>
