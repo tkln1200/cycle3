@@ -19,7 +19,10 @@
   </header>
 
   <main class="activity-tracker-main">
-    <h2>Activity Tracker</h2>
+    <div class="activity-header">
+      <h2>Activity Tracker</h2>
+      <button class="view-list-btn" onclick="window.location.href='activity_dashboard.php'">View List</button>
+    </div>
 
     <div class="content-container">
       <form id="activity-tracker-form" class="activity-tracker-section" method="POST" action="activity_tracker.php">
