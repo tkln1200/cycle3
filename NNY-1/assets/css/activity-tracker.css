@@ -165,3 +165,24 @@
 .icon.exercise-icon i {
   color: #264653;
 }
+
+.activity-header {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* To add space between "Activity Tracker" and "View List" button */
+}
+
+.view-list-btn {
+  background-color: #d88bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.view-list-btn:hover {
+  background-color: #c576e5;
+}

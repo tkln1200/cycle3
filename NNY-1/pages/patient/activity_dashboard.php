@@ -53,7 +53,7 @@ if ($stmt->num_rows > 0) {
 }
 $stmt->close();
 
-$sqlRecent = "SELECT activityId, createdDate, sleepRating, foodRating, waterRate, exerciseRating FROM activity ORDER BY createdDate DESC";
+$sqlRecent = "SELECT activityId, createdDate, sleepRating, foodRating, waterRate, exerciseRating FROM activity ORDER BY activityId DESC";
 $resultRecent = $conn->query($sqlRecent);
 
 ?>
@@ -82,7 +82,10 @@ $resultRecent = $conn->query($sqlRecent);
 
     <div class="content-container">
       <div class="form-section">
-        <h2>Your Log Today</h2>
+        <div class="form-header">
+          <h2>Your Lastest Log</h2>
+          <button class="create-log-btn" onclick="window.location.href='activity_tracker.php'">Create a New Log</button>
+        </div>
         <form id="activity-tracker-form" class="activity-tracker-section" method="POST" action="activity_dashboard.php">
           <input type="hidden" name="activityId" value="<?php echo htmlspecialchars($activityId); ?>">
           <section class="activity-tracker-section">
