@@ -10,172 +10,84 @@
   </head>
   <body>
   <header>
-    <?php include_once ("../navigation/therapist_nav.php")
-    ?> 
-    </header>
-    <div class="main-content">
-      <h2>Patient List</h2>
-      <div class="content">
-        <!-- Create Group Button -->
-        <div class="group-search-container">
-          <button class="create-group-btn" id="createGroupBtn">Create Group</button>
-      
-          <!-- Search Box and Button -->
-          <div class="search-container">
-            <form action="#" method="post" class="search-form">
-              <input type="text" placeholder="Search..." id="search-input" />
-              <button type="submit" class="search-btn">Search</button>
-            </form>
-          </div>
+    <?php include_once ("../navigation/therapist_nav.php") ?> 
+  </header>
+  <div class="main-content">
+    <h2>Patient List</h2>
+    <div class="content">
+      <div class="group-search-container">
+        <button class="create-group-btn" id="createGroupBtn">Create Group</button>
+        <div class="search-container">
+          <form action="#" method="post" class="search-form">
+            <input type="text" placeholder="Search..." id="search-input" />
+            <button type="submit" class="search-btn">Search</button>
+          </form>
         </div>
-        <table id="myTable">
-          <thead>
-            <tr>
-              <th>Group</th>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Diagnosis</th>
-              <th>Progress</th>
-              <th>Status</th>
-              <th>View Journal Entries</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><a href="group_page.php">Group 1</a></td>
-              <td><a href="patient_profile.php">01</a></td>
-              <td>John Anders </td>
-              <td>Depression</td>
-              <td>33%</td>
-              <td>
-                <select onchange="changeTableColor(this)">
-                  <option>Active</option>
-                  <option>Inactive</option>
-                  <option>On Hold</option>
-                  <option value="follow">Follow-up</option>
-                </select>
-              </td>
-              <td>
-                <button
-                  class="journal-btn"
-                  onclick="location.href='./patient_profile.php'"
-                >
-                  View
-                </button>
-              </td>
-              <td><input type="checkbox" name="" class="select-patient"></td>
-            </tr>
-            <tr>
-              <td><a href="group_page.php">Group 2</a></td>
-              <td><a href="patient_profile.html">02</a></td>
-              <td>Zoe Ashford</td>
-              <td>Generalized Anxiety Disorder</td>
-              <td>7%</td>
-              <td>
-                <select onchange="changeTableColor(this)">
-                  <option>Active</option>
-                  <option>Inactive</option>
-                  <option>On Hold</option>
-                  <option value="follow">Follow-up</option>
-                </select>
-              </td>
-              <td>
-                <button
-                  class="journal-btn"
-                  onclick="location.href='./patient_profile.php'"
-                >
-                  View
-                </button>
-              </td>
-              <td><input type="checkbox" name="" class="select-patient"></td>
-            </tr>
-            <tr>
-              <td><a href="group_page.php">Group 3</a></td>
-              <td><a href="patient_profile.php">03</a></td>
-              <td>Emma Harris </td>
-              <td>Bipolar Disorder</td>
-              <td>98%</td>
-              <td>
-                <select onchange="changeTableColor(this)">
-                  <option>Active</option>
-                  <option>Inactive</option>
-                  <option>On Hold</option>
-                  <option value="follow">Follow-up</option>
-                </select>
-              </td>
-              <td>
-                <button
-                  class="journal-btn"
-                  onclick="location.href='./patient_profile.php'"
-                >
-                  View
-                </button>
-              </td>
-              <td><input type="checkbox" name="patient" class="select-patient"></td>
-            </tr>
-            <tr></tr>
-              <td><a href="group_page.php">Group 2</a></td>
-              <td><a href="patient_profile.php">04</a></td>
-              <td>James Foster</td>
-              <td>Generalized Anxiety Disorder</td>
-              <td>58%</td>
-              <td>
-                <select onchange="changeTableColor(this)">
-                  <option>Active</option>
-                  <option>Inactive</option>
-                  <option>On Hold</option>
-                  <option value="follow">Follow-up</option>
-                </select>
-              </td>
-              <td>
-                <button
-                  class="journal-btn"
-                  onclick="location.href='./patient_profile.php'"
-                >
-                  View
-                </button>
-              </td>
-              <td><input type="checkbox" name="patient" class="select-patient"></td>
-            </tr>
-          </tbody>
-        </table>
       </div>
+      <table id="myTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Diagnosis</th>
+            <th>Progress</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          // 数据库连接信息
+          $host = "localhost";
+          $username = "root";
+          $password = "";
+          $dbname = "healthcare";
 
-      <!-- Group Form Modal -->
-      <div id="groupFormModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Create Group</h2>
-            <form id="groupForm">
-                <label for="groupName">Group Name:</label>
-                <input type="text" id="groupName" name="groupName" required />
-    
-                <label for="participants">Participants:</label>
-                <input type="text" id="participants" name="participants" readonly />
-    
-                <label for="availableSpace">Available Space:</label>
-                <input type="number" id="availableSpace" name="availableSpace" required />
-    
-                <label for="time">Time:</label>
-                <input type="time" id="time" name="time" required />
-    
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required />
-    
-                <label for="location">Location:</label>
-                <input type="text" id="location" name="location" required />
-    
-                <button type="submit" class="save-group-btn">Save Group</button>
-            </form>
-        </div>
+          // 创建数据库连接
+          $conn = new mysqli($host, $username, $password, $dbname);
+
+          // 检查连接是否成功
+          if ($conn->connect_error) {
+              die("连接失败: " . $conn->connect_error);
+          }
+
+          // 查询患者列表
+          $sql = "SELECT id, name, diagnosis, progress, status FROM patients";
+          $result = $conn->query($sql);
+
+          // 动态生成患者表格行
+          if ($result->num_rows > 0) {
+              while ($row = $result->fetch_assoc()) {
+                  echo "<tr>";
+                  echo "<td><a href='patient_profile.php'>" . $row["id"] . "</a></td>";
+                  echo "<td>" . $row["name"] . "</td>";
+                  echo "<td>" . $row["diagnosis"] . "</td>";
+                  echo "<td>" . $row["progress"] . "%</td>";
+                  echo "<td>";
+                  echo "<select onchange='changeTableColor(this)'>";
+                  echo "<option " . ($row["status"] == 'Active' ? 'selected' : '') . ">Active</option>";
+                  echo "<option " . ($row["status"] == 'Inactive' ? 'selected' : '') . ">Inactive</option>";
+                  echo "<option " . ($row["status"] == 'On Hold' ? 'selected' : '') . ">On Hold</option>";
+                  echo "<option value='follow' " . ($row["status"] == 'Follow-up' ? 'selected' : '') . ">Follow-up</option>";
+                  echo "</select>";
+                  echo "</td>";
+                  echo "<td><button class='journal-btn' onclick='location.href=\"./patient_profile.php\"'>View</button></td>";
+                  echo "</tr>";
+              }
+          } else {
+              echo "<tr><td colspan='6'>没有患者数据</td></tr>";
+          }
+
+          // 关闭数据库连接
+          $conn->close();
+          ?>
+        </tbody>
+      </table>
     </div>
-   <footer>
-   <?php include_once ("../footer/therapist_footer.php")
-    ?> 
+    <footer>
+      <?php include_once ("../footer/therapist_footer.php") ?> 
     </footer>
-      </footer>
   </div>
-    <script src="../../components/therapist/therapist.js"></script>
+  <script src="../../components/therapist/therapist.js"></script>
   </body>
 </html>

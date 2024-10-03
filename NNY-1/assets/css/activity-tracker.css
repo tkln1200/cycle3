@@ -1,81 +1,188 @@
-.activity-tracker-main {
+.content-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
   padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
 }
 
 .activity-tracker-section {
-  margin-bottom: 40px;
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 8px; 
+  padding: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
 }
 
 .activity-tracker-section h3 {
-  font-size: 20px;
-  margin-bottom: 20px;
-  color: #007bff;
-}
-
-.activity-tracker-form {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
 }
 
-.activity-tracker-form label {
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.activity-tracker-form .form-group {
+.activity-tracker-section .rating-buttons {
   display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
+  gap: 5px;
+  margin-bottom: 10px;
 }
 
-.activity-tracker-form .form-group label {
-  margin-bottom: 5px;
-}
-
-.activity-tracker-form .form-group textarea {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  width: 100%;
-  box-sizing: border-box;
-  resize: vertical;
-}
-
-.activity-tracker-form input[type="date"],
-.activity-tracker-form input[type="number"],
-.activity-tracker-form input[type="text"],
-.activity-tracker-form select {
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.activity-tracker-form button[type="submit"] {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
+.rating-buttons button {
   border: none;
-  border-radius: 4px;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
   font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.rating-buttons button.active {
+  background-color: #f8c146;
+  color: white;
+}
+
+.activity-notes {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.publish-btn {
+  background-color: #d88bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.publish-btn:hover {
+  background-color: #c576e5;
+}
+
+.activity-tracker-main {
+  width: 100%;
+}
+.side-section {
+  width: 450px;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  margin-left: 10px;
+}
+
+.side-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.side-section p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.calendar-container {
+  background-color: #f4f4f9;
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+#goalSection {
+  background-color: #f4c6e1;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#goalSection h2 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+#goalSection p {
+  font-size: 16px;
+  color: #555;
+  margin-top: 10px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.calendar-header button {
+  background-color: #d3a4e6;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  font-size: 18px;
   cursor: pointer;
 }
 
-.activity-tracker-form button[type="submit"]:hover {
-  background-color: #0056b3;
+.calendar-wrapper {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  margin-top: 10px;
 }
 
-/* Vertical layout for Record Eating Habits */
-.vertical-layout .form-group {
+.calendar-grid div {
+  background-color: #e7e7ff;
+  padding: 8px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.weekday {
+  font-weight: bold;
+  color: #444;
+}
+
+.icon.sleep-icon i {
+  color: #f8c146;
+}
+
+.icon.food-icon i {
+  color: #e76f51;
+}
+
+.icon.water-icon i {
+  color: #2a9d8f;
+}
+
+.icon.exercise-icon i {
+  color: #264653;
+}
+
+.activity-header {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 15px; /* To add space between "Activity Tracker" and "View List" button */
+}
+
+.view-list-btn {
+  background-color: #d88bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.view-list-btn:hover {
+  background-color: #c576e5;
 }
