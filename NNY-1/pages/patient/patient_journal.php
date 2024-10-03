@@ -9,8 +9,30 @@
   </head>
   <body>
     <header>
-    <?php include_once ("../navigation/patient_nav.php")
-      ?>
+    <?php 
+      session_start();
+      include_once ("../navigation/patient_nav.php");
+    require_once "patient_journal_connect.php";
+    // if (!isset($_SESSION['patientId'])) {
+    //   // Redirect to login page if the patient is not logged in
+    //   header("Location: ../login/patient_login.php");
+    //   exit();
+    // }
+    $patientId = $_SESSION['patientId'];
+    $query = "SELECT id, title, dateCreated, timeCreated, details, moodLevel, file FROM Journal WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $patientId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $journals = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $journals[] = $row;
+        }
+    }
+    $stmt->close();
+    $conn->close();
+    ?>
     </header>
     <main>
       <div class="container">
@@ -190,6 +212,9 @@
       include_once ("../footer/patient_footer.php")
       ?>
     </footer>
+    <script>
+        const journalsData = <?php echo json_encode($journals); ?>;
+    </script>
     <script src="../../components/patient/patient.js"></script>
     <script src="../../components/patient/journal.js"></script>
   </body>
