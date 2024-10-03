@@ -29,7 +29,7 @@ CREATE TABLE Patient (
 
 INSERT INTO Patient (therapistId, title, fName, lName, dob, gender, contactNo, email, streetAddress, postCode, height, weight, startDate, endDate, diagnosis, status, profile)
 VALUES
-(1, 'Ms', 'Zoe', 'Glasson', '1999-02-18', 'F', '0412345678', 'zoe.glasson@gmail.com', '122 Main Rd', '5000', 156, 60, '2024-01-23', NULL, 'GAD', 'Active', NULL);
+(1, 'Ms', 'Zoe', 'Glasson', '1999-02-18', 'F', '0412345678', 'zoe.glasson@gmail.com', '122 Main Rd', '5000', 156, 60, '2024-01-23', NULL, 'GAD', 'Active', NULL),
 (2, 'Ms.', 'Emily', 'Clark', '1995-04-12', 'F', '0419876543', 'emilyc@gmail.com.com', '456 Oak Ave', '3001', 165, 60, '2022-09-12', NULL, 'Depression', 'Follow-up', NULL),
 (1, 'Mr.', 'Michael', 'Brown', '1978-06-15', 'M', '0412348888', 'mikeb@gmail.com.com', '789 Pine Rd', '2000', 175, 85, '2023-02-25', NULL, 'PTSD', 'Follow-up', NULL),
 (3, 'Mrs.', 'Sophia', 'Miller', '1971-09-22', 'F', '0423456789', 'sophiam@gmail.com.com', '321 Maple Ln', '6002', 170, 68, '2021-11-05', NULL, 'Bipolar Disorder', 'Active', NULL),

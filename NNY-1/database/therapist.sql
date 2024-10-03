@@ -19,6 +19,6 @@ CREATE TABLE Therapist (
 
 INSERT INTO Therapist (title, fName, lName, email, contactNo, address, profile)
 VALUES
-('Dr', 'Lauren', 'Li', 'lauren.li@care.com', '0401122334', '45 King St, Adelaide, SA 5000', NULL);
+('Dr', 'Lauren', 'Li', 'lauren.li@care.com', '0401122334', '45 King St, Adelaide, SA 5000', NULL),
 ('Dr', 'David', 'Black', 'david.black@care.com', '0412233445', '789 Health St, Sydney, NSW 2000', NULL),
 ('Dr', 'Evelyn', 'Carter', 'evelyn.carter@care.com', '0423344556', '456 Wellness Ave, Melbourne, VIC 3000', NULL);
