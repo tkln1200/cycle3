@@ -12,41 +12,54 @@
       session_start();
       require_once "login_connect.php";
       if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Get email and password from the form
         $email = $_POST['email'];
         $password = $_POST['password'];
-      
-        $query = "SELECT id, password FROM Patient WHERE email = ?";
-        $stmt = $conn->prepare($query);
+    
+        // Prepare and bind
+        $stmt = $conn->prepare("SELECT id, password FROM patient WHERE email = ?");
         $stmt->bind_param("s", $email);
+        
+        // Execute the query
         $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result && $result->num_rows == 1) {
-            $patient = $result->fetch_assoc();
-            $stored_password = $patient['password'];  // The stored plain-text password in the database
-            // Direct comparison of plain-text passwords (not recommended)
-            if ($password === $stored_password) {
-                // Password is correct; proceed with login
-                $_SESSION['patientId'] = $patient['id'];
-                header("Location: ../patient/patient_dashboard.php");
+        
+        // Store the result
+        $stmt->store_result();
+    
+        // Check if email exists
+        if ($stmt->num_rows > 0) {
+            // Bind result variables
+            $stmt->bind_result($id, $hashed_password);
+            $stmt->fetch();
+    
+            // Verify the password
+            if (password_verify($password, $hashed_password)) {
+                // Password is correct, start session and redirect
+                $_SESSION['patient_id'] = $id;
+                header("Location: ../patient/patient_dashboard.php"); // Redirect to the journal page
                 exit();
             } else {
-                echo "Invalid password.";
+                // Password is incorrect
+                $error = "Invalid password.";
             }
         } else {
-            echo "No patient found with that email.";
+            // Email not found
+            $error = "No account found with that email.";
         }
-
-        // Close the statement and connection
+        
+        // Close statement
         $stmt->close();
-        $conn->close();
-      }
-      ?>
+    }
+    
+    // Close connection
+    $conn->close();
+    
+    ?>
     </header>
     <div class="login-container">
       <div class="login-box">
         <h2>Login as a Patient</h2>
-        <form action="../patient/patient_dashboard.php" method="POST">
+        <form method="POST" action="../patient/patient_dashboard.php">
           <div class="input-group">
             <input type="email" name="email" placeholder="Email" />
           </div>
