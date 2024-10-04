@@ -12,83 +12,76 @@
     <?php
         include_once("../navigation/straff_nav.php");
         require_once "patient_db_connect.php";
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['therapistId']) && isset($_POST['fName']) && isset($_POST['lName']) && isset($_POST['dob'])) {
-            // Function to handle image upload
-            function uploadProfileImage($file) {
-                // Check if the file was uploaded without errors
-                if (isset($file) && $file['error'] == 0) {
-                    $fileTmpPath = $file['tmp_name'];
-                    $fileType = mime_content_type($fileTmpPath);
-                    
-                    // Check if it's an image
-                    if (strpos($fileType, 'image') === false) {
-                        die("Error: The uploaded file is not an image.");
-                    }
-                    
-                    // Read file content into a blob (binary large object)
-                    $imageBlob = file_get_contents($fileTmpPath);
-                    
-                    return $imageBlob;
+        function uploadProfileImage($file) {
+            // Check if the file was uploaded without errors
+            if (isset($file) && $file['error'] == 0) {
+                $fileTmpPath = $file['tmp_name'];
+                $fileType = mime_content_type($fileTmpPath);
+                
+                // Check if it's an image
+                if (strpos($fileType, 'image') === false) {
+                    die("Error: The uploaded file is not an image.");
                 }
                 
-                return null;
+                // Read file content into a blob (binary large object)
+                $imageBlob = file_get_contents($fileTmpPath);
+                
+                return $imageBlob;
             }
-
-            // Upload the profile image
-            $profileImage = uploadProfileImage($_FILES['profile']);
-
-            // Prepare the SQL statement with placeholders
-            $sql = "INSERT INTO Patient (therapistId, title, fName, lName, dob, gender, contactNo, email, streetAddress, postCode, height, weight, startDate, endDate, diagnosis, status, profile, password)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-            $stmt = $conn->prepare($sql);
-
-            if ($stmt === false) {
-                die('Prepare failed: ' . $conn->error);
-            }
-
-            // Hash the password
-            $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-            // Bind parameters (18 placeholders and password)
-            // For NULL values (like endDate and profile), pass them directly
-            $stmt->bind_param(
-                "isssssssssdsssssb",
-                $_POST['therapistId'],          // i: therapistId
-                $_POST['title'],                // s: title
-                $_POST['fName'],                // s: fName
-                $_POST['lName'],                // s: lName
-                $_POST['dob'],                  // s: dob
-                $_POST['gender'],               // s: gender
-                $_POST['contactNo'],            // s: contactNo
-                $_POST['email'],                // s: email
-                $_POST['streetAddress'],        // s: streetAddress
-                $_POST['postCode'],             // s: postCode
-                $_POST['height'],               // d: height
-                $_POST['weight'],               // d: weight
-                $_POST['startDate'],            // s: startDate
-                $_POST['endDate'],              // s: endDate (can be NULL)
-                $_POST['diagnosis'],            // s: diagnosis
-                $_POST['status'],               // s: status
-                $profileImage,                  // b: profile image as blob (can be NULL)
-                $hashedPassword                 // s: hashed password
-            );
-
-            // Execute the statement
-            if ($stmt->execute()) {
-                echo "Patient added successfully.";
-            } else {
-                echo "Error: " . $stmt->error;
-            }
-
+            
+            return null;  // Return null if no file is uploaded
+        }
+        
+        // Check if the profile key exists in $_FILES
+        $profileImage = isset($_FILES['profile']) ? uploadProfileImage($_FILES['profile']) : null;
+        
+        // Prepare the SQL statement with placeholders
+        $sql = "INSERT INTO Patient (therapistId, title, fName, lName, dob, gender, contactNo, email, streetAddress, postCode, height, weight, startDate, endDate, diagnosis, status, profile, password)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        $stmt = $conn->prepare($sql);
+        
+        if ($stmt === false) {
+            die('Prepare failed: ' . $conn->error);
+        }
+        
+        // Hash the password
+        $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        
+        // Bind parameters (18 placeholders and password)
+        // For NULL values (like endDate and profile), pass them directly
+        $stmt->bind_param(
+            "isssssssssdsssssbs",
+            $_POST['therapistId'],          // i: therapistId
+            $_POST['title'],                // s: title
+            $_POST['fName'],                // s: fName
+            $_POST['lName'],                // s: lName
+            $_POST['dob'],                  // s: dob
+            $_POST['gender'],               // s: gender
+            $_POST['contactNo'],            // s: contactNo
+            $_POST['email'],                // s: email
+            $_POST['streetAddress'],        // s: streetAddress
+            $_POST['postCode'],             // s: postCode
+            $_POST['height'],               // d: height
+            $_POST['weight'],               // d: weight
+            $_POST['startDate'],            // s: startDate
+            $_POST['endDate'],              // s: endDate (can be NULL)
+            $_POST['diagnosis'],            // s: diagnosis
+            $_POST['status'],               // s: status
+            $profileImage,                  // b: profile image as blob (can be NULL)
+            $hashedPassword                 // s: hashed password
+        );
+        
+        // Execute the statement
+        if ($stmt->execute()) {
+            echo "Patient added successfully.";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+        
         // Close the statement and connection
         $stmt->close();
         $conn->close();
-        }
-        // } else {
-        //     // Handle the case where required fields are not set or the request is not POST
-        //     echo "Invalid request. Please ensure all required fields are filled in.";
-        // }
     ?>
 </header>
 
@@ -117,7 +110,7 @@
         <div class="new-modal-content">
             <span class="close">&times;</span>
             <h2>Create Patient Credentials</h2>
-            <form id="createPatientForm" method="POST" action="">
+            <form id="createPatientForm" method="POST" action="patient_database.php" enctype="multipart/form-data">
                 <label for="therapistId">Therapist ID:</label>
                 <input type="number" id="therapistId" name="therapistId" required>
 
