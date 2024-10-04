@@ -12,26 +12,26 @@
     <?php 
       session_start();
       include_once ("../navigation/patient_nav.php");
-    require_once "patient_journal_connect.php";
+      require_once "patient_journal_connect.php";
     // if (!isset($_SESSION['patientId'])) {
     //   // Redirect to login page if the patient is not logged in
     //   header("Location: ../login/patient_login.php");
     //   exit();
     // }
-    $patientId = $_SESSION['patientId'];
-    $query = "SELECT id, title, dateCreated, timeCreated, details, moodLevel, file FROM Journal WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $patientId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $journals = [];
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $journals[] = $row;
-        }
-    }
-    $stmt->close();
-    $conn->close();
+      $patientId = $_SESSION['patientId'];
+      $query = "SELECT id, title, dateCreated, timeCreated, details, moodLevel, file FROM Journal WHERE id = ?";
+      $stmt = $conn->prepare($query);
+      $stmt->bind_param("i", $patientId);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $journals = [];
+      if ($result->num_rows > 0) {
+          while ($row = $result->fetch_assoc()) {
+              $journals[] = $row;
+          }
+      }
+      $stmt->close();
+      $conn->close();
     ?>
     </header>
     <main>
@@ -182,26 +182,29 @@
         </div>
 
         <!-- Right panel -->
-        <div class="journal-right-panel">
-          <div class="calendar">
-            <div class="month-navigation">
-              <span id="prevMonth" class="nav-arrow">&lt;</span>
-              <h3 id="currentMonth"></h3>
-              <span id="nextMonth" class="nav-arrow">&gt;</span>
+        <div class="right-panel">
+          <div class="calendar-container">
+            <div class="calendar-header">
+              <button id="prevMonth" onclick="prevMonth()">&lt;</button>
+              <h2 id="month-name">September 2024</h2>
+              <button id="nextMonth" onclick="nextMonth()">&gt;</button>
             </div>
-            <div class="calendar-view">
-              <div class="days">
-                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span
-                ><span>Fri</span><span>Sat</span><span>Sun</span>
-              </div>
-              <div class="dates" id="calendarDates">
-                <!-- Dates will be dynamically generated here -->
+            <div class="calendar-wrapper">
+              <div class="calendar-grid" id="calendar-grid">
+                <div class="weekday">Sun</div>
+                <div class="weekday">Mon</div>
+                <div class="weekday">Tue</div>
+                <div class="weekday">Wed</div>
+                <div class="weekday">Thu</div>
+                <div class="weekday">Fri</div>
+                <div class="weekday">Sat</div>
               </div>
             </div>
           </div>
-          <div class="mood-chart">
-            <h3>Your mood recently</h3>
-            <canvas id="moodChart"></canvas>
+
+          <div class="chart-container">
+            <h2>Recent Activity - Mood Level</h2>
+            <canvas id="lineChart" width="500" height="150"></canvas>
           </div>
         </div>
       </div>
@@ -212,10 +215,9 @@
       include_once ("../footer/patient_footer.php")
       ?>
     </footer>
-    <script>
-        const journalsData = <?php echo json_encode($journals); ?>;
-    </script>
+    
     <script src="../../components/patient/patient.js"></script>
     <script src="../../components/patient/journal.js"></script>
+    
   </body>
 </html>
