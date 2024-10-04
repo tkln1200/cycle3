@@ -35,8 +35,8 @@
             // Verify the password
             if (password_verify($password, $hashed_password)) {
                 // Password is correct, start session and redirect
-                $_SESSION['patient_id'] = $id;
-                header("Location: ../patient/patient_dashboard.php"); // Redirect to the journal page
+                $_SESSION['patientId'] = $id;
+                header("Location: ../patient/patient_journal.php"); // Redirect to the journal page
                 exit();
             } else {
                 // Password is incorrect
@@ -59,7 +59,7 @@
     <div class="login-container">
       <div class="login-box">
         <h2>Login as a Patient</h2>
-        <form method="POST" action="../patient/patient_dashboard.php">
+        <form method="POST" action="">
           <div class="input-group">
             <input type="email" name="email" placeholder="Email" />
           </div>
