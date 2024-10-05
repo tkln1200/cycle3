@@ -117,7 +117,7 @@
                 $journals[] = $row;
             }
         }
-    
+  
         $conn->close();
   
       }
@@ -130,7 +130,7 @@
         <!-- Left hand side bar for past journal entries-->
         <div class="journal-left-panel">
           <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search entry..." />
+            <input type="text" id="searchInput" placeholder="Search entry by title..." />
             <button type="submit" id="searchJournal">
               <img
                 src="../../assets/images/search-interface-symbol.png"

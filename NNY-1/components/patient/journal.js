@@ -71,55 +71,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 // document.getElementById("journalForm").onsubmit = saveJournalEntry;
 document.getElementById("addNewPostBtn").addEventListener("click", addNewPost);
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Function to save journal
-// Function to handle mood level selection
-// document.querySelectorAll(".moodbtn").forEach((button) => {
-//   button.addEventListener("click", function () {
-//     // Set the value of the hidden input to the value of the clicked button
-//     document.getElementById("moodLevel").value = this.value;
-
-//     // Remove 'selected' class from all buttons
-//     document
-//       .querySelectorAll(".moodbtn")
-//       .forEach((btn) => btn.classList.remove("selected"));
-
-//     // Add 'selected' class to the clicked button
-//     this.classList.add("selected");
-//   });
-// });
-
-// // Function to submit journal entry
-// function submitJournalEntry() {
-//   const journalTitle = document.getElementById("journal-title").value; // Example for title
-//   const journalContent = document.getElementById("journal-content").value; // Example for content
-//   const moodLevelValue = document.getElementById("moodLevel").value;
-
-//   // Example AJAX request to send data to the server
-//   const xhr = new XMLHttpRequest();
-//   xhr.open("POST", "submit-journal.php", true);
-//   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-//   xhr.onreadystatechange = function () {
-//     if (xhr.readyState === 4 && xhr.status === 200) {
-//       alert("Journal entry submitted successfully!");
-//       // Optionally reset the form or close the modal here
-//     }
-//   };
-
-//   // Prepare data to send
-//   const data = `title=${encodeURIComponent(
-//     journalTitle
-//   )}&content=${encodeURIComponent(
-//     journalContent
-//   )}&moodLevel=${encodeURIComponent(moodLevelValue)}`;
-//   xhr.send(data);
-// }
-
-// // Call the function on form submission (or button click)
-// document
-//   .getElementById("submit-button")
-//   .addEventListener("click", submitJournalEntry);
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Function to show journal details
 function showJournalDetails(id) {
@@ -141,50 +92,31 @@ function showJournalDetails(id) {
       `;
 }
 
+//////////////////////////////////////////
 function filterJournals() {
   const searchInput = document
     .getElementById("searchInput")
     .value.toLowerCase();
-  const journalListItems = document.querySelectorAll(
-    "#journalList .journal-title"
-  );
 
-  journalListItems.forEach((item) => {
-    const title = item.textContent.toLowerCase();
+  // Select all journal items instead of journal titles
+  const journalItems = document.querySelectorAll("#journalList .journal-item");
+
+  journalItems.forEach((item) => {
+    // Get the title text from the journal-title child element
+    const title = item
+      .querySelector(".journal-title")
+      .textContent.toLowerCase();
+
+    // Check if the title includes the search input
     if (title.includes(searchInput)) {
-      item.style.display = "";
+      item.style.display = ""; // Show item if it matches
     } else {
-      item.style.display = "none";
+      item.style.display = "none"; // Hide item if it doesn't match
     }
   });
 }
 
-// //Event listener to search entry
-// document
-//   .getElementById("searchJournal")
-//   .addEventListener("click", filterJournals);
-
-// //Event listener to search entry
-// document
-//   .getElementById("searchInput")
-//   .addEventListener("input", filterJournals);
-
-// // Function to save the new journal entry
-// function saveJournalEntry(event) {
-//   event.preventDefault();
-
-//   // Prepare the form data
-//   const title = document.getElementById("journalTitle").value;
-//   const content = document.getElementById("journalContent").value;
-//   const moodLevel = document.getElementById("moodLevel").value;
-
-//   // Use form submission to send data to PHP
-//   const form = document.getElementById("journalForm");
-//   form.submit();
-// }
-
-// // Call the function to display the date when the page loads
-
-// document
-//   .getElementById("searchInput")
-//   .addEventListener("input", filterJournals);
+// Event listener to search entry
+document
+  .getElementById("searchInput")
+  .addEventListener("input", filterJournals);
