@@ -6,6 +6,8 @@
     <title>Journal</title>
     <link rel="stylesheet" href="../../assets/css/patient.css" />
     <link rel="stylesheet" href="../../assets/css/shared.css" />
+    <script src="../../components/patient/patient.js"></script>
+    <script src="../../components/patient/journal.js"></script>
   </head>
   <body>
     <header>
@@ -22,17 +24,27 @@
       
       $patientId = $_SESSION['patientId'];
       
-      $query = "SELECT * FROM Journal WHERE id = ?";      
+      $query = "SELECT * FROM Journal WHERE patientId = ?";      
       $stmt = $conn->prepare($query);
       $stmt->bind_param("i", $patientId);
       $stmt->execute();
       $result = $stmt->get_result();
       $journals = [];
+
       if ($result->num_rows > 0) {
-          while ($row = $result->fetch_assoc()) {
-              $journals[] = $row;
-          }
-      }
+        while ($row = $result->fetch_assoc()) {
+            $journals[] = $row;
+        }
+    }
+    
+    // Pass the entire journals array to the JavaScript function
+      echo '<script> populateJournalList(' . json_encode($journals) . ');</script>';
+    
+      // if ($result->num_rows > 0) {
+      //     while ($row = $result->fetch_assoc()) {
+      //       echo '<script>populateJournalList('.json_encode($journals).');</script>';
+      //     }
+      // }
 
       // Fetch the patient's therapistId
       $query = "SELECT therapistId FROM Patient WHERE id = ?";
@@ -50,10 +62,10 @@
       // Handle the form submission for adding a new journal entry 
       if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $title = $_POST['title'];
-        $details = $_POST['details'];
-        $moodLevel = $_POST['moodLevel'];
         $dateCreated = $_POST['dateCreated'];
         $timeCreated = $_POST['timeCreated'];
+        $details = $_POST['details'];
+        $moodLevel = $_POST['moodLevel'];
         
         // Initialize fileContent
         $fileContent = null;
@@ -77,14 +89,30 @@
         $insertStmt->bind_param("iissssib", $patientId, $therapistId, $title, $dateCreated, $timeCreated, $details, $moodLevel, $fileContent); // Changed to 'b' for BLOB
 
         // Check if the prepared statement was executed successfully
+        
         if ($insertStmt->execute()) {
-            echo "New journal entry added successfully!";
-        } else {
-            echo "Error: " . $insertStmt->error;
-        }
-
-        $insertStmt->close();
+          echo "New journal entry added successfully!";
+          
+          // Fetch the newly created journal to send to JavaScript
+          $newJournalId = $conn->insert_id; // Get the last inserted id
+          $query = "SELECT * FROM Journal WHERE id = ?";
+          $newStmt = $conn->prepare($query);
+          $newStmt->bind_param("i", $newJournalId);
+          $newStmt->execute();
+          $newResult = $newStmt->get_result();
+      
+          if ($newResult->num_rows > 0) {
+              $newJournal = $newResult->fetch_assoc();
+              echo '<script>populateJournalList('.json_encode($newJournal).');</script>'; // Call JS function with the new journal
+          }
+          
+          $newStmt->close();
+      } else {
+          echo "Error: " . $insertStmt->error;
       }
+      }
+
+      
 
       $query = "SELECT * FROM Journal WHERE id = ?";
       $stmt = $conn->prepare($query);
@@ -95,6 +123,8 @@
       $stmt->close();
       $conn->close();
     ?>
+
+
     </header>
     <main>
       <div class="container">
@@ -109,16 +139,11 @@
               />
             </button>
           </div>
-          <div class="journalList">
-              <div class="journal-title">
-                  <?php while ($row = $result->fetch_assoc()): ?>
-                      <div class="journal-content" onclick="showJournalDetails(<?php echo $row['id']; ?>)">
-                          <?php echo htmlspecialchars($row['title']); ?> <br> 
-                          <?php echo htmlspecialchars($row['dateCreated']); ?>
-                      </div>
-                  <?php endwhile; ?>
-                </div>
+          
+          <div id="journalList" class="journalList"> 
+        
           </div>
+        
        </div>
 
         <!-- Main panel with journal details -->
@@ -134,7 +159,7 @@
                 <span class="close">&times;</span>
               </h3>
               <div id="line"></div>
-              <form id="new-journal-form" method="POST" action="" enctype="multipart/form-data"> 
+              <form id="journalForm" method="POST" action="" enctype="multipart/form-data"> 
               <label for="journalTitle"></label>
               <input
                   type="text"
@@ -145,7 +170,7 @@
               /><br />
               
               <div id="journalDate">
-                  <label for="dateCreated">Date:</label>
+                  <label for="dateCreated"></label>
                   <input
                       type="date"
                       id="dateCreated"
@@ -156,7 +181,7 @@
               </div>
               
               <div id="journalTime">
-                  <label for="timeCreated">Time:</label>
+                  <label for="timeCreated"></label>
                   <input
                       type="time"
                       id="timeCreated"
@@ -168,7 +193,7 @@
               
               <label for="journalContent"></label>
               <textarea
-                  id="journalContent"
+                  id="deatils"
                   name="details" 
                   placeholder="Share your thoughts..."
                   rows="10"
@@ -183,95 +208,26 @@
               <br />
               
               <div id="moodInput" class="moodInput" required>
-                  <label for="moodInput">Mood:</label>
-                  <input
-                      style="order: 10"
-                      type="button"
-                      id="btn1"
-                      class="moodbtn"
-                      value="1"
-                      onclick="selectMood(1)"
-                  />
-                  <input
-                      style="order: 9"
-                      type="button"
-                      id="btn2"
-                      class="moodbtn"
-                      value="2"
-                      onclick="selectMood(2)"
-                  />
-                  <input
-                      style="order: 8"
-                      type="button"
-                      id="btn3"
-                      class="moodbtn"
-                      value="3"
-                      onclick="selectMood(3)"
-                  />
-                  <input
-                      style="order: 7"
-                      type="button"
-                      id="btn4"
-                      class="moodbtn"
-                      value="4"
-                      onclick="selectMood(4)"
-                  />
-                  <input
-                      style="order: 6"
-                      type="button"
-                      id="btn5"
-                      class="moodbtn"
-                      value="5"
-                      onclick="selectMood(5)"
-                  />
-                  <input
-                      style="order: 5"
-                      type="button"
-                      id="btn6"
-                      class="moodbtn"
-                      value="6"
-                      onclick="selectMood(6)"
-                  />
-                  <input
-                      style="order: 4"
-                      type="button"
-                      id="btn7"
-                      class="moodbtn"
-                      value="7"
-                      onclick="selectMood(7)"
-                  />
-                  <input
-                      style="order: 3"
-                      type="button"
-                      id="btn8"
-                      class="moodbtn"
-                      value="8"
-                      onclick="selectMood(8)"
-                  />
-                  <input
-                      style="order: 2"
-                      type="button"
-                      id="btn9"
-                      class="moodbtn"
-                      value="9"
-                      onclick="selectMood(9)"
-                  />
-                  <input
-                      style="order: 1"
-                      type="button"
-                      id="btn10"
-                      class="moodbtn"
-                      value="10"
-                      onclick="selectMood(10)"
-                  />
-                  <input type="hidden" name="moodLevel" id="moodLevel" required />
-    </div>
-    
-    <div id="line"></div>
-    <input type="submit" value="Publish" />
-</form>
-            </div>
+                <label for="moodLevel">Mood:</label>
+                <input type="button" id="btn1" class="moodbtn" value="1" />
+                <input type="button" id="btn2" class="moodbtn" value="2" />
+                <input type="button" id="btn3" class="moodbtn" value="3" />
+                <input type="button" id="btn4" class="moodbtn" value="4" />
+                <input type="button" id="btn5" class="moodbtn" value="5" />
+                <input type="button" id="btn6" class="moodbtn" value="6" />
+                <input type="button" id="btn7" class="moodbtn" value="7" />
+                <input type="button" id="btn8" class="moodbtn" value="8" />
+                <input type="button" id="btn9" class="moodbtn" value="9" />
+                <input type="button" id="btn10" class="moodbtn" value="10" />
+                <input type="hidden" name="moodLevel" id="moodLevel" required />
+              </div>
+                             
+              <div id="line"></div>
+                  <input type="submit" value="Publish" />
+              </div>  
+            </form>
           </div>
+        
 
           <div class="journal-details">
             <!-- <h2>Journal Details</h2> -->
@@ -304,22 +260,21 @@
                 <div class="weekday">Sat</div>
               </div>
             </div>
-          </div>
-
+          
           <div class="chart-container">
             <h2>Recent Activity - Mood Level</h2>
             <canvas id="lineChart" width="500" height="150"></canvas>
           </div>
         </div>
       </div>
-    </main>
+      </div>
 
+    </main>
     <footer>
     <?php
       include_once ("../footer/patient_footer.php")
       ?>
     </footer>
-    
     <script src="../../components/patient/patient.js"></script>
     <script src="../../components/patient/journal.js"></script>
   </body>
