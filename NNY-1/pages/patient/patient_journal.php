@@ -109,15 +109,15 @@
               />
             </button>
           </div>
-          <div id="journal-list">
-              <h2>Past Journals</h2>
-              <ul>
+          <div class="journalList">
+              <div class="journal-title">
                   <?php while ($row = $result->fetch_assoc()): ?>
-                      <li onclick="showJournalDetails(<?php echo $row['id']; ?>)">
-                          <?php echo htmlspecialchars($row['title']); ?> - <?php echo htmlspecialchars($row['dateCreated']); ?>
-                      </li>
+                      <div class="journal-content" onclick="showJournalDetails(<?php echo $row['id']; ?>)">
+                          <?php echo htmlspecialchars($row['title']); ?> <br> 
+                          <?php echo htmlspecialchars($row['dateCreated']); ?>
+                      </div>
                   <?php endwhile; ?>
-              </ul>
+                </div>
           </div>
        </div>
 

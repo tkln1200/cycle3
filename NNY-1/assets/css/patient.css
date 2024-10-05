@@ -19,7 +19,7 @@ body {
 }
 
 .right-panel {
-  width: 100%; 
+  width: 100%;
   max-width: 400px;
   background-color: #fff;
   padding: 20px;
@@ -38,7 +38,6 @@ body {
   max-width: 400px;
   height: auto;
 }
-
 
 .greetings {
   font-size: x-large;
@@ -304,7 +303,8 @@ body {
   border-radius: 5px;
 }
 
-div .journal-title {
+.journal-title {
+  width: 90%;
   background-color: white;
   padding: 10px;
   border-radius: 10px;
@@ -312,13 +312,12 @@ div .journal-title {
   box-shadow: 5px 5px rgba(199, 160, 196, 0.691);
   margin: 0px;
   margin-bottom: 10px;
-  font-size: medium;
+  font-size: large;
   cursor: pointer;
-  font-size: small;
 }
 
 div .journal-content {
-  font-size: small;
+  font-size: large;
   padding-top: 5px;
 }
 
@@ -341,7 +340,7 @@ div.journal-title:hover {
 }
 
 .journal-details p {
-  font-size: small;
+  font-size: large;
 }
 
 .journal-details img {
@@ -590,7 +589,7 @@ div.journal-title:hover {
 }
 
 .calendar-header button {
-  background-color: #B79CEB;
+  background-color: #b79ceb;
   color: white;
   border: none;
   padding: 10px;
@@ -622,7 +621,7 @@ div.journal-title:hover {
 }
 
 .day:hover {
-  background-color: #B79CEB;
+  background-color: #b79ceb;
   color: white;
 }
 
