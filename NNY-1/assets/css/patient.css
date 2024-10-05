@@ -306,8 +306,7 @@ body {
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-height: 1700px;
-  height: fit-content;
+  height: 95%;
 }
 
 .journal-title {
@@ -421,7 +420,7 @@ div.journal-title:hover {
     padding-left: 20px;
     padding-right: 20px;
     margin: 0px;
-    font-size: medium;
+    font-size: large;
   }
 
   #dateCreated {
@@ -454,6 +453,7 @@ div.journal-title:hover {
     padding-right: 20px;
     border: none;
     resize: none;
+    size: medium;
   }
 
   textarea:focus,
@@ -462,13 +462,14 @@ div.journal-title:hover {
   }
 
   #moodInput {
-    align-self: flex-end;
+    align-self: flex-start;
     padding: 5px 10px;
     background-color: white;
-    color: rgb(161, 50, 149);
+    color: black;
     font-size: small;
     margin-bottom: 10px;
     margin-right: 20px;
+    margin-left: 10px;
   }
 
   .moodbtn {
@@ -504,6 +505,27 @@ div.journal-title:hover {
     margin-top: 10px;
     margin-right: 20px;
     box-shadow: 0px 0.5px 0px 1px #f0f0f0;
+    font-weight: bold;
+  }
+
+  input[type="submit"]:hover {
+    align-self: flex-end;
+    padding: 5px 10px;
+    background-color: rgb(161, 50, 150);
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: small;
+    margin-top: 10px;
+    margin-right: 20px;
+    box-shadow: 0px 0.5px 0px 1px #f0f0f0;
+    font-weight: bold;
+  }
+
+  #moodLevel {
+    border: 1px;
+    background-color: #fdfdfd;
   }
 }
 
@@ -514,6 +536,7 @@ div.journal-title:hover {
   padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
+  color: black;
 }
 
 .journal-popup {

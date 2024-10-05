@@ -74,51 +74,51 @@ document.getElementById("addNewPostBtn").addEventListener("click", addNewPost);
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Function to save journal
 // Function to handle mood level selection
-document.querySelectorAll(".moodbtn").forEach((button) => {
-  button.addEventListener("click", function () {
-    // Set the value of the hidden input to the value of the clicked button
-    document.getElementById("moodLevel").value = this.value;
+// document.querySelectorAll(".moodbtn").forEach((button) => {
+//   button.addEventListener("click", function () {
+//     // Set the value of the hidden input to the value of the clicked button
+//     document.getElementById("moodLevel").value = this.value;
 
-    // Remove 'selected' class from all buttons
-    document
-      .querySelectorAll(".moodbtn")
-      .forEach((btn) => btn.classList.remove("selected"));
+//     // Remove 'selected' class from all buttons
+//     document
+//       .querySelectorAll(".moodbtn")
+//       .forEach((btn) => btn.classList.remove("selected"));
 
-    // Add 'selected' class to the clicked button
-    this.classList.add("selected");
-  });
-});
+//     // Add 'selected' class to the clicked button
+//     this.classList.add("selected");
+//   });
+// });
 
-// Function to submit journal entry
-function submitJournalEntry() {
-  const journalTitle = document.getElementById("journal-title").value; // Example for title
-  const journalContent = document.getElementById("journal-content").value; // Example for content
-  const moodLevelValue = document.getElementById("moodLevel").value;
+// // Function to submit journal entry
+// function submitJournalEntry() {
+//   const journalTitle = document.getElementById("journal-title").value; // Example for title
+//   const journalContent = document.getElementById("journal-content").value; // Example for content
+//   const moodLevelValue = document.getElementById("moodLevel").value;
 
-  // Example AJAX request to send data to the server
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "submit-journal.php", true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      alert("Journal entry submitted successfully!");
-      // Optionally reset the form or close the modal here
-    }
-  };
+//   // Example AJAX request to send data to the server
+//   const xhr = new XMLHttpRequest();
+//   xhr.open("POST", "submit-journal.php", true);
+//   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+//   xhr.onreadystatechange = function () {
+//     if (xhr.readyState === 4 && xhr.status === 200) {
+//       alert("Journal entry submitted successfully!");
+//       // Optionally reset the form or close the modal here
+//     }
+//   };
 
-  // Prepare data to send
-  const data = `title=${encodeURIComponent(
-    journalTitle
-  )}&content=${encodeURIComponent(
-    journalContent
-  )}&moodLevel=${encodeURIComponent(moodLevelValue)}`;
-  xhr.send(data);
-}
+//   // Prepare data to send
+//   const data = `title=${encodeURIComponent(
+//     journalTitle
+//   )}&content=${encodeURIComponent(
+//     journalContent
+//   )}&moodLevel=${encodeURIComponent(moodLevelValue)}`;
+//   xhr.send(data);
+// }
 
-// Call the function on form submission (or button click)
-document
-  .getElementById("submit-button")
-  .addEventListener("click", submitJournalEntry);
+// // Call the function on form submission (or button click)
+// document
+//   .getElementById("submit-button")
+//   .addEventListener("click", submitJournalEntry);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // // Function to show journal details

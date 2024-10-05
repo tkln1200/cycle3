@@ -35,17 +35,11 @@
         while ($row = $result->fetch_assoc()) {
             $journals[] = $row;
         }
-    }
+      } 
     
-    // Pass the entire journals array to the JavaScript function
+      // Pass the entire journals array to the JavaScript function
       echo '<script> populateJournalList(' . json_encode($journals) . ');</script>';
     
-      // if ($result->num_rows > 0) {
-      //     while ($row = $result->fetch_assoc()) {
-      //       echo '<script>populateJournalList('.json_encode($journals).');</script>';
-      //     }
-      // }
-
       // Fetch the patient's therapistId
       $query = "SELECT therapistId FROM Patient WHERE id = ?";
       $stmt = $conn->prepare($query);
@@ -59,69 +53,67 @@
         $therapistId = $row['therapistId']; // Retrieve the therapistId associated with the patient
       }    
 
-      // Handle the form submission for adding a new journal entry 
       if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Retrieve form data
         $title = $_POST['title'];
         $dateCreated = $_POST['dateCreated'];
         $timeCreated = $_POST['timeCreated'];
         $details = $_POST['details'];
         $moodLevel = $_POST['moodLevel'];
-        
-        // Initialize fileContent
-        $fileContent = null;
-        
+    
+        // Initialize mediaName
+        $mediaName = null;
+    
         // Check if a file was uploaded
         if (isset($_FILES['mediaUpload']) && $_FILES['mediaUpload']['error'] == UPLOAD_ERR_OK) {
-            $fileTmpPath = $_FILES['mediaUpload']['tmp_name'];
-            $fileContent = file_get_contents($fileTmpPath); // Read the file content
-        } else {
-            // Handle the error for file upload
-            echo "Error uploading file. Please try again.";
-            // You may want to set $fileContent to a default value or NULL if the file is not necessary
+            $mediaName = $_FILES['mediaUpload']['name'];
+            $mediaTmpName = $_FILES['mediaUpload']['tmp_name'];
+            $mediaDestination = "uploads/" . basename($mediaName); // Ensure this directory exists
+    
+            // Move the uploaded file to the desired directory
+            if (!move_uploaded_file($mediaTmpName, $mediaDestination)) {
+                echo "Error uploading media.";
+            }
         }
-
-        // Prepare to insert the new journal entry, using the retrieved therapistId
-        $insertQuery = "INSERT INTO Journal (patientId, therapistId, title, dateCreated, timeCreated, details, moodLevel, file)
+    
+        // Prepare the SQL insert statement with placeholders
+        $insertQuery = "INSERT INTO Journal (patientId, therapistId, title, dateCreated, timeCreated, details, moodLevel, file) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $insertStmt = $conn->prepare($insertQuery);
-        
-        // Bind parameters: 'i' for integer, 's' for string, 'b' for blob
-        $insertStmt->bind_param("iissssib", $patientId, $therapistId, $title, $dateCreated, $timeCreated, $details, $moodLevel, $fileContent); // Changed to 'b' for BLOB
-
+    
+        // Bind parameters: 'i' for integer, 's' for string
+        // Note: Ensure $patientId and $therapistId are defined in your scope
+        $insertStmt->bind_param("iissssib", $patientId, $therapistId, $title, $dateCreated, $timeCreated, $details, $moodLevel, $mediaName);
+    
         // Check if the prepared statement was executed successfully
+        // if ($insertStmt->execute()) {
+        //   exit();
+        // } 
         
-        if ($insertStmt->execute()) {
-          echo "New journal entry added successfully!";
-          
-          // Fetch the newly created journal to send to JavaScript
-          $newJournalId = $conn->insert_id; // Get the last inserted id
-          $query = "SELECT * FROM Journal WHERE id = ?";
-          $newStmt = $conn->prepare($query);
-          $newStmt->bind_param("i", $newJournalId);
-          $newStmt->execute();
-          $newResult = $newStmt->get_result();
+        // else {
+        //     echo "Error: " . $insertStmt->error;
+        // }
       
-          if ($newResult->num_rows > 0) {
-              $newJournal = $newResult->fetch_assoc();
-              echo '<script>populateJournalList('.json_encode($newJournal).');</script>'; // Call JS function with the new journal
-          }
-          
-          $newStmt->close();
-      } else {
-          echo "Error: " . $insertStmt->error;
+        // Close the statement and connection
+        $insertStmt->close();
+        
+        // Fetch existing journals for the patient after adding a new one
+        $query = "SELECT * FROM Journal WHERE patientId = ?";      
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $patientId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $journals = [];
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $journals[] = $row;
+            }
+        }
+    
+        $conn->close();
+  
       }
-      }
-
-      
-
-      $query = "SELECT * FROM Journal WHERE id = ?";
-      $stmt = $conn->prepare($query);
-      $stmt->bind_param("i", $patientId);
-      $stmt->execute();
-      $result = $stmt->get_result();
-
-      $stmt->close();
-      $conn->close();
     ?>
 
 
@@ -154,7 +146,7 @@
 
           <div id="newJournalModal" class="modal">
             <div class="journal-modal-content">
-              <h3 style="color: rgb(161, 50, 149); text-align: center">
+              <h3 style="color: rgb(161, 50, 149); text-align: center; size: medium">
                 What's on your mind?
                 <span class="close">&times;</span>
               </h3>
@@ -193,7 +185,7 @@
               
               <label for="journalContent"></label>
               <textarea
-                  id="deatils"
+                  id="details"
                   name="details" 
                   placeholder="Share your thoughts..."
                   rows="10"
@@ -207,7 +199,7 @@
               </div>
               <br />
               
-              <div id="moodInput" class="moodInput" required>
+              <!-- <div id="moodInput" class="moodInput" required>
                 <label for="moodLevel">Mood:</label>
                 <input type="button" id="btn1" class="moodbtn" value="1" />
                 <input type="button" id="btn2" class="moodbtn" value="2" />
@@ -220,6 +212,11 @@
                 <input type="button" id="btn9" class="moodbtn" value="9" />
                 <input type="button" id="btn10" class="moodbtn" value="10" />
                 <input type="hidden" name="moodLevel" id="moodLevel" required />
+              </div> -->
+
+              <div id="moodInput" required>
+              <label for="moodLevel">Mood Level (from 1 to 10):</label>
+              <input type="number" id="moodLevel" class="moodLvel" name="moodLevel" value="1" min="1" max="10" />
               </div>
                              
               <div id="line"></div>
