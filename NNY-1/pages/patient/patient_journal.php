@@ -24,7 +24,7 @@
       
       $patientId = $_SESSION['patientId'];
       
-      $query = "SELECT * FROM Journal WHERE patientId = ?";      
+      $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
       $stmt = $conn->prepare($query);
       $stmt->bind_param("i", $patientId);
       $stmt->execute();
@@ -60,7 +60,13 @@
         $timeCreated = $_POST['timeCreated'];
         $details = $_POST['details'];
         $moodLevel = $_POST['moodLevel'];
-    
+        
+        $uploadDir = "uploads/";
+
+        // Check if the uploads directory exists, if not, create it
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true); // Create the directory with appropriate permissions
+        }
         // Initialize mediaName
         $mediaName = null;
     
@@ -86,19 +92,20 @@
         $insertStmt->bind_param("iissssib", $patientId, $therapistId, $title, $dateCreated, $timeCreated, $details, $moodLevel, $mediaName);
     
         // Check if the prepared statement was executed successfully
-        // if ($insertStmt->execute()) {
-        //   exit();
-        // } 
+        if ($insertStmt->execute()) {
+          header("Location: patient_journal.php");
+          exit();
+        } 
         
-        // else {
-        //     echo "Error: " . $insertStmt->error;
-        // }
+        else {
+            echo "Error: " . $insertStmt->error;
+        }
       
         // Close the statement and connection
         $insertStmt->close();
         
         // Fetch existing journals for the patient after adding a new one
-        $query = "SELECT * FROM Journal WHERE patientId = ?";      
+        $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $patientId);
         $stmt->execute();
@@ -151,7 +158,7 @@
                 <span class="close">&times;</span>
               </h3>
               <div id="line"></div>
-              <form id="journalForm" method="POST" action="" enctype="multipart/form-data"> 
+              <form id="journalForm" method="POST" action="patient_journal.php" enctype="multipart/form-data"> 
               <label for="journalTitle"></label>
               <input
                   type="text"

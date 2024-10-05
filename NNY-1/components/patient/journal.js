@@ -20,7 +20,7 @@ function populateJournalList(journals) {
     // Add the date
     const dateElement = document.createElement("div");
     dateElement.className = "journal-date";
-    dateElement.textContent = journal.date;
+    dateElement.textContent = journal.dateCreated;
     journalItem.appendChild(dateElement);
 
     // Add a substring of the content (first 10 words)
