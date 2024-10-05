@@ -121,38 +121,43 @@ document.getElementById("addNewPostBtn").addEventListener("click", addNewPost);
 //   .addEventListener("click", submitJournalEntry);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-// // Function to show journal details
-// function showJournalDetails(id) {
-//   const journal = journalsList.find((journal) => journal.id === id);
-//   if (!journal) return;
+// Function to show journal details
+function showJournalDetails(id) {
+  const journal = journalsList.find((journal) => journal.id === id);
+  if (!journal) return;
 
-//   const detailsPanel = document.querySelector(".journal-details");
-//   detailsPanel.innerHTML = `
-//       <h2>${journal.title}</h2>
-//       <p><strong>Date:</strong> ${journal.date}</p>
-//       <p>${journal.content}</></br></br>
-//       <img src="${journal.image}"></>
-//       <p>Mood: ${journal.moodlevel}</p>
-//       `;
-// }
+  const detailsPanel = document.querySelector(".journal-details");
+  detailsPanel.innerHTML = `
+      <h2>${journal.title}</h2>
+      <p><strong>Date:</strong> ${journal.dateCreated}</p>
+      <p><strong>Time:</strong> ${journal.timeCreated}</p>
+      <p>${journal.details}</></br></br>
+      ${
+        journal.file
+          ? `<img src="uploads/${journal.file}" alt="Journal Image" />`
+          : ""
+      }
+      <p>Mood: ${journal.moodLevel}</p>
+      `;
+}
 
-// function filterJournals() {
-//   const searchInput = document
-//     .getElementById("searchInput")
-//     .value.toLowerCase();
-//   const journalListItems = document.querySelectorAll(
-//     "#journalList .journal-title"
-//   );
+function filterJournals() {
+  const searchInput = document
+    .getElementById("searchInput")
+    .value.toLowerCase();
+  const journalListItems = document.querySelectorAll(
+    "#journalList .journal-title"
+  );
 
-//   journalListItems.forEach((item) => {
-//     const title = item.textContent.toLowerCase();
-//     if (title.includes(searchInput)) {
-//       item.style.display = "";
-//     } else {
-//       item.style.display = "none";
-//     }
-//   });
-// }
+  journalListItems.forEach((item) => {
+    const title = item.textContent.toLowerCase();
+    if (title.includes(searchInput)) {
+      item.style.display = "";
+    } else {
+      item.style.display = "none";
+    }
+  });
+}
 
 // //Event listener to search entry
 // document

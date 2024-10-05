@@ -234,13 +234,10 @@
         
 
           <div class="journal-details">
-            <!-- <h2>Journal Details</h2> -->
+            <h2 style="color: rgb(161, 50, 149);">Journal Details</h2>
+            
             <div id="journalDetails">
-            <?php while ($row = $result->fetch_assoc()): ?>
-                    <li onclick="showJournalDetails(<?php echo $row['id']; ?>)">
-                        <?php echo htmlspecialchars($row['title']); ?> - <?php echo htmlspecialchars($row['dateCreated']); ?>
-                    </li>
-                <?php endwhile; ?>
+            <!-- JS generated details -->
             </div>
           </div>
         </div>
