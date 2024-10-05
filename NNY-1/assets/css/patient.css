@@ -19,7 +19,7 @@ body {
 }
 
 .right-panel {
-  width: 100%; 
+  width: 100%;
   max-width: 400px;
   background-color: #fff;
   padding: 20px;
@@ -38,7 +38,6 @@ body {
   max-width: 400px;
   height: auto;
 }
-
 
 .greetings {
   font-size: x-large;
@@ -267,13 +266,12 @@ body {
 .journal-left-panel {
   width: 25%;
   padding-right: 20px;
-  height: 70%;
+  margin-right: 20px;
 }
 
 .journal-main-panel {
   width: 50%;
   padding-right: 20px;
-  height: 70%;
 }
 
 .journal-right-panel {
@@ -299,12 +297,19 @@ body {
 
 .journalList {
   display: flex;
+  overflow: scroll;
+  padding-left: 10px;
+  padding-top: 10px;
   flex-direction: column;
   align-items: flex-start;
-  border-radius: 5px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 95%;
 }
 
-div .journal-title {
+.journal-title {
+  width: 90%;
   background-color: white;
   padding: 10px;
   border-radius: 10px;
@@ -312,13 +317,12 @@ div .journal-title {
   box-shadow: 5px 5px rgba(199, 160, 196, 0.691);
   margin: 0px;
   margin-bottom: 10px;
-  font-size: medium;
+  font-size: large;
   cursor: pointer;
-  font-size: small;
 }
 
 div .journal-content {
-  font-size: small;
+  font-size: medium;
   padding-top: 5px;
 }
 
@@ -330,18 +334,20 @@ div .journal-date {
 }
 
 div.journal-title:hover {
-  background-color: #f0f0f0;
+  background-color: #fdfdfd;
 }
 
 .journal-details {
   background-color: #fff;
-  padding: 10px;
+  padding: 30px;
   text-align: justify;
-  border-radius: 5px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 91%;
 }
 
 .journal-details p {
-  font-size: small;
+  font-size: large;
 }
 
 .journal-details img {
@@ -404,7 +410,7 @@ div.journal-title:hover {
   display: flex;
   flex-direction: column;
 
-  input[type="title"] {
+  #journalTitle {
     font-family: Arial, Helvetica, sans-serif;
     border: none;
     width: 90%;
@@ -413,25 +419,27 @@ div.journal-title:hover {
     padding-left: 20px;
     padding-right: 20px;
     margin: 0px;
-    font-size: medium;
+    font-size: large;
   }
 
-  #journalDate {
+  #dateCreated {
     padding-left: 20px;
     padding-right: 20px;
     font-size: small;
     font-family: Arial, Helvetica, sans-serif;
     color: #888;
     font-style: italic;
+    border: none;
   }
 
-  #journalTime {
+  #timeCreated {
     padding-left: 20px;
     padding-right: 20px;
     font-size: small;
     font-family: Arial, Helvetica, sans-serif;
     color: #888;
     font-style: italic;
+    border: none;
   }
 
   textarea {
@@ -444,11 +452,44 @@ div.journal-title:hover {
     padding-right: 20px;
     border: none;
     resize: none;
+    size: medium;
   }
 
   textarea:focus,
   input:focus {
     outline: none;
+  }
+
+  #moodInput {
+    align-self: flex-start;
+    padding: 5px 10px;
+    background-color: white;
+    color: black;
+    font-size: small;
+    margin-bottom: 10px;
+    margin-right: 20px;
+    margin-left: 10px;
+  }
+
+  .moodbtn {
+    align-self: flex-end;
+    padding: 5px 10px;
+    background-color: white;
+    color: rgb(161, 50, 149);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: small;
+    margin-top: 10px;
+    margin-right: 20px;
+    box-shadow: 0px 0.5px 0px 1px #f0f0f0;
+  }
+
+  .moodbtn.selected {
+    background-color: rgba(148, 67, 140, 0.753);
+    color: white;
+    border: none;
+    border-radius: 10px;
   }
 
   input[type="submit"] {
@@ -459,10 +500,31 @@ div.journal-title:hover {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    font-size: x-small;
+    font-size: small;
     margin-top: 10px;
     margin-right: 20px;
     box-shadow: 0px 0.5px 0px 1px #f0f0f0;
+    font-weight: bold;
+  }
+
+  input[type="submit"]:hover {
+    align-self: flex-end;
+    padding: 5px 10px;
+    background-color: rgb(161, 50, 150);
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: small;
+    margin-top: 10px;
+    margin-right: 20px;
+    box-shadow: 0px 0.5px 0px 1px #f0f0f0;
+    font-weight: bold;
+  }
+
+  #moodLevel {
+    border: 1px;
+    background-color: #fdfdfd;
   }
 }
 
@@ -473,6 +535,7 @@ div.journal-title:hover {
   padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
+  color: black;
 }
 
 .journal-popup {
@@ -590,7 +653,7 @@ div.journal-title:hover {
 }
 
 .calendar-header button {
-  background-color: #B79CEB;
+  background-color: #b79ceb;
   color: white;
   border: none;
   padding: 10px;
@@ -622,7 +685,7 @@ div.journal-title:hover {
 }
 
 .day:hover {
-  background-color: #B79CEB;
+  background-color: #b79ceb;
   color: white;
 }
 
