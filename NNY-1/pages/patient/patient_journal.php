@@ -6,7 +6,6 @@
     <title>Journal</title>
     <link rel="stylesheet" href="../../assets/css/patient.css" />
     <link rel="stylesheet" href="../../assets/css/shared.css" />
-    <script src="../../components/patient/patient.js"></script>
     <script src="../../components/patient/journal.js"></script>
   </head>
   <body>
@@ -15,8 +14,7 @@
       session_start();
       include_once ("../navigation/patient_nav.php");
       require_once "patient_journal_connect.php";
-      require_once "patient_dashboard_connect.php";
-      
+           
       if (!isset($_SESSION['patientId'])) {
         header("Location: ../login/patient_login.php");
         exit();
@@ -235,29 +233,30 @@
 
         <!-- Right panel -->
         <div class="right-panel">
-          <div class="calendar-container">
-            <div class="calendar-header">
-              <button id="prevMonth" onclick="prevMonth()">&lt;</button>
-              <h2 id="month-name">September 2024</h2>
-              <button id="nextMonth" onclick="nextMonth()">&gt;</button>
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <button id="prevMonth" onclick="prevMonth()">&lt;</button>
+            <h2 id="month-name">September 2024</h2>
+            <button id="nextMonth" onclick="nextMonth()">&gt;</button>
+          </div>
+          <div class="calendar-wrapper">
+            <div class="calendar-grid" id="calendar-grid">
+              <div class="weekday">Sun</div>
+              <div class="weekday">Mon</div>
+              <div class="weekday">Tue</div>
+              <div class="weekday">Wed</div>
+              <div class="weekday">Thu</div>
+              <div class="weekday">Fri</div>
+              <div class="weekday">Sat</div>
             </div>
-            <div class="calendar-wrapper">
-              <div class="calendar-grid" id="calendar-grid">
-                <div class="weekday">Sun</div>
-                <div class="weekday">Mon</div>
-                <div class="weekday">Tue</div>
-                <div class="weekday">Wed</div>
-                <div class="weekday">Thu</div>
-                <div class="weekday">Fri</div>
-                <div class="weekday">Sat</div>
-              </div>
-            </div>
-          
-          <div class="chart-container">
-            <h2>Recent Activity - Mood Level</h2>
-            <canvas id="lineChart" width="500" height="150"></canvas>
           </div>
         </div>
+
+        <div class="chart-container">
+          <h2>Recent Activity - Mood Level</h2>
+          <canvas id="lineChart" width="500" height="150"></canvas>
+        </div>
+      </div>
       </div>
       </div>
 
