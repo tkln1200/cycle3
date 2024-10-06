@@ -308,7 +308,7 @@ body {
   height: 95%;
 }
 
-.journal-title {
+.journal-item {
   width: 90%;
   background-color: white;
   padding: 10px;
@@ -319,6 +319,11 @@ body {
   margin-bottom: 10px;
   font-size: large;
   cursor: pointer;
+}
+
+div .journal-title {
+  font-size: medium;
+  padding-top: 5px;
 }
 
 div .journal-content {

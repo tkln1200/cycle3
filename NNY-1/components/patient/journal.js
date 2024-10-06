@@ -4,7 +4,7 @@ function populateJournalList(journals) {
   console.log("Journals received:", journals);
   journalsList = journals;
   const journalList = document.getElementById("journalList");
-  // journalList.innerHTML = "";
+  journalList.innerHTML = "";
 
   journalsList.forEach((journal) => {
     // Create a container for each journal entry
@@ -13,8 +13,8 @@ function populateJournalList(journals) {
 
     // Add the title to container
     const titleElement = document.createElement("div");
-    journalItem.className = "journal-title";
-    journalItem.textContent = journal.title;
+    titleElement.className = "journal-title";
+    titleElement.textContent = journal.title;
     journalItem.appendChild(titleElement);
 
     // Add the date
@@ -93,25 +93,25 @@ function showJournalDetails(id) {
 }
 
 //////////////////////////////////////////
+
 function filterJournals() {
   const searchInput = document
     .getElementById("searchInput")
     .value.toLowerCase();
-
-  // Select all journal items instead of journal titles
   const journalItems = document.querySelectorAll("#journalList .journal-item");
 
   journalItems.forEach((item) => {
-    // Get the title text from the journal-title child element
-    const title = item
-      .querySelector(".journal-title")
-      .textContent.toLowerCase();
+    const titleElement = item.querySelector(".journal-title");
 
-    // Check if the title includes the search input
-    if (title.includes(searchInput)) {
-      item.style.display = ""; // Show item if it matches
+    if (titleElement) {
+      const title = titleElement.textContent.toLowerCase();
+      if (title.includes(searchInput)) {
+        item.style.display = ""; // Show item if it matches
+      } else {
+        item.style.display = "none"; // Hide item if it doesn't match
+      }
     } else {
-      item.style.display = "none"; // Hide item if it doesn't match
+      console.warn("Journal title element not found for:", item); // Optional: log a warning
     }
   });
 }

@@ -15,9 +15,9 @@
       session_start();
       include_once ("../navigation/patient_nav.php");
       require_once "patient_journal_connect.php";
+      require_once "patient_dashboard_connect.php";
       
       if (!isset($_SESSION['patientId'])) {
-        // Redirect to login page if the patient is not logged in
         header("Location: ../login/patient_login.php");
         exit();
       }
@@ -36,11 +36,9 @@
             $journals[] = $row;
         }
       } 
-    
-      // Pass the entire journals array to the JavaScript function
+  
       echo '<script> populateJournalList(' . json_encode($journals) . ');</script>';
     
-      // Fetch the patient's therapistId
       $query = "SELECT therapistId FROM Patient WHERE id = ?";
       $stmt = $conn->prepare($query);
       $stmt->bind_param("i", $patientId);
@@ -50,11 +48,10 @@
 
       if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $therapistId = $row['therapistId']; // Retrieve the therapistId associated with the patient
+        $therapistId = $row['therapistId']; 
       }    
 
       if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Retrieve form data
         $title = $_POST['title'];
         $dateCreated = $_POST['dateCreated'];
         $timeCreated = $_POST['timeCreated'];
@@ -81,17 +78,13 @@
                 echo "Error uploading media.";
             }
         }
-    
-        // Prepare the SQL insert statement with placeholders
+
         $insertQuery = "INSERT INTO Journal (patientId, therapistId, title, dateCreated, timeCreated, details, moodLevel, file) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $insertStmt = $conn->prepare($insertQuery);
     
-        // Bind parameters: 'i' for integer, 's' for string
-        // Note: Ensure $patientId and $therapistId are defined in your scope
         $insertStmt->bind_param("iissssib", $patientId, $therapistId, $title, $dateCreated, $timeCreated, $details, $moodLevel, $mediaName);
     
-        // Check if the prepared statement was executed successfully
         if ($insertStmt->execute()) {
           header("Location: patient_journal.php");
           exit();
@@ -100,11 +93,9 @@
         else {
             echo "Error: " . $insertStmt->error;
         }
-      
-        // Close the statement and connection
+
         $insertStmt->close();
         
-        // Fetch existing journals for the patient after adding a new one
         $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $patientId);
@@ -131,7 +122,7 @@
         <div class="journal-left-panel">
           <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search entry by title..." />
-            <button type="submit" id="searchJournal">
+            <button type="submit" id="searchJournal" onclick="filterJournals()">
               <img
                 src="../../assets/images/search-interface-symbol.png"
                 width="15px"
