@@ -67,7 +67,7 @@ $resultRecent = $conn->query($sqlRecent);
   <title>Activity Dashboard</title>
   <link rel="stylesheet" href="../../assets/css/shared.css" />
   <link rel="stylesheet" href="../../assets/css/patient.css" />
-  <link rel="stylesheet" href="../../assets/css/activity-dashboard.css" />>
+  <link rel="stylesheet" href="../../assets/css/activity-dashboard.css" />
 </head>
 
 <body>
