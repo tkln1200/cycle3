@@ -3,28 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Journal</title>
-    <link rel="stylesheet" href="../../assets/css/patient.css" />
+    <title>Patient Journal</title>
+    <link rel="stylesheet" href="../../assets/css/therapist_journal.css" />
     <link rel="stylesheet" href="../../assets/css/shared.css" />
-    <script src="../../components/patient/journal.js"></script>
+    <script src="../../components/therapist/therapist_journal.js"></script>
   </head>
   <body>
     <header>
     <?php 
       session_start();
-      include_once ("../navigation/patient_nav.php");
-      require_once "patient_journal_connect.php";
+      include_once ("../navigation/therapist_nav.php");
+      require_once "../patient/patient_journal_connect.php";
            
-      if (!isset($_SESSION['patientId'])) {
-        header("Location: ../login/patient_login.php");
-        exit();
-      }
+      // if (!isset($_SESSION['therapistId'])) {
+      //   header("Location: ../login/therapist_login.php");
+      //   exit();
+      // }
       
-      $patientId = $_SESSION['patientId'];
+      // $therapistId = $_SESSION['therapistId'];
       
-      $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
+      $therapistId = 1; //Testing for therapistId 1 Dr. Lauren Li
+
+      $query = "SELECT j.id, j.title, j.dateCreated, j.timeCreated, j.details, j.moodLevel  
+                FROM Journal j 
+                JOIN Patient p ON j.patientId = p.id 
+                WHERE j.therapistId = ? ORDER BY j.dateCreated DESC";      
       $stmt = $conn->prepare($query);
-      $stmt->bind_param("i", $patientId);
+      $stmt->bind_param("i", $therapistId);
       $stmt->execute();
       $result = $stmt->get_result();
       $journals = [];
@@ -37,17 +42,17 @@
   
       echo '<script> populateJournalList(' . json_encode($journals) . ');</script>';
     
-      $query = "SELECT therapistId FROM Patient WHERE id = ?";
-      $stmt = $conn->prepare($query);
-      $stmt->bind_param("i", $patientId);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $therapistId = null;
+      // $query = "SELECT therapistId FROM Patient WHERE id = ?";
+      // $stmt = $conn->prepare($query);
+      // $stmt->bind_param("i", $patientId);
+      // $stmt->execute();
+      // $result = $stmt->get_result();
+      // $therapistId = null;
 
-      if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $therapistId = $row['therapistId']; 
-      }    
+      // if ($result->num_rows > 0) {
+      //   $row = $result->fetch_assoc();
+      //   $therapistId = $row['therapistId']; 
+      // }    
 
       if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $title = $_POST['title'];
@@ -119,12 +124,29 @@
         <!-- Left hand side bar for past journal entries-->
         <div class="journal-left-panel">
           <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search entry by title..." />
+            <input 
+              type="text" 
+              id="searchInput" 
+              placeholder="Search entry by patient name..." 
+              list="patientNames" 
+              value="<?php echo isset($_GET['patientName']) ? htmlspecialchars($_GET['patientName']) : ''; ?>" 
+            />
+            <datalist id="patientNames">
+              <?php           
+                // Fetch patient names from the database
+                $query = "SELECT fname FROM Patient";
+                $result = $conn->query($query);
+                while ($row = $result->fetch_assoc()) {
+                    echo '<option value="' . htmlspecialchars($row['fname']) . '"></option>';
+                }
+              ?>
+            </datalist>
+            
             <button type="submit" id="searchJournal" onclick="filterJournals()">
-              <img
-                src="../../assets/images/search-interface-symbol.png"
-                width="15px"
-              />
+                <img
+                  src="../../assets/images/search-interface-symbol.png"
+                  width="15px"
+                />
             </button>
           </div>
           
@@ -136,8 +158,8 @@
 
         <!-- Main panel with journal details -->
         <div class="journal-main-panel">
-          <div class="add-new-post">
-            <button id="addNewPostBtn" onclick="addnewpost()">New Post</button>
+          <div class="add-new-note">
+            <button id="addNewNoteBtn" onclick="addNewNote()">New Note</button>
           </div>
 
           <div id="newJournalModal" class="modal">
@@ -267,6 +289,6 @@
       ?>
     </footer>
     <script src="../../components/patient/patient.js"></script>
-    <script src="../../components/patient/journal.js"></script>
+    <script src="../../components/therapist/therapist_journal.js"></script>
   </body>
 </html>

@@ -14,6 +14,19 @@ if (!$conn) {
     echo "Debugging error: " . mysqli_connect_error() . "<br>";
     exit;
 }
+
+$sql_check = "SHOW COLUMNS FROM `patient_list` LIKE 'password'";
+$result_check = mysqli_query($conn, $sql_check);
+if (mysqli_num_rows($result_check) == 0) {
+    // If the password column doesn't exist, alter the table to add the password column
+    $sql_alter = "ALTER TABLE patient_list ADD COLUMN password VARCHAR(255) NOT NULL";
+    if (mysqli_query($conn, $sql_alter)) {
+        echo "Password column added successfully.";
+    } else {
+        echo "Error adding password column: " . mysqli_error($conn);
+    }
+}
+
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
@@ -28,6 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $startDate = $_POST['startDate'];
     $endDate = $_POST['endDate'];
     $diagnosis = $_POST['diagnosis'];
+    $password = $_POST['password']; // Raw password entered
+
+    // Hash the password using the password_hash() function
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Create SQL query to insert patient info into the database
     $sql = "INSERT INTO patient_list (fName, age, gender, contactNo, email, streetAddress, height, startDate, endDate, diagnosis)
