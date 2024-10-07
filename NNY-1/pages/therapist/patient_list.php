@@ -41,7 +41,7 @@
           $host = "localhost";
           $username = "root";
           $password = "";
-          $dbname = "healthcare";
+          $dbname = "care_db";
 
           // 创建数据库连接
           $conn = new mysqli($host, $username, $password, $dbname);
@@ -52,15 +52,16 @@
           }
 
           // 查询患者列表
-          $sql = "SELECT id, name, diagnosis, progress, status FROM patients";
-          $result = $conn->query($sql);
-
+          $sql = "SELECT * FROM patient";
+          // $result = $conn->query($sql);
+          $sql_q = mysqli_query($conn,$sql) Or die("Failed to query " . mysqli_error($conn));
+          $result = mysqli_num_rows($sql_q);
           // 动态生成患者表格行
-          if ($result->num_rows > 0) {
-              while ($row = $result->fetch_assoc()) {
+          if ($result> 0) {
+              while ($row = mysqli_fetch_assoc($sql_q)) {
                   echo "<tr>";
                   echo "<td><a href='patient_profile.php'>" . $row["id"] . "</a></td>";
-                  echo "<td>" . $row["name"] . "</td>";
+                  echo "<td>" . $row["fName"] . $row["lName"] . "</td>";
                   echo "<td>" . $row["diagnosis"] . "</td>";
                   echo "<td>" . $row["progress"] . "%</td>";
                   echo "<td>";

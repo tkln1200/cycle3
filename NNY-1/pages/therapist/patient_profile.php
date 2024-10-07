@@ -1,3 +1,13 @@
+
+<?php
+    include_once '../../includes/connections.php';
+    $patient_id = $_GET['id'];
+    $sql_patient_details  = "SELECT * FROM patient where id = $patient_id";    
+    $sql_q = mysqli_query($conn,$sql_patient_details) Or die("Failed to query " . mysqli_error($conn));
+    $count_patients = mysqli_num_rows($sql_q);
+
+    
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +17,6 @@
     <link rel="stylesheet" href="../../assets/css/patient_profile.css">
     <link rel="stylesheet" href="../../assets/css/therapist.css">
     <link rel="stylesheet" href="../../styles/therapist-dashboard.css">
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> -->
 
 </head>
 <body>
