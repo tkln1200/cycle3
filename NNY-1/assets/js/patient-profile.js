@@ -64,7 +64,7 @@ const months = [
     { name: "December", days: 31 }
 ];
 
-let currentMonth = 8; // September (0-based index)
+let currentMonth = 9; // September (0-based index)
 let currentYear = 2024;
 
 const calendarGrid = document.getElementById("calendar-grid");

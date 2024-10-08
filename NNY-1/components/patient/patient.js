@@ -2,15 +2,14 @@
 const quotes = document.querySelectorAll(".affirmation-slider .quote");
 const dots = document.querySelectorAll(".dots .dot");
 let currentQuote = 0;
-let currentMonth = 8;
-let currentYear = 2024;
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
 
 document.addEventListener("DOMContentLoaded", () => {
     initializeGoalSetting();
     initializeQuoteSlider();
     initializeGoalModal();
     loadDailyAffirmation();
-    initializeCalendar();
     initializeLineChart();
 });
 
@@ -115,16 +114,10 @@ function loadDailyAffirmation() {
     }
 }
 
-// Calendar
-function initializeCalendar() {
-    generateCalendar(currentMonth, currentYear);
-    document.getElementById("prevMonth").addEventListener("click", prevMonth);
-    document.getElementById("nextMonth").addEventListener("click", nextMonth);
-}
-
+//Calendar
 const months = [
     { name: "January", days: 31 },
-    { name: "February", days: 28 }, 
+    { name: "February", days: 28 }, // Leap year handling is optional
     { name: "March", days: 31 },
     { name: "April", days: 30 },
     { name: "May", days: 31 },
@@ -137,42 +130,99 @@ const months = [
     { name: "December", days: 31 }
 ];
 
-function generateCalendar(monthIndex, year) {
-    const calendarGrid = document.getElementById("calendar-grid");
-    const monthNameElement = document.getElementById("month-name");
-    const month = months[monthIndex];
-    
-    monthNameElement.textContent = `${month.name} ${year}`;
-    calendarGrid.innerHTML = generateDaysGrid(monthIndex, year);
-}
+const calendarGrid = document.getElementById("calendar-grid");
+const monthNameElement = document.getElementById("month-name");
 
-function generateDaysGrid(monthIndex, year) {
+// Function to generate the days in the calendar
+function generateCalendar(monthIndex, year) {
     const month = months[monthIndex];
-    const firstDay = new Date(year, monthIndex, 1).getDay();
-    let gridContent = `
-        <div class="weekday">Sun</div><div class="weekday">Mon</div>
-        <div class="weekday">Tue</div><div class="weekday">Wed</div>
-        <div class="weekday">Thu</div><div class="weekday">Fri</div><div class="weekday">Sat</div>
+    monthNameElement.textContent = `${month.name} ${year}`;
+
+    // Clear previous days
+    calendarGrid.innerHTML = `
+        <div class="weekday">Sun</div>
+        <div class="weekday">Mon</div>
+        <div class="weekday">Tue</div>
+        <div class="weekday">Wed</div>
+        <div class="weekday">Thu</div>
+        <div class="weekday">Fri</div>
+        <div class="weekday">Sat</div>
     `;
 
-    gridContent += `<div class="day empty"></div>`.repeat(firstDay);
-    for (let day = 1; day <= month.days; day++) {
-        gridContent += `<div class="day">${day}</div>`;
+    const firstDay = new Date(year, monthIndex, 1).getDay(); // Day of the week the month starts on
+
+    // Add empty slots before the 1st of the month
+    for (let i = 0; i < firstDay; i++) {
+        calendarGrid.innerHTML += `<div class="day empty"></div>`;
     }
-    return gridContent;
+
+    // Add the days of the month
+    // for (let day = 1; day <= month.days; day++) {
+    //     calendarGrid.innerHTML += `<div class="day">${day}</div>`;
+    // }
+
+    for (let day = 1; day <= month.days; day++) {
+        const date = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        calendarGrid.innerHTML += `
+            <form method="POST" action="" class="date-form" style="display:inline-block; margin:2px;">
+                <input type="hidden" name="selectedDate" value="${date}">
+                <button type="submit" class="day" style="
+                    width: 40px;
+                    height: 40px;
+                    border: none;
+                    border-radius: 8px;
+                    background-color: #E6E6FF;
+                    color: #333;
+                    font-size: 16px;
+                    font-weight: bold;
+                    text-align: center;
+                    cursor: pointer;
+                    outline: none;
+                    transition: background-color 0.3s ease;
+                " 
+                onmouseover="this.style.backgroundColor='#D1C4E9'"
+                onmouseout="this.style.backgroundColor='#E6E6FF'">
+                    ${day}
+                </button>
+            </form>
+        `;
+    }
 }
 
+// Function to handle switching to the next month
 function nextMonth() {
-    currentMonth = (currentMonth + 1) % 12;
-    if (currentMonth === 0) currentYear++;
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+
+    // Slide animation effect for next month
+    calendarGrid.style.transform = 'translateX(100%)';
     generateCalendar(currentMonth, currentYear);
+    calendarGrid.style.transform = 'translateX(-100%)'; // Pre-position
+    calendarGrid.style.transform = 'translateX(0)';
 }
 
+// Function to handle switching to the previous month
 function prevMonth() {
-    currentMonth = (currentMonth - 1 + 12) % 12;
-    if (currentMonth === 11) currentYear--;
+    currentMonth--;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+
+    // Slide animation effect for previous month
+    calendarGrid.style.transform = 'translateX(-100%)';
+
     generateCalendar(currentMonth, currentYear);
+    calendarGrid.style.transform = 'translateX(100%)'; // Pre-position
+    calendarGrid.style.transform = 'translateX(0)';
+
 }
+
+// Initial load of calendar for September 2024
+generateCalendar(currentMonth, currentYear);
 
 function initializeLineChart() {
     const canvas = document.getElementById('lineChart');

@@ -72,6 +72,22 @@
       }
     }
 
+    $journal = null;
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selectedDate'])) {
+      $selectedDate = $_POST['selectedDate'];
+
+      $sql = "SELECT title, details, moodLevel FROM journal WHERE dateCreated = ? ORDER BY id DESC LIMIT 1";
+      $stmt = $conn->prepare($sql);
+      $stmt->bind_param("s", $selectedDate);
+      $stmt->execute();
+      $result = $stmt->get_result();
+
+      if ($result->num_rows > 0) {
+        $journal = $result->fetch_assoc();
+      }
+    }
+
     $conn->close();
     ?>
 
@@ -203,6 +219,18 @@
           <canvas id="lineChart" width="500" height="150"></canvas>
         </div>
       </div>
+      <div id="journalModal" class="modal" style="<?php echo isset($journal) ? 'display: block;' : 'display: none;'; ?>">
+        <div class="modal-content">
+          <span class="close" onclick="document.getElementById('journalModal').style.display='none'">&times;</span>
+          <?php if ($journal): ?>
+            <h2><?php echo htmlspecialchars($journal['title']); ?></h2>
+            <p><?php echo htmlspecialchars($journal['details']); ?></p>
+            <p><strong>Mood Level:</strong> <?php echo htmlspecialchars($journal['moodLevel']); ?></p>
+          <?php else: ?>
+            <p>No journal entry found for this date.</p>
+          <?php endif; ?>
+        </div>
+      </div>
   </main>
   <footer>
     <?php include_once("../footer/patient_footer.php") ?>
@@ -222,6 +250,14 @@
 
       closeModal.addEventListener("click", () => {
         goalModal.style.display = "none";
+      });
+    });
+    document.addEventListener("DOMContentLoaded", () => {
+      const closeModalButtons = document.querySelectorAll(".close");
+      closeModalButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          document.getElementById("journalModal").style.display = "none";
+        });
       });
     });
   </script>

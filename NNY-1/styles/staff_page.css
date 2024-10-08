@@ -170,7 +170,7 @@ body {
 /* Modal content */
 .new-modal-content {
   background-color: #ffffff;
-  margin: 10% auto; /* 10% from the top and centered */
+  margin: 10% auto;
   padding: 30px;
   border: none;
   width: 80%;
@@ -179,6 +179,8 @@ body {
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 /* Close button */
