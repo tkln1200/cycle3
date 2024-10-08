@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dashboard {
+    padding: 20px;
+  }
+  
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .stats div {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .doctor-filter {
+    margin-top: 20px;
+  }
+  
+  .doctor-filter h3 {
+    font-weight: bold;
+  }
+  
+  .doctor-filter button {
+    display: block;
+    background-color: #7a63f2;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+  
+  .doctor-filter table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .doctor-filter th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .doctor-filter tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
