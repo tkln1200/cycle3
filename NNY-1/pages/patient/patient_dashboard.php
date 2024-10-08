@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Patient</title>
+  <title>Patient Dashboard</title>
   <link rel="stylesheet" href="../../assets/css/patient.css" />
   <link rel="stylesheet" href="../../assets/css/shared.css" />
 </head>
