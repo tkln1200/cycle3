@@ -4,7 +4,8 @@
     $patient_id = $_GET['id'];
     $sql_patient  = "SELECT * FROM patient where id = $patient_id";
     $sql_patient_details  = "SELECT * FROM patient_details where patient_id = $patient_id";   
-    $sql_patient_notes  = "SELECT * FROM notes where patient_id = $patient_id";        
+    $sql_patient_notes  = "SELECT * FROM notes where patient_id = $patient_id";
+    $sql_journals = "SELECT * FROM journal where patient_id = $patient_id";
 
     $sql_patient_obj = mysqli_query($conn,$sql_patient) Or die("Failed to query " . mysqli_error($conn));
     $sql_patient_details_obj = mysqli_query($conn,$sql_patient_details) Or die("Failed to query " . mysqli_error($conn));
@@ -15,6 +16,7 @@
        $patient = mysqli_fetch_assoc($sql_patient_obj);
        $patient_details = mysqli_fetch_assoc($sql_patient_details_obj);
        $patient_notes =  mysqli_fetch_assoc($sql_patient_notes_obj);
+       $notes_array = explode('.', $patient_notes);
     }
 
     
@@ -102,10 +104,11 @@
                 </button>
               </div>
               <ul class ="notes-details">
-                  <li>The patient reports persistent feelings of hopelessness for months.</li>
-                  <li>Describes significant fatigue and loss of interest in previously enjoyed activities.</li>
-                  <li>Expresses feelings of worthlessness and negative self-perception.</li>
-                  <li>Social withdrawal observed; reduced contact with friends and family.</li>
+                <?php foreach ($notes_array as $note): ?>
+                  <?php if (trim($note) !== ''): ?>
+                      <li><?php echo htmlspecialchars(trim($note)) . '.'; ?></li>
+                  <?php endif; ?>
+                <?php endforeach; ?>
               </ul>
           </div>
           <div class="calendar-container">
