@@ -15,19 +15,14 @@
       include_once ("../navigation/therapist_nav.php");
       require_once "../patient/patient_journal_connect.php";
            
-      // if (!isset($_SESSION['therapistId'])) {
-      //   header("Location: ../login/therapist_login.php");
-      //   exit();
-      // }
-      
-      // $therapistId = $_SESSION['therapistId'];
-      
+           
       $therapistId = 1; //Testing for therapistId 1 Dr. Lauren Li
 
-      $query = "SELECT j.id, j.title, j.dateCreated, j.timeCreated, j.details, j.moodLevel  
+      $query = "SELECT j.*, p.fname, p.lname 
                 FROM Journal j 
                 JOIN Patient p ON j.patientId = p.id 
-                WHERE j.therapistId = ? ORDER BY j.dateCreated DESC";      
+                WHERE j.therapistId = ? 
+                ORDER BY j.dateCreated DESC";      
       $stmt = $conn->prepare($query);
       $stmt->bind_param("i", $therapistId);
       $stmt->execute();
@@ -42,18 +37,7 @@
   
       echo '<script> populateJournalList(' . json_encode($journals) . ');</script>';
     
-      // $query = "SELECT therapistId FROM Patient WHERE id = ?";
-      // $stmt = $conn->prepare($query);
-      // $stmt->bind_param("i", $patientId);
-      // $stmt->execute();
-      // $result = $stmt->get_result();
-      // $therapistId = null;
-
-      // if ($result->num_rows > 0) {
-      //   $row = $result->fetch_assoc();
-      //   $therapistId = $row['therapistId']; 
-      // }    
-
+  
       if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $title = $_POST['title'];
         $dateCreated = $_POST['dateCreated'];

@@ -11,6 +11,14 @@ function populateJournalList(journals) {
     const journalItem = document.createElement("div");
     journalItem.className = "journal-item";
 
+    const ownerElement = document.createElement("div");
+    ownerElement.className = "journal-owner";
+    let fname = journal.fname;
+    let lname = journal.lname;
+    let owner = `${fname} ${lname}`;
+    ownerElement.textContent = owner;
+    journalItem.appendChild(ownerElement);
+
     // Add the title to container
     const titleElement = document.createElement("div");
     titleElement.className = "journal-title";
@@ -82,7 +90,7 @@ function showJournalDetails(id) {
       <h2>${journal.title}</h2>
       <p><strong>Date:</strong> ${journal.dateCreated}</p>
       <p><strong>Time:</strong> ${journal.timeCreated}</p>
-      <p><strong>Created by:</strong> ${journal.timeCreated}</p>
+      <p><strong>Created by:</strong> ${journal.fname} ${journal.lname}</p>
       <p>${journal.details}</></br></br>
       ${
         journal.file
@@ -102,17 +110,17 @@ function filterJournals() {
   const journalItems = document.querySelectorAll("#journalList .journal-item");
 
   journalItems.forEach((item) => {
-    const titleElement = item.querySelector(".journal-title");
+    const ownerElement = item.querySelector(".journal-owner");
 
-    if (titleElement) {
-      const title = titleElement.textContent.toLowerCase();
-      if (title.includes(searchInput)) {
+    if (ownerElement) {
+      const owner = ownerElement.textContent.toLowerCase();
+      if (owner.includes(searchInput)) {
         item.style.display = ""; // Show item if it matches
       } else {
         item.style.display = "none"; // Hide item if it doesn't match
       }
     } else {
-      console.warn("Journal title element not found for:", item); // Optional: log a warning
+      console.warn("Journal owner not found for:", item); // Optional: log a warning
     }
   });
 }

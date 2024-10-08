@@ -464,3 +464,10 @@ div.journal-title:hover {
 .new-modal-content .close:hover {
   color: #000;
 }
+
+.journal-owner {
+  font-size: medium;
+  color: #a13295;
+  font-weight: bold;
+  padding-top: 5px;
+}
