@@ -61,7 +61,7 @@
           <?php if (!empty($patients)): ?>
             <?php foreach ($patients as $patient): ?>
               <tr>
-                <td><?php echo htmlspecialchars($patient['id']); ?></td>
+                <td><a href="patient_profile.php?id=<?php echo htmlspecialchars($patient['id']); ?>"><?php echo htmlspecialchars($patient['id']); ?></a></td>
                 <td><?php echo htmlspecialchars($patient['fName'] . " " . $patient['lName']); ?></td>
                 <td><?php echo htmlspecialchars($patient['gender']); ?></td>
                 <td><?php echo htmlspecialchars($patient['dob']); ?></td>

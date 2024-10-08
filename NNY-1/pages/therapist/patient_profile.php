@@ -1,3 +1,46 @@
+
+<?php
+    include_once '../../includes/connections.php';
+    $patient_id = $_GET['id'];
+    $sql_patient  = "SELECT * FROM patient where id = $patient_id";
+    $sql_patient_details  = "SELECT * FROM patient_details where patient_id = $patient_id";   
+    $sql_patient_notes  = "SELECT * FROM notes where patient_id = $patient_id";
+    $sql_journals = "SELECT * FROM journal where patientId = $patient_id";
+
+    $sql_patient_obj = mysqli_query($conn,$sql_patient) Or die("Failed to query " . mysqli_error($conn));
+    $sql_patient_details_obj = mysqli_query($conn,$sql_patient_details) Or die("Failed to query " . mysqli_error($conn));
+    $sql_patient_notes_obj = mysqli_query($conn,$sql_patient_notes) Or die("Failed to query " . mysqli_error($conn));
+    $sql_patient_journal_obj = mysqli_query($conn,$sql_journals) Or die("Failed to query " . mysqli_error($conn));
+
+    $count_patients = mysqli_num_rows($sql_patient_obj);
+    if ($count_patients>0) {
+       $patient = mysqli_fetch_assoc($sql_patient_obj);
+       $patient_details = mysqli_fetch_assoc($sql_patient_details_obj);
+       $patient_notes =  mysqli_fetch_assoc($sql_patient_notes_obj);
+       if(isset($patient_notes['notes']))
+       {
+          $notes_array = explode('.', $patient_notes['notes']);
+       }
+
+       // getting journals
+       $journal_count = mysqli_num_rows($sql_patient_journal_obj);
+       if ($journal_count>0)
+       {
+          $journals = [];
+          while ($row = mysqli_fetch_assoc($sql_patient_journal_obj)) {
+              $journals[] = $row['details'];
+          }
+       }
+       else
+       {
+        $journals = ["Not Available", "Not Available","Not Available","Not Available","Not Available"];
+
+       }
+    }
+    
+
+    
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +50,6 @@
     <link rel="stylesheet" href="../../assets/css/patient_profile.css">
     <link rel="stylesheet" href="../../assets/css/therapist.css">
     <link rel="stylesheet" href="../../styles/therapist-dashboard.css">
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> -->
 
 </head>
 <body>
@@ -22,32 +64,22 @@
             <div class="profile-header">
                 <img src="../../assets/images/patient.png" alt="Patient Photo" class="profile-photo">
                 <div class="patient-info">
-                    <h2>Zoe Ashford</h1>
-                    <p class="patient-details">Age: 25</p>
-                    <p class="patient-details">Gender: Female</p>
-                    <p class="patient-details">Height: 5 ft 4 in</p>
-                    <p class="patient-details">Weight: 56 KG</p>
-                    <p class="patient-details">Diagnosis: Generalized Anxiety Disorder</p>
+                    <h2><?php echo $patient['fName'] ." " .  $patient['lName'];?></h2>
+                    <p class="patient-details">Age: <?php echo isset($patient_details['age']) ? htmlspecialchars($patient_details['age']) : 'Not available'; ?></p>
+                    <p class="patient-details">Gender: <?php echo $patient['gender'];?></p>
+                    <p class="patient-details">Height: <?php echo isset($patient_details['height']) ? htmlspecialchars($patient_details['height']) : 'Not available'; ?></p>
+                    <p class="patient-details">Weight: <?php echo isset($patient_details['weight']) ? htmlspecialchars($patient_details['weight']) : 'Not available'; ?> KG</p>
+                    <p class="patient-details">Diagnosis: <?php echo isset($patient_details['diagnosis']) ? htmlspecialchars($patient_details['diagnosis']) : 'Not available'; ?></p>
                 </div>
             </div>
 
             <!-- Recent Journal Section -->
             <div class="journal-section">
-                <h2>Recent Journal</h2>
-                <div class="patient-journel" id="boxContainer">
-                  <div class="patient-box">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.   Commodi numquam vero sed beatae nam, ipsam itaque cumque quisquam. Saepe reiciendis quasi aperiam quidem voluptatum similique id ad beatae ut fugit?
-                  </div>
-                  <div class="patient-box">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi numquam vero sed beatae nam, ipsam itaque cumque quisquam. Saepe reiciendis quasi aperiam quidem voluptatum similique id ad beatae ut fugit?
-                  </div>
-                  <div class="patient-box">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi numquam vero sed beatae nam, ipsam itaque cumque quisquam. Saepe reiciendis quasi aperiam quidem voluptatum similique id ad beatae ut fugit?
-                  </div>
-              </div>
+              <h2>Recent Journal</h2>
+              <div class="patient-journel" id="boxContainer"></div>
               <div class="navigation">
-                <button id="prevBtn" onclick="showPrevious()">Previous</button>
-                <button id="nextBtn" onclick="showNext()">Next</button>
+                  <button id="prevBtn">Previous</button>
+                  <button id="nextBtn">Next</button>
               </div>
 
             </div>
@@ -66,10 +98,10 @@
                 <!-- <button class="edit-btn">
                   <i class="fas fa-edit"></i>
                 </button> -->
-              <p class="patient-details">Group: 2</p>
-              <p class="patient-details">Sessions Completed: 3</p>
-              <p class="patient-details">Sessions Left: 2</p>
-              <p class="patient-details">Personal Progression: 10%</p>
+              <p class="patient-details">Group: <?php echo isset($patient_details['group_no']) ? htmlspecialchars($patient_details['group_no']) : 'Not available'; ?></p>
+              <p class="patient-details">Sessions Completed: <?php echo isset($patient_details['completed_session']) ? htmlspecialchars($patient_details['completed_session']) : 'Not available'; ?></p>
+              <p class="patient-details">Sessions Left: <?php echo isset($patient_details['total_session']) ? htmlspecialchars($patient_details['total_session']-$patient_details['completed_session']) : 'Not available'; ?></p>
+              <p class="patient-details">Personal Progression: <?php echo isset($patient_details['progression']) ? htmlspecialchars($patient_details['progression']) : 'Not available'; ?></p>
               <p class="patient-details">Group Progression: 62%</p>
           </div>
           <div class="notes-container">
@@ -77,15 +109,16 @@
               <h2>Notes</h2>
               <button class="edit-btn" id="notesBtn">
                  <!-- <i class="fas fa-edit"></i> -->
-                 <img src="/assets/images/note-btn.png" alt="Edit Notes" />
+                 <a href="patient_note.php?id=<?php echo $patient_id?>"><img src="/assets/images/note-btn.png" alt="Edit Notes" /></a>
 
                 </button>
               </div>
               <ul class ="notes-details">
-                  <li>The patient reports persistent feelings of hopelessness for months.</li>
-                  <li>Describes significant fatigue and loss of interest in previously enjoyed activities.</li>
-                  <li>Expresses feelings of worthlessness and negative self-perception.</li>
-                  <li>Social withdrawal observed; reduced contact with friends and family.</li>
+                <?php foreach ($notes_array as $note): ?>
+                  <?php if (trim($note) !== ''): ?>
+                      <li><?php echo htmlspecialchars(trim($note)) . '.'; ?></li>
+                  <?php endif; ?>
+                <?php endforeach; ?>
               </ul>
           </div>
           <div class="calendar-container">
@@ -117,6 +150,9 @@
     <?php include_once ("../footer/therapist_footer.php")
     ?> 
     </footer>
+    <script>
+      const journals = <?php echo json_encode($journals); ?>;
+    </script>
     <script src="../../assets/js/patient-profile.js"></script>
     <script src="../../assets/js/patient-profile-charts.js"></script>
 
