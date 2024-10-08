@@ -102,7 +102,6 @@
               <p class="patient-details">Sessions Completed: <?php echo isset($patient_details['completed_session']) ? htmlspecialchars($patient_details['completed_session']) : 'Not available'; ?></p>
               <p class="patient-details">Sessions Left: <?php echo isset($patient_details['total_session']) ? htmlspecialchars($patient_details['total_session']-$patient_details['completed_session']) : 'Not available'; ?></p>
               <p class="patient-details">Personal Progression: <?php echo isset($patient_details['progression']) ? htmlspecialchars($patient_details['progression']) : 'Not available'; ?></p>
-              <p class="patient-details">Group Progression: 62%</p>
           </div>
           <div class="notes-container">
             <div class="header-with-btn">
