@@ -5,11 +5,12 @@
     $sql_patient  = "SELECT * FROM patient where id = $patient_id";
     $sql_patient_details  = "SELECT * FROM patient_details where patient_id = $patient_id";   
     $sql_patient_notes  = "SELECT * FROM notes where patient_id = $patient_id";
-    $sql_journals = "SELECT * FROM journal where patient_id = $patient_id";
+    $sql_journals = "SELECT * FROM journal where patientId = $patient_id";
 
     $sql_patient_obj = mysqli_query($conn,$sql_patient) Or die("Failed to query " . mysqli_error($conn));
     $sql_patient_details_obj = mysqli_query($conn,$sql_patient_details) Or die("Failed to query " . mysqli_error($conn));
     $sql_patient_notes_obj = mysqli_query($conn,$sql_patient_notes) Or die("Failed to query " . mysqli_error($conn));
+    $sql_patient_journal_obj = mysqli_query($conn,$sql_journals) Or die("Failed to query " . mysqli_error($conn));
 
     $count_patients = mysqli_num_rows($sql_patient_obj);
     if ($count_patients>0) {
@@ -17,7 +18,23 @@
        $patient_details = mysqli_fetch_assoc($sql_patient_details_obj);
        $patient_notes =  mysqli_fetch_assoc($sql_patient_notes_obj);
        $notes_array = explode('.', $patient_notes);
+
+       // getting journals
+       $journal_count = mysqli_num_rows($sql_patient_journal_obj);
+       if ($journal_count>0)
+       {
+          $journals = [];
+          while ($row = mysqli_fetch_assoc($sql_patient_journal_obj)) {
+              $journals[] = $row['details'];
+          }
+       }
+       else
+       {
+        $journals = ["Not Available", "Not Available","Not Available","Not Available","Not Available"];
+
+       }
     }
+    
 
     
 ?>
@@ -55,21 +72,11 @@
 
             <!-- Recent Journal Section -->
             <div class="journal-section">
-                <h2>Recent Journal</h2>
-                <div class="patient-journel" id="boxContainer">
-                  <div class="patient-box">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.   Commodi numquam vero sed beatae nam, ipsam itaque cumque quisquam. Saepe reiciendis quasi aperiam quidem voluptatum similique id ad beatae ut fugit?
-                  </div>
-                  <div class="patient-box">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi numquam vero sed beatae nam, ipsam itaque cumque quisquam. Saepe reiciendis quasi aperiam quidem voluptatum similique id ad beatae ut fugit?
-                  </div>
-                  <div class="patient-box">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi numquam vero sed beatae nam, ipsam itaque cumque quisquam. Saepe reiciendis quasi aperiam quidem voluptatum similique id ad beatae ut fugit?
-                  </div>
-              </div>
+              <h2>Recent Journal</h2>
+              <div class="patient-journel" id="boxContainer"></div>
               <div class="navigation">
-                <button id="prevBtn" onclick="showPrevious()">Previous</button>
-                <button id="nextBtn" onclick="showNext()">Next</button>
+                  <button id="prevBtn">Previous</button>
+                  <button id="nextBtn">Next</button>
               </div>
 
             </div>
@@ -140,6 +147,9 @@
     <?php include_once ("../footer/therapist_footer.php")
     ?> 
     </footer>
+    <script>
+      const journals = <?php echo json_encode($journals); ?>;
+    </script>
     <script src="../../assets/js/patient-profile.js"></script>
     <script src="../../assets/js/patient-profile-charts.js"></script>
 

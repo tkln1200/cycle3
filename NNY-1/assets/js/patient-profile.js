@@ -1,54 +1,52 @@
 
-let details = "Lorem ipsum dolor sit amet consectetur adipisicing elit.   Commodi numquam vero sed beatae nam, ipsam itaque cumque quisquam. Saepe reiciendis quasi aperiam quidem voluptatum similique id ad beatae ut fugit?";
-let details2 = "Lorem ipsum dolor sit amet consectetur adipisicing elit.   Commodi numquam vero sed beatae nam, ipsam itaqu";
-// Arrays of box sets
-
-const boxSets = [
-    [details, details, details],
-    [details, details, details2],
-    [details, details2, details],
-];
-
+const boxContainer = document.getElementById('boxContainer');
 let currentSet = 0;
-let isTransitioning = false; // Flag to prevent overlapping transitions
+const journalsPerPage = 3; // Number of journals to show at a time
 
-// Function to display boxes based on the current set index
-function displayBoxes() {
-    const container = document.getElementById('boxContainer');
-    container.innerHTML = ''; // Clear previous boxes
+function displayJournals() {
+    // Clear previous content
+    boxContainer.innerHTML = '';
 
-    boxSets[currentSet].forEach(boxText => {
+    // Calculate start and end indices for the current set
+    const start = currentSet * journalsPerPage;
+    const end = start + journalsPerPage;
+
+    // Slice the journals array and create HTML elements for each journal in the current set
+    journals.slice(start, end).forEach(journal => {
         const box = document.createElement('div');
         box.classList.add('patient-box');
-        box.textContent = boxText;
-        container.appendChild(box);
+        box.textContent = journal;
+        boxContainer.appendChild(box);
     });
 
-    // Disable Previous button if on the first set
+    // Disable the Previous button if on the first set
     document.getElementById('prevBtn').disabled = currentSet === 0;
 
-    // Disable Next button if on the last set
-    document.getElementById('nextBtn').disabled = currentSet === boxSets.length - 1;
+    // Disable the Next button if on the last set
+    document.getElementById('nextBtn').disabled = end >= journals.length;
 }
 
-// Function to show the next set of boxes
+// Functions to navigate between sets
 function showNext() {
-    if (currentSet < boxSets.length - 1) {
+    if ((currentSet + 1) * journalsPerPage < journals.length) {
         currentSet++;
-        displayBoxes();
+        displayJournals();
     }
 }
 
-// Function to show the previous set of boxes
 function showPrevious() {
     if (currentSet > 0) {
         currentSet--;
-        displayBoxes();
+        displayJournals();
     }
 }
 
-// Initial display of boxes
-displayBoxes();
+// Attach event listeners to navigation buttons
+document.getElementById('prevBtn').addEventListener('click', showPrevious);
+document.getElementById('nextBtn').addEventListener('click', showNext);
+
+// Initial display
+displayJournals();
 const months = [
     { name: "January", days: 31 },
     { name: "February", days: 28 }, // Leap year handling is optional
