@@ -356,7 +356,10 @@ div.journal-title:hover {
 }
 
 .journal-details img {
-  max-width: 100px;
+  display: block;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .search-bar {
@@ -658,7 +661,7 @@ div.journal-title:hover {
 }
 
 .calendar-header button {
-  background-color: #b79ceb;
+  background-color: #a13295;
   color: white;
   border: none;
   padding: 10px;
@@ -684,13 +687,13 @@ div.journal-title:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ecf0f1;
+  background-color: #ffffff;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .day:hover {
-  background-color: #b79ceb;
+  background-color: #eac7e6;
   color: white;
 }
 

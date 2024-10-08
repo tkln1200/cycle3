@@ -22,6 +22,7 @@
       
       $patientId = $_SESSION['patientId'];
       
+      // Fetching all journal entries of logged in user and populate on left hand panel
       $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
       $stmt = $conn->prepare($query);
       $stmt->bind_param("i", $patientId);
@@ -36,7 +37,8 @@
       } 
   
       echo '<script> populateJournalList(' . json_encode($journals) . ');</script>';
-    
+      
+      // Fetching therapistID for logged in user to automatically add into Journal entry
       $query = "SELECT therapistId FROM Patient WHERE id = ?";
       $stmt = $conn->prepare($query);
       $stmt->bind_param("i", $patientId);
@@ -49,7 +51,8 @@
         $therapistId = $row['therapistId']; 
       }    
 
-      if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      // Add journal entry into Journal database
+      if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['formSubmitted'])) {
         $title = $_POST['title'];
         $dateCreated = $_POST['dateCreated'];
         $timeCreated = $_POST['timeCreated'];
@@ -76,18 +79,18 @@
                 echo "Error uploading media.";
             }
         }
-
+        
         $insertQuery = "INSERT INTO Journal (patientId, therapistId, title, dateCreated, timeCreated, details, moodLevel, file) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $insertStmt = $conn->prepare($insertQuery);
     
-        $insertStmt->bind_param("iissssib", $patientId, $therapistId, $title, $dateCreated, $timeCreated, $details, $moodLevel, $mediaName);
+        $insertStmt->bind_param("iissssis", $patientId, $therapistId, $title, $dateCreated, $timeCreated, $details, $moodLevel, $mediaName);
     
         if ($insertStmt->execute()) {
-          header("Location: patient_journal.php");
+          // header("Location: patient_journal.php");
+          echo "form submitted!";
           exit();
-        } 
-        
+        }
         else {
             echo "Error: " . $insertStmt->error;
         }
@@ -106,10 +109,28 @@
                 $journals[] = $row;
             }
         }
-  
         $conn->close();
-  
       }
+      
+    
+
+      //Fetching past journals on calendar
+      $journal = null;
+
+      if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selectedDate'])) {
+          $selectedDate = $_POST['selectedDate'];
+
+          $sql = "SELECT title, details, moodLevel FROM journal WHERE dateCreated = ? ORDER BY id DESC LIMIT 1";
+          $stmt = $conn->prepare($sql);
+          $stmt->bind_param("s", $selectedDate);
+          $stmt->execute();
+          $result = $stmt->get_result();
+
+          if ($result->num_rows > 0) {
+            $journal = $result->fetch_assoc();
+          }
+      }
+
     ?>
 
 
@@ -216,7 +237,7 @@
               </div>
                              
               <div id="line"></div>
-                  <input type="submit" value="Publish" />
+                  <input type="submit" name="formsubmitted" value="Publish" />
               </div>  
             </form>
           </div>
@@ -233,30 +254,42 @@
 
         <!-- Right panel -->
         <div class="right-panel">
-        <div class="calendar-container">
-          <div class="calendar-header">
-            <button id="prevMonth" onclick="prevMonth()">&lt;</button>
-            <h2 id="month-name">September 2024</h2>
-            <button id="nextMonth" onclick="nextMonth()">&gt;</button>
-          </div>
-          <div class="calendar-wrapper">
-            <div class="calendar-grid" id="calendar-grid">
-              <div class="weekday">Sun</div>
-              <div class="weekday">Mon</div>
-              <div class="weekday">Tue</div>
-              <div class="weekday">Wed</div>
-              <div class="weekday">Thu</div>
-              <div class="weekday">Fri</div>
-              <div class="weekday">Sat</div>
+          <div class="calendar-container">
+            <div class="calendar-header">
+              <button id="prevMonth" onclick="prevMonth()">&lt;</button>
+              <h2 id="month-name">September 2024</h2>
+              <button id="nextMonth" onclick="nextMonth()">&gt;</button>
+            </div>
+            <div class="calendar-wrapper">
+              <div class="calendar-grid" id="calendar-grid">
+                <div class="weekday">Sun</div>
+                <div class="weekday">Mon</div>
+                <div class="weekday">Tue</div>
+                <div class="weekday">Wed</div>
+                <div class="weekday">Thu</div>
+                <div class="weekday">Fri</div>
+                <div class="weekday">Sat</div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="chart-container">
-          <h2>Recent Activity - Mood Level</h2>
-          <canvas id="lineChart" width="500" height="150"></canvas>
+          <div class="chart-container">
+            <h2>Recent Activity - Mood Level</h2>
+            <canvas id="lineChart" width="500" height="150"></canvas>
+          </div>
         </div>
-      </div>
+        <div id="journalModal" class="modal" style="<?php echo isset($journal) ? 'display: block;' : 'display: none;'; ?>">
+          <div class="modal-content">
+            <span class="close" onclick="document.getElementById('journalModal').style.display='none'">&times;</span>
+            <?php if ($journal): ?>
+              <h2><?php echo htmlspecialchars($journal['title']); ?></h2>
+              <p><?php echo htmlspecialchars($journal['details']); ?></p>
+              <p><strong>Mood Level:</strong> <?php echo htmlspecialchars($journal['moodLevel']); ?></p>
+            <?php else: ?>
+              <p>No journal entry found for this date.</p>
+            <?php endif; ?>
+          </div>
+        </div>
       </div>
       </div>
 
