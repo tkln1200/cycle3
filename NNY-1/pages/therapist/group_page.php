@@ -54,7 +54,6 @@
                         <p><strong>Location:</strong> '. $row['location'] .'</p>
                         <p><strong>Participants:</strong> '. $row['participants'] . '</p>
                         <p><strong>Available Space:</strong> '. $row['space'] - $row['occupied_space'] . '</p>
-                        <button class="details-btn">View Details</button>
                       </div>';
               }
             }
@@ -74,7 +73,6 @@
                         <p><strong>Location:</strong> '. $row1['location'] .'</p>
                         <p><strong>Participants:</strong> '. $row1['participants'] . '</p>
                         <p><strong>Available Space:</strong> '. $row1['space'] - $row1['occupied_space'] . '</p>
-                        <button class="details-btn">View Details</button>
                       </div>';
               }
             }

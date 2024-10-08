@@ -36,8 +36,10 @@
   <div class="main-content">
     <h2>Patient List</h2>
     <div class="content">
+
       <div class="group-search-container">
-        <button class="create-group-btn" id="createGroupBtn">Create Group</button>
+      <button class="create-group-btn" id="createGroupBtn" type="submit">Create Group</button>
+
         <div class="search-container">
           <form action="#" method="post" class="search-form">
             <input type="text" placeholder="Search..." id="search-input" />
@@ -45,6 +47,7 @@
           </form>
         </div>
       </div>
+      <form action="create_group.php" method="post" id = "groupForm">
       <table id="myTable">
         <thead>
           <tr>
@@ -55,19 +58,22 @@
             <th>Phone Number</th>
             <th>Diagnosis</th>
             <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <?php if (!empty($patients)): ?>
             <?php foreach ($patients as $patient): ?>
               <tr>
-                <td><a href="patient_profile.php?id=<?php echo htmlspecialchars($patient['id']); ?>"><?php echo htmlspecialchars($patient['id']); ?></a></td>
+                <td><a href="patient_profile.php?id=<?php echo htmlspecialchars($patient['id']); ?>" style="text-decoration: none;"><?php echo htmlspecialchars($patient['id']); ?></a></td>
                 <td><?php echo htmlspecialchars($patient['fName'] . " " . $patient['lName']); ?></td>
                 <td><?php echo htmlspecialchars($patient['gender']); ?></td>
                 <td><?php echo htmlspecialchars($patient['dob']); ?></td>
                 <td><?php echo htmlspecialchars($patient['contactNo']); ?></td>
                 <td><?php echo htmlspecialchars($patient['diagnosis']); ?></td>
                 <td><?php echo htmlspecialchars($patient['status']); ?></td>
+                <td><input type="checkbox" name="patient_ids[]" value="<?php echo htmlspecialchars($patient['id']); ?>"></td>
+              
               </tr>
             <?php endforeach; ?>
           <?php else: ?>
@@ -77,6 +83,11 @@
           <?php endif; ?>
         </tbody>
       </table>
+      <br>
+      <input type="hidden" name="selected_patients" id="selectedPatients">
+
+
+      </form>
     </div>
     <footer>
       <?php include_once("../footer/therapist_footer.php") ?>
