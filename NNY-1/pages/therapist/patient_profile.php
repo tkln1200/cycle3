@@ -17,7 +17,10 @@
        $patient = mysqli_fetch_assoc($sql_patient_obj);
        $patient_details = mysqli_fetch_assoc($sql_patient_details_obj);
        $patient_notes =  mysqli_fetch_assoc($sql_patient_notes_obj);
-       $notes_array = explode('.', $patient_notes);
+       if(isset($patient_notes['notes']))
+       {
+          $notes_array = explode('.', $patient_notes['notes']);
+       }
 
        // getting journals
        $journal_count = mysqli_num_rows($sql_patient_journal_obj);
@@ -61,7 +64,7 @@
             <div class="profile-header">
                 <img src="../../assets/images/patient.png" alt="Patient Photo" class="profile-photo">
                 <div class="patient-info">
-                    <h2><?php echo $patient['fName'] ." " .  $patient['lName'];?></h1>
+                    <h2><?php echo $patient['fName'] ." " .  $patient['lName'];?></h2>
                     <p class="patient-details">Age: <?php echo isset($patient_details['age']) ? htmlspecialchars($patient_details['age']) : 'Not available'; ?></p>
                     <p class="patient-details">Gender: <?php echo $patient['gender'];?></p>
                     <p class="patient-details">Height: <?php echo isset($patient_details['height']) ? htmlspecialchars($patient_details['height']) : 'Not available'; ?></p>
@@ -106,7 +109,7 @@
               <h2>Notes</h2>
               <button class="edit-btn" id="notesBtn">
                  <!-- <i class="fas fa-edit"></i> -->
-                 <img src="/assets/images/note-btn.png" alt="Edit Notes" />
+                 <a href="patient_note.php?id=<?php echo $patient_id?>"><img src="/assets/images/note-btn.png" alt="Edit Notes" /></a>
 
                 </button>
               </div>
