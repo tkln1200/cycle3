@@ -36,7 +36,7 @@
             if (password_verify($password, $hashed_password)) {
                 // Password is correct, start session and redirect
                 $_SESSION['patientId'] = $id;
-                header("Location: ../patient/patient_journal.php"); // Redirect to the journal page
+                header("Location: ../patient/patient_dashboard.php"); // Redirect to the journal page
                 exit();
             } else {
                 // Password is incorrect

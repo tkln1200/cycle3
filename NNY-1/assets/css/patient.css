@@ -356,7 +356,10 @@ div.journal-title:hover {
 }
 
 .journal-details img {
-  max-width: 100px;
+  display: block;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .search-bar {

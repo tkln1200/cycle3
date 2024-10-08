@@ -471,3 +471,65 @@ div.journal-title:hover {
   font-weight: bold;
   padding-top: 5px;
 }
+
+.calendar-container {
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.calendar-header button {
+  background-color: #a13295;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.weekday {
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.day {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.day:hover {
+  background-color: #eac7e6;
+  color: white;
+}
+
+.day.empty {
+  visibility: hidden;
+}

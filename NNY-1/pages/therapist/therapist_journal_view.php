@@ -18,6 +18,7 @@
            
       $therapistId = 1; //Testing for therapistId 1 Dr. Lauren Li
 
+      //Fetching journals for logged in therapist
       $query = "SELECT j.*, p.fname, p.lname 
                 FROM Journal j 
                 JOIN Patient p ON j.patientId = p.id 
@@ -38,67 +39,84 @@
       echo '<script> populateJournalList(' . json_encode($journals) . ');</script>';
     
   
-      if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $title = $_POST['title'];
-        $dateCreated = $_POST['dateCreated'];
-        $timeCreated = $_POST['timeCreated'];
-        $details = $_POST['details'];
-        $moodLevel = $_POST['moodLevel'];
+      // if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      //   $title = $_POST['title'];
+      //   $dateCreated = $_POST['dateCreated'];
+      //   $timeCreated = $_POST['timeCreated'];
+      //   $details = $_POST['details'];
+      //   $moodLevel = $_POST['moodLevel'];
         
-        $uploadDir = "uploads/";
+      //   $uploadDir = "uploads/";
 
-        // Check if the uploads directory exists, if not, create it
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true); // Create the directory with appropriate permissions
-        }
-        // Initialize mediaName
-        $mediaName = null;
+      //   // Check if the uploads directory exists, if not, create it
+      //   if (!is_dir($uploadDir)) {
+      //       mkdir($uploadDir, 0755, true); // Create the directory with appropriate permissions
+      //   }
+      //   // Initialize mediaName
+      //   $mediaName = null;
     
-        // Check if a file was uploaded
-        if (isset($_FILES['mediaUpload']) && $_FILES['mediaUpload']['error'] == UPLOAD_ERR_OK) {
-            $mediaName = $_FILES['mediaUpload']['name'];
-            $mediaTmpName = $_FILES['mediaUpload']['tmp_name'];
-            $mediaDestination = "uploads/" . basename($mediaName); // Ensure this directory exists
+      //   // Check if a file was uploaded
+      //   if (isset($_FILES['mediaUpload']) && $_FILES['mediaUpload']['error'] == UPLOAD_ERR_OK) {
+      //       $mediaName = $_FILES['mediaUpload']['name'];
+      //       $mediaTmpName = $_FILES['mediaUpload']['tmp_name'];
+      //       $mediaDestination = "uploads/" . basename($mediaName); // Ensure this directory exists
     
-            // Move the uploaded file to the desired directory
-            if (!move_uploaded_file($mediaTmpName, $mediaDestination)) {
-                echo "Error uploading media.";
-            }
-        }
+      //       // Move the uploaded file to the desired directory
+      //       if (!move_uploaded_file($mediaTmpName, $mediaDestination)) {
+      //           echo "Error uploading media.";
+      //       }
+      //   }
 
-        $insertQuery = "INSERT INTO Journal (patientId, therapistId, title, dateCreated, timeCreated, details, moodLevel, file) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $insertStmt = $conn->prepare($insertQuery);
+      //   $insertQuery = "INSERT INTO Journal (patientId, therapistId, title, dateCreated, timeCreated, details, moodLevel, file) 
+      //                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+      //   $insertStmt = $conn->prepare($insertQuery);
     
-        $insertStmt->bind_param("iissssib", $patientId, $therapistId, $title, $dateCreated, $timeCreated, $details, $moodLevel, $mediaName);
+      //   $insertStmt->bind_param("iissssib", $patientId, $therapistId, $title, $dateCreated, $timeCreated, $details, $moodLevel, $mediaName);
     
-        if ($insertStmt->execute()) {
-          header("Location: patient_journal.php");
-          exit();
-        } 
+      //   if ($insertStmt->execute()) {
+      //     header("Location: patient_journal.php");
+      //     exit();
+      //   } 
         
-        else {
-            echo "Error: " . $insertStmt->error;
-        }
+      //   else {
+      //       echo "Error: " . $insertStmt->error;
+      //   }
 
-        $insertStmt->close();
+      //   $insertStmt->close();
         
-        $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $patientId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $journals = [];
+      //   $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
+      //   $stmt = $conn->prepare($query);
+      //   $stmt->bind_param("i", $patientId);
+      //   $stmt->execute();
+      //   $result = $stmt->get_result();
+      //   $journals = [];
 
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $journals[] = $row;
-            }
-        }
+      //   if ($result->num_rows > 0) {
+      //       while ($row = $result->fetch_assoc()) {
+      //           $journals[] = $row;
+      //       }
+      //   }
   
-        $conn->close();
-  
-      }
+      //   $conn->close();
+      // }
+
+      //Fetching past journals on calendar
+      $journal = null;
+
+      if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selectedDate'])) {
+          $selectedDate = $_POST['selectedDate'];
+
+          $sql = "SELECT title, details, moodLevel FROM journal WHERE dateCreated = ? ORDER BY id DESC LIMIT 1";
+          $stmt = $conn->prepare($sql);
+          $stmt->bind_param("s", $selectedDate);
+          $stmt->execute();
+          $result = $stmt->get_result();
+
+          if ($result->num_rows > 0) {
+            $journal = $result->fetch_assoc();
+          }
+    }
+
     ?>
 
 
@@ -239,28 +257,41 @@
 
         <!-- Right panel -->
         <div class="right-panel">
-        <div class="calendar-container">
-          <div class="calendar-header">
-            <button id="prevMonth" onclick="prevMonth()">&lt;</button>
-            <h2 id="month-name">September 2024</h2>
-            <button id="nextMonth" onclick="nextMonth()">&gt;</button>
-          </div>
-          <div class="calendar-wrapper">
-            <div class="calendar-grid" id="calendar-grid">
-              <div class="weekday">Sun</div>
-              <div class="weekday">Mon</div>
-              <div class="weekday">Tue</div>
-              <div class="weekday">Wed</div>
-              <div class="weekday">Thu</div>
-              <div class="weekday">Fri</div>
-              <div class="weekday">Sat</div>
+          <div class="calendar-container">
+            <div class="calendar-header">
+              <button id="prevMonth" onclick="prevMonth()">&lt;</button>
+              <h2 id="month-name">September 2024</h2>
+              <button id="nextMonth" onclick="nextMonth()">&gt;</button>
+            </div>
+            <div class="calendar-wrapper">
+              <div class="calendar-grid" id="calendar-grid">
+                <div class="weekday">Sun</div>
+                <div class="weekday">Mon</div>
+                <div class="weekday">Tue</div>
+                <div class="weekday">Wed</div>
+                <div class="weekday">Thu</div>
+                <div class="weekday">Fri</div>
+                <div class="weekday">Sat</div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="chart-container">
-          <h2>Recent Activity - Mood Level</h2>
-          <canvas id="lineChart" width="500" height="150"></canvas>
+          <div class="chart-container">
+            <h2>Recent Activity - Mood Level</h2>
+            <canvas id="lineChart" width="500" height="150"></canvas>
+          </div>
+        </div>
+        <div id="journalModal" class="modal" style="<?php echo isset($journal) ? 'display: block;' : 'display: none;'; ?>">
+          <div class="modal-content">
+            <span class="close" onclick="document.getElementById('journalModal').style.display='none'">&times;</span>
+            <?php if ($journal): ?>
+              <h2><?php echo htmlspecialchars($journal['title']); ?></h2>
+              <p><?php echo htmlspecialchars($journal['details']); ?></p>
+              <p><strong>Mood Level:</strong> <?php echo htmlspecialchars($journal['moodLevel']); ?></p>
+            <?php else: ?>
+              <p>No journal entry found for this date.</p>
+            <?php endif; ?>
+          </div>
         </div>
       </div>
       </div>

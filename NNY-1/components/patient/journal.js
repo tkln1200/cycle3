@@ -85,7 +85,7 @@ function showJournalDetails(id) {
       <p>${journal.details}</></br></br>
       ${
         journal.file
-          ? `<img src="uploads/${journal.file}" alt="Journal Image" />`
+          ? `<img src="./uploads/${journal.file}" alt="Journal Image" />`
           : ""
       }
       <p>Mood: ${journal.moodLevel}</p>

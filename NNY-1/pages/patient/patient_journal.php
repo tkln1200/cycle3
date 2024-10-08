@@ -22,6 +22,7 @@
       
       $patientId = $_SESSION['patientId'];
       
+      // Fetching all journal entries of logged in user and populate on left hand panel
       $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
       $stmt = $conn->prepare($query);
       $stmt->bind_param("i", $patientId);
@@ -36,7 +37,8 @@
       } 
   
       echo '<script> populateJournalList(' . json_encode($journals) . ');</script>';
-    
+      
+      // Fetching therapistID for logged in user to automatically add into Journal entry
       $query = "SELECT therapistId FROM Patient WHERE id = ?";
       $stmt = $conn->prepare($query);
       $stmt->bind_param("i", $patientId);
@@ -49,7 +51,8 @@
         $therapistId = $row['therapistId']; 
       }    
 
-      if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['formsubmitted'])) {
+      // Add journal entry into Journal database
+      if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['formSubmitted'])) {
         $title = $_POST['title'];
         $dateCreated = $_POST['dateCreated'];
         $timeCreated = $_POST['timeCreated'];
@@ -76,18 +79,18 @@
                 echo "Error uploading media.";
             }
         }
-
+        
         $insertQuery = "INSERT INTO Journal (patientId, therapistId, title, dateCreated, timeCreated, details, moodLevel, file) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $insertStmt = $conn->prepare($insertQuery);
     
-        $insertStmt->bind_param("iissssib", $patientId, $therapistId, $title, $dateCreated, $timeCreated, $details, $moodLevel, $mediaName);
+        $insertStmt->bind_param("iissssis", $patientId, $therapistId, $title, $dateCreated, $timeCreated, $details, $moodLevel, $mediaName);
     
         if ($insertStmt->execute()) {
-          header("Location: patient_journal.php");
+          // header("Location: patient_journal.php");
+          echo "form submitted!";
           exit();
-        } 
-        
+        }
         else {
             echo "Error: " . $insertStmt->error;
         }
@@ -108,7 +111,10 @@
         }
         $conn->close();
       }
+      
+    
 
+      //Fetching past journals on calendar
       $journal = null;
 
       if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selectedDate'])) {
@@ -231,7 +237,7 @@
               </div>
                              
               <div id="line"></div>
-                  <input type="submit" name="formSubmitted" value="Publish" />
+                  <input type="submit" name="formsubmitted" value="Publish" />
               </div>  
             </form>
           </div>
