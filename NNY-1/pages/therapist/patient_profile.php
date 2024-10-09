@@ -85,10 +85,10 @@
             </div>
 
             <!-- Recent Mood Chart -->
-            <div class="mood-chart">
+            <!-- <div class="mood-chart">
                 <h2>Recent Activity - Mood Level</h2>
                 <canvas id="lineChart" width="600" height="400"></canvas>
-              </div>
+              </div> -->
         </div>
 
         <!-- Notes and Group Information Section -->
@@ -120,7 +120,7 @@
                 <?php endforeach; ?>
               </ul>
           </div>
-          <div class="calendar-container">
+          <!-- <div class="calendar-container"> -->
             <div class="calendar-header">
                 <button class="prev-month" onclick="prevMonth()">&lt;</button>
                 <h2 id="month-name">September 2024</h2>
