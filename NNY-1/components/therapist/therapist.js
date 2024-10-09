@@ -128,3 +128,18 @@ function changeTableColor(selectElement) {
     row.style.backgroundColor = "white";
   }
 }
+document.getElementById('groupForm').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent default form submission
+
+  // Collect selected patient IDs
+  let selectedPatients = [];
+  document.querySelectorAll('input[name="patient_ids[]"]:checked').forEach((checkbox) => {
+    selectedPatients.push(checkbox.value);
+  });
+
+  // Set the JSON string of selected IDs to the hidden input
+  document.getElementById('selectedPatients').value = JSON.stringify(selectedPatients);
+
+  // Submit the form after setting the hidden input
+  this.submit();
+});

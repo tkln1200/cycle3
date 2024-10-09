@@ -1,3 +1,47 @@
+<?php
+    include_once '../../includes/connections.php';
+    $patient_id = $_GET['id'];
+    $sql_patient  = "SELECT * FROM patient where id = $patient_id";
+    $sql_patient_details  = "SELECT * FROM patient_details where patient_id = $patient_id";   
+    $sql_patient_notes  = "SELECT * FROM notes where patient_id = $patient_id";
+    $sql_journals = "SELECT * FROM journal where patientId = $patient_id";
+
+    $sql_patient_obj = mysqli_query($conn,$sql_patient) Or die("Failed to query " . mysqli_error($conn));
+    $sql_patient_details_obj = mysqli_query($conn,$sql_patient_details) Or die("Failed to query " . mysqli_error($conn));
+    $sql_patient_notes_obj = mysqli_query($conn,$sql_patient_notes) Or die("Failed to query " . mysqli_error($conn));
+    $sql_patient_journal_obj = mysqli_query($conn,$sql_journals) Or die("Failed to query " . mysqli_error($conn));
+
+    $count_patients = mysqli_num_rows($sql_patient_obj);
+    if ($count_patients>0) {
+       $patient = mysqli_fetch_assoc($sql_patient_obj);
+       $patient_details = mysqli_fetch_assoc($sql_patient_details_obj);
+       $patient_notes =  mysqli_fetch_assoc($sql_patient_notes_obj);
+       if(isset($patient_notes['notes']))
+       {
+          $notes_array = explode('.', $patient_notes['notes']);
+       }
+
+       // getting journals
+       $journal_count = mysqli_num_rows($sql_patient_journal_obj);
+       if ($journal_count>0)
+       {
+          $journals = [];
+          while ($row = mysqli_fetch_assoc($sql_patient_journal_obj)) {
+              $journals[] = $row['details'];
+          }
+       }
+       else
+       {
+        $journals = ["Not Available", "Not Available","Not Available","Not Available","Not Available"];
+
+       }
+    }
+    
+
+    
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -22,40 +66,25 @@
             class="profile-photo"
           />
           <div class="patient-info">
-            <h2>Zoe Ashford</h2>
-            <p class="patient-details">Issues: Depression</p>
-            <p class="patient-details">Age: 33</p>
-            <p class="patient-details">Gender: Female</p>
-            <p class="patient-details">Height: 5 ft 4 inch</p>
-            <p class="patient-details">Weight: 56 KG</p>
+            <h2><?php echo $patient['fName'] ." " .  $patient['lName'];?></h2>
+
+            <p class="patient-details">Issues: <?php echo isset($patient_details['diagnosis']) ? htmlspecialchars($patient_details['diagnosis']) : 'Not available'; ?></p>
+            <p class="patient-details">Age: <?php echo isset($patient_details['age']) ? htmlspecialchars($patient_details['age']) : 'Not available'; ?></p>
+            <p class="patient-details">Gender: <?php echo $patient['gender'];?></p>
+            <p class="patient-details">Height: <?php echo isset($patient_details['height']) ? htmlspecialchars($patient_details['height']) : 'Not available'; ?></p>
+            <p class="patient-details">Weight: <?php echo isset($patient_details['weight']) ? htmlspecialchars($patient_details['weight']) : 'Not available'; ?> KG</p>
           </div>
         </div>
       </div>
 
       <!-- Notes Section -->
+      
       <div class="notes-section">
-        <ul>
-          <li>
-            The patient reports persistent low mood and feelings of hopelessness
-            for the past six months.
-          </li>
-          <li>
-            Describes significant fatigue and loss of interest in previously
-            enjoyable activities.
-          </li>
-          <li>
-            Expresses feelings of worthlessness and negative self-perception.
-          </li>
-          <li>
-            Social withdrawal observed; patient has reduced contact with friends
-            and family.
-          </li>
-        </ul>
-        <!-- Recent Mood Chart -->
-        <div class="mood-chart">
-          <h2>Recent Activity - Mood Level</h2>
-          <canvas id="lineChart" width="600" height="400"></canvas>
-        </div>
+        <form action="save_notes.php?id=<?php echo $patient_id?>" method="post">
+          <textarea name="patient_notes" id="" cols="110" rows="10"><?php echo isset($patient_notes['notes']) ? htmlspecialchars($patient_notes['notes']) : ''; ?></textarea>
+          <button type="submit" id="edit_save">Save</button>
+        </form>
+
       </div>
     </div>
     <footer>

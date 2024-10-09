@@ -1,3 +1,28 @@
+<?php
+  session_start();
+  include_once '../../includes/connections.php';
+
+  if (empty($_SESSION['therapist_id'])) 
+  {
+    $therapist_id = 1;
+  }
+  else
+  {
+    $therapist_id = $_SESSION['therapist_id'];
+  }
+  $current_date = date('Y-m-d');
+  $current_time = date('H:i:s');
+  $sql_search_groups_past = "SELECT * FROM groups WHERE therapist_id = '$therapist_id' AND (date < '$current_date' 
+         OR (date = '$current_date' AND sTime < '$current_time'))";
+  $sql_search_groups_new = "SELECT * FROM groups WHERE therapist_id = '$therapist_id' AND (date > '$current_date' 
+         OR (date = '$current_date' AND sTime > '$current_time'))";
+
+  $sql_obj_past =  mysqli_query($conn,$sql_search_groups_past) Or die("Failed to query " . mysqli_error($conn));
+  $sql_obj_new =  mysqli_query($conn,$sql_search_groups_new) Or die("Failed to query " . mysqli_error($conn));
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,36 +42,43 @@
         <h1>Group Therapy Sessions</h1>
         <div class="group-list">
           <h2>Latest Group Session</h2>
-          <div class="group-card latest-session">
-            <h3>Group Name: Coping with Anxiety</h3>
-            <p><strong>Date:</strong> September 25, 2024</p>
-            <p><strong>Time:</strong> 10:00 AM - 11:30 AM</p>
-            <p><strong>Location:</strong> Room A1</p>
-            <p><strong>Participants:</strong> Zoe Ashford, James Foster</p>
-            <p><strong>Available Space:</strong> 2/5</p>
-            <button class="details-btn">View Details</button>
-          </div>
+          <?php
+            if(mysqli_num_rows($sql_obj_new)>0)
+            {
+              while ($row = mysqli_fetch_assoc($sql_obj_new))
+              {
+                echo '<div class="group-card latest-session">
+                        <h3>Group Name: ' .$row['group_name'] .'</h3>
+                        <p><strong>Date:</strong> '. $row['date'] . '</p>
+                        <p><strong>Time:</strong> ' .  $row['sTime'] . '-' . $row['eTime'] . '</p>
+                        <p><strong>Location:</strong> '. $row['location'] .'</p>
+                        <p><strong>Participants:</strong> '. $row['participants'] . '</p>
+                        <p><strong>Available Space:</strong> '. $row['space'] - $row['occupied_space'] . '</p>
+                      </div>';
+              }
+            }
+          ?>
+
 
           <h2>Previous Sessions</h2>
-          <div class="group-card">
-            <h3>Group Name: Depression Management</h3>
-            <p><strong>Date:</strong> September 15, 2024</p>
-            <p><strong>Time:</strong> 9:00 AM - 10:30 AM</p>
-            <p><strong>Location:</strong> Room B2</p>
-            <p><strong>Participants:</strong> Minho, John Snow</p>
-            <p><strong>Available Space:</strong> 3/5</p>
-            <button class="details-btn">View Details</button>
-          </div>
+          <?php
+            if(mysqli_num_rows($sql_obj_past)>0)
+            {
+              while ($row1 = mysqli_fetch_assoc($sql_obj_past))
+              {
+                echo '<div class="group-card">
+                        <h3>Group Name: ' .$row1['group_name'] .'</h3>
+                        <p><strong>Date:</strong> '. $row1['date'] . '</p>
+                        <p><strong>Time:</strong> ' .  $row1['sTime'] . '-' . $row1['eTime'] . '</p>
+                        <p><strong>Location:</strong> '. $row1['location'] .'</p>
+                        <p><strong>Participants:</strong> '. $row1['participants'] . '</p>
+                        <p><strong>Available Space:</strong> '. $row1['space'] - $row1['occupied_space'] . '</p>
+                      </div>';
+              }
+            }
+          ?>
 
-          <div class="group-card">
-            <h3>Group Name: Mindfulness and Stress Relief</h3>
-            <p><strong>Date:</strong> August 28, 2024</p>
-            <p><strong>Time:</strong> 11:00 AM - 12:30 PM</p>
-            <p><strong>Location:</strong> Room C1</p>
-            <p><strong>Participants:</strong> Minho, John Snow, Luffy</p>
-            <p><strong>Available Space:</strong> 1/5</p>
-            <button class="details-btn">View Details</button>
-          </div>
+
         </div>
       </section>
     </main>
