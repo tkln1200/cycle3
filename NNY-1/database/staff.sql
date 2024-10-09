@@ -7,5 +7,3 @@ CREATE TABLE `staff` (
   PRIMARY KEY (`staffId`)
 );
 
-INSERT INTO STAFF 
-VALUE(1, 'staff_vip_pr0@gmail.com', 'Johnny', 'Johnny', '1233456');

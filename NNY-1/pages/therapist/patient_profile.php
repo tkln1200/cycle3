@@ -28,7 +28,7 @@
        {
           $journals = [];
           while ($row = mysqli_fetch_assoc($sql_patient_journal_obj)) {
-              $journals[] = $row['details'];
+              $journals[] = $row['title'];
           }
        }
        else

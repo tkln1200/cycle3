@@ -22,3 +22,6 @@ VALUES
 ('Dr', 'Lauren', 'Li', 'lauren.li@care.com', '0401122334', '45 King St, Adelaide, SA 5000', NULL),
 ('Dr', 'David', 'Black', 'david.black@care.com', '0412233445', '789 Health St, Sydney, NSW 2000', NULL),
 ('Dr', 'Evelyn', 'Carter', 'evelyn.carter@care.com', '0423344556', '456 Wellness Ave, Melbourne, VIC 3000', NULL);
+
+ALTER TABLE Therapist
+ADD COLUMN password VARCHAR(255);  
