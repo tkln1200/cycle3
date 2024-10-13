@@ -185,7 +185,8 @@ div.journal-title:hover {
 }
 
 .journal-details img {
-  max-width: 100px;
+  max-width: 50%;
+  margin: auto;
 }
 
 .search-bar {

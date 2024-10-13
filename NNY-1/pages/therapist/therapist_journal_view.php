@@ -13,7 +13,7 @@
     <?php 
       session_start();
       include_once ("../navigation/therapist_nav.php");
-      require_once "../patient/patient_journal_connect.php";
+      require_once "../../includes/connections.php";
            
            
       $therapistId = 5; 
