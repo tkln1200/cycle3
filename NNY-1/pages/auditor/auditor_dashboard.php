@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Consultation Dashboard</title>
     <link rel="stylesheet" href="../../assets/css/auditor.css">
+    <link rel="stylesheet" href="../../assets/css/shared.css">
+
 </head>
 
 <body>
     <div class="dashboard">
         <?php
-        require_once "../patient/patient-dashboard-connect.php";
+        include_once("../navigation/straff_nav.php");
+        require_once "../../includes/connections.php";
 
         // Set pagination variables
         $records_per_page = 10;

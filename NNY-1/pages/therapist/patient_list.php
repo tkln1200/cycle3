@@ -15,6 +15,7 @@
     <?php
     include_once("../navigation/therapist_nav.php");
     require_once "../../includes/connections.php";
+    session_start();
 
     // Query to fetch all patients
     $sql = "SELECT id, fName, lName, dob, gender, contactNo, diagnosis, status FROM Patient";

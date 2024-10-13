@@ -1,6 +1,8 @@
 
 <?php
     include_once '../../includes/connections.php';
+    session_start();
+    $_SESSION['therapistId'] = $therapistId;
     $patient_id = $_GET['id'];
     $sql_patient  = "SELECT * FROM patient where id = $patient_id";
     // $sql_patient_details  = "SELECT * FROM patient_details where patient_id = $patient_id";   
