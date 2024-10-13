@@ -6,6 +6,3 @@ CREATE TABLE `staff` (
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`staffId`)
 );
-
-INSERT INTO STAFF 
-VALUE(1, 'staff_vip_pr0@gmail.com', 'Johnny', 'Johnny', '1233456');

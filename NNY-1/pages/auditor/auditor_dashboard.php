@@ -1,115 +1,160 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Consultation Dashboard</title>
     <link rel="stylesheet" href="../../assets/css/auditor.css">
 </head>
+
 <body>
-<nav class="navbar">
-        <div class="navbar-brand">Dashboard</div>
-        <!-- <ul class="navbar-menu">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Appointments</a></li>
-            <li><a href="#">Patients</a></li>
-            <li><a href="#">Doctors</a></li>
-            <li><a href="#">Reports</a></li>
-        </ul> -->
-        <div class="navbar-icons">
-            <a href="#" class="icon-bell"><img src="bell-icon.png" alt="Notifications"></a>
-            <a href="#" class="icon-profile"><img src="profile-icon.png" alt="Profile"></a>
-        </div>
-    </nav>
+    <div class="dashboard">
+        <?php
+        require_once "../patient/patient-dashboard-connect.php";
 
-<div class="dashboard">
-    <div class="stats-container">
-        <div class="stat">
-            <h4>Appointments</h4>
-            <p>20</p>
-        </div>
-        <div class="stat">
-            <h4>Consult length</h4>
-            <p>10 hrs</p>
-        </div>
-        <div class="stat">
-            <h4>Patients</h4>
-            <p>300</p>
-        </div>
-        <div class="stat">
-            <h4>Doctors</h4>
-            <p>100</p>
-        </div>
-    </div>
-    <div class="container">
-    <div class="filter-container">
-        <h2>Filter by <span>Doctor's Name</span></h2>
-        <button class="export-btn">Export</button>
+        // Set pagination variables
+        $records_per_page = 10;
+        $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($current_page - 1) * $records_per_page;
 
-        <div class="doctor-list">
-            <!-- Doctor 1 -->
-            <div class="doctor-card">
-                <button class="doctor-name" onclick="toggleDetails(this)">Sagun Thapa</button>
+        // Query to get the total number of records
+        $totalRecordsQuery = "SELECT COUNT(DISTINCT p.id) AS total_records FROM Patient p";
+        $total_records = $conn->query($totalRecordsQuery)->fetch_assoc()['total_records'];
+        $total_pages = ceil($total_records / $records_per_page);
+
+        // Query to get therapist details along with patient count and consultation length with pagination
+        $query = "
+        SELECT 
+            t.fName AS therapist_fname,
+            t.lName AS therapist_lname,
+            p.fName AS patient_fname,
+            p.lName AS patient_lname,
+            p.diagnosis,
+            DATEDIFF(p.endDate, p.startDate) AS consult_length
+        FROM Therapist t
+        LEFT JOIN Patient p ON t.id = p.therapistId
+        GROUP BY t.id, p.id
+        ORDER BY t.fName, t.lName
+        LIMIT $records_per_page OFFSET $offset
+        ";
+
+        $result = $conn->query($query);
+
+        // Query to get the number of patients treated by each therapist
+        $therapistPatientCountQuery = "
+        SELECT 
+            t.fName AS therapist_fname,
+            t.lName AS therapist_lname,
+            COUNT(p.id) AS patient_count
+        FROM Therapist t
+        LEFT JOIN Patient p ON t.id = p.therapistId
+        GROUP BY t.id
+        ";
+        $therapistPatientCountResult = $conn->query($therapistPatientCountQuery);
+        ?>
+
+        <div class="stats-container">
+            <div class="stat">
+                <h4>Appointments</h4>
+                <p><?php echo $total_records; ?></p>
             </div>
+            <div class="stat">
+                <h4>Consult Length</h4>
+                <p><?php
+                    $consultLengthQuery = "SELECT SUM(DATEDIFF(endDate, startDate)) AS total_consult_length FROM Patient WHERE endDate IS NOT NULL";
+                    $consultLength = $conn->query($consultLengthQuery)->fetch_assoc()['total_consult_length'];
+                    echo $consultLength . ' hrs';
+                    ?></p>
+            </div>
+            <div class="stat">
+                <h4>Patients</h4>
+                <p><?php echo $total_records; ?></p>
+            </div>
+            <div class="stat">
+                <h4>Doctors</h4>
+                <p><?php echo $therapistCount = $conn->query("SELECT COUNT(*) AS therapist_count FROM Therapist")->fetch_assoc()['therapist_count']; ?></p>
+            </div>
+        </div>
 
-            <!-- Doctor 2 with details -->
-            <div class="doctor-card">
-                <button class="doctor-name" onclick="toggleDetails(this)">Malik Mbaye</button>
-                <div class="doctor-details">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Patient ID</th>
-                                <th>Type of Case</th>
-                                <th>Length of Consultation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>12312321</td>
-                                <td>PTSD</td>
-                                <td>1.5 HRS</td>
-                            </tr>
-                            <tr>
-                                <td>322523</td>
-                                <td>OCD</td>
-                                <td>2 HRS</td>
-                            </tr>
-                            <tr>
-                                <td>30923</td>
-                                <td>NCD</td>
-                                <td>1 HR</td>
-                            </tr>
-                            <tr>
-                                <td>5232314</td>
-                                <td>DEPRESSION</td>
-                                <td>1 HR</td>
-                            </tr>
-                            <tr>
-                                <td>12412553</td>
-                                <td>GAD</td>
-                                <td>2 HRS</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p>Total = 5</p>
+        <div class="container-flex">
+            <!-- Main Table with Pagination (3/4 width) -->
+            <div class="table-container main-table">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Therapist Name</th>
+                            <th>Patient Name</th>
+                            <th>Diagnosis</th>
+                            <th>Consult Length (hrs)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>
+                                    <td>" . $row['therapist_fname'] . " " . $row['therapist_lname'] . "</td>
+                                    <td>" . $row['patient_fname'] . " " . $row['patient_lname'] . "</td>
+                                    <td>" . $row['diagnosis'] . "</td>
+                                    <td>" . $row['consult_length'] . "</td>
+                                  </tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='4'>No data available</td></tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+                <!-- Pagination Links -->
+                <div class="pagination">
+                    <?php if ($current_page > 1): ?>
+                        <a href="?page=<?php echo $current_page - 1; ?>">Previous</a>
+                    <?php endif; ?>
+                    
+                    <?php for ($page = 1; $page <= $total_pages; $page++): ?>
+                        <a href="?page=<?php echo $page; ?>" 
+                           class="<?php if ($page == $current_page) echo 'active'; ?>">
+                           <?php echo $page; ?>
+                        </a>
+                    <?php endfor; ?>
+
+                    <?php if ($current_page < $total_pages): ?>
+                        <a href="?page=<?php echo $current_page + 1; ?>">Next</a>
+                    <?php endif; ?>
                 </div>
             </div>
 
-            <!-- Additional doctors -->
-            <div class="doctor-card">
-                <button class="doctor-name" onclick="toggleDetails(this)">Alexis Martinez</button>
-            </div>
-            <div class="doctor-card">
-                <button class="doctor-name" onclick="toggleDetails(this)">Grace Wilkinson</button>
+            <!-- Summary Table (1/4 width) -->
+            <div class="table-container summary-table">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Therapist Name</th>
+                            <th>Patient Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($therapistPatientCountResult->num_rows > 0) {
+                            while ($row = $therapistPatientCountResult->fetch_assoc()) {
+                                echo "<tr>
+                                    <td>" . $row['therapist_fname'] . " " . $row['therapist_lname'] . "</td>
+                                    <td>" . $row['patient_count'] . "</td>
+                                  </tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='2'>No data available</td></tr>";
+                        }
+                        $conn->close();
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    </div>
-</div>
-
     <script src="../../assets/js/auditor.js"></script>
 </body>
+
 </html>
