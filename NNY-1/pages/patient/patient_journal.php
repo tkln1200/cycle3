@@ -13,7 +13,7 @@
     <?php
       session_start();
       include_once ("../navigation/patient_nav.php");
-      require_once "patient_journal_connect.php";
+      require_once "../../includes/connections.php";
            
       if (!isset($_SESSION['patientId'])) {
         header("Location: ../login/patient_login.php");
@@ -108,19 +108,6 @@
         }
 
         $insertStmt->close();
-        
-        // $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
-        // $stmt = $conn->prepare($query);
-        // $stmt->bind_param("i", $patientId);
-        // $stmt->execute();
-        // $result = $stmt->get_result();
-        // $journals = [];
-
-        // if ($result->num_rows > 0) {
-        //     while ($row = $result->fetch_assoc()) {
-        //         $journals[] = $row;
-        //     }
-        // }
         $conn->close();
       }
       
