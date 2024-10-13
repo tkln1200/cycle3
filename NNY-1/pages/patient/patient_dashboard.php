@@ -12,34 +12,19 @@
 <body>
   <header>
     <?php
-    session_start();
     include_once("../navigation/patient_nav.php");
-    require_once "../../includes/connections.php";
-    
-    $patientId = $_SESSION['patientId'];
-    
-    //Get patientName from patientId
-    $sql = "SELECT fName FROM Patient WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $patientId);
-    $stmt->execute(); 
-    $result = $stmt->get_result();
-    $patientName = null;
-    if ($result->num_rows > 0) {
-      $row = $result->fetch_assoc();
-      $patientName = $row['fName']; 
-    } 
+    require_once "patient-dashboard-connect.php";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['goalTitle'])) {
       $title = isset($_POST['goalTitle']) ? $_POST['goalTitle'] : '';
       $category = isset($_POST['goalCategory']) ? $_POST['goalCategory'] : '';
       $dueDate = isset($_POST['dueDate']) ? $_POST['dueDate'] : '';
-      
+
       if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
       }
 
-      $sql = "INSERT INTO Goal (title, category, dueDate) VALUES (?, ?, ?)";
+      $sql = "INSERT INTO GOAL (title, category, dueDate) VALUES (?, ?, ?)";
       $stmt = $conn->prepare($sql);
 
       if ($stmt === false) {
@@ -47,9 +32,8 @@
       }
 
       $stmt->bind_param("sss", $title, $category, $dueDate);
-      
+
       if ($stmt->execute()) {
-        header("Location: patient_dashboard.php");
       } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
       }
@@ -69,7 +53,7 @@
     }
 
     $incompleteGoals = [];
-    $sql = "SELECT * FROM Goal WHERE isCompleted IS NULL ORDER BY goalId DESC";
+    $sql = "SELECT goalId, title, category, dueDate FROM GOAL WHERE isCompleted = 0 ORDER BY goalId DESC";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -111,7 +95,7 @@
   <main>
     <div class="container">
       <div class="left-panel">
-        <div class="greetings">Hi, <?php echo htmlspecialchars($patientName); ?>!</div>
+        <div class="greetings">Hi, Zoe!</div>
 
         <!-- Affirmation Slider -->
         <div class="affirmation-slider">
@@ -187,7 +171,7 @@
           <div class="new-modal-content">
             <span class="close">&times;</span>
             <h2>Set a New Goal</h2>
-            <form id="goalForm" method="POST" action="">
+            <form id="goalForm" method="POST" action="patient_dashboard.php">
               <label for="goalTitle">Title:</label>
               <input type="text" id="goalTitle" name="goalTitle" required>
               <label for="goalCategory">Category:</label>
