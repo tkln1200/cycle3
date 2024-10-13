@@ -20,7 +20,7 @@
 
   <main class="activity-tracker-main">
     <div class="activity-header">
-      <h2>Activity Tracker</h2>
+      <h2 id="pageheader">Activity Tracker</h2>
       <button class="view-list-btn" onclick="window.location.href='activity_dashboard.php'">View List</button>
     </div>
 
@@ -74,7 +74,7 @@
       </form>
 
       <div class="side-section">
-        <div class="calendar-container">
+      <div class="calendar-container">
           <div class="calendar-header">
             <button id="prevMonth" onclick="prevMonth()">&lt;</button>
             <h2 id="month-name">September 2024</h2>
@@ -92,6 +92,18 @@
             </div>
           </div>
         </div>
+        <div id="journalModal" class="modal" style="<?php echo isset($journal) ? 'display: block;' : 'display: none;'; ?>">
+        <div class="modal-content">
+          <span class="close" onclick="document.getElementById('journalModal').style.display='none'">&times;</span>
+          <?php if ($journal): ?>
+            <h2><?php echo htmlspecialchars($journal['title']); ?></h2>
+            <p><?php echo htmlspecialchars($journal['details']); ?></p>
+            <p><strong>Mood Level:</strong> <?php echo htmlspecialchars($journal['moodLevel']); ?></p>
+          <?php else: ?>
+            <p>No journal entry found for this date.</p>
+          <?php endif; ?>
+        </div>
+      </div>
 
         <div id="goalSection">
           <h2>Your goal for this week:</h2>
@@ -117,6 +129,7 @@
     <?php include_once("../footer/patient_footer.php") ?>
   </footer>
   <script src="../../components/patient/activity-tracker.js"></script>
+  <script src="../../components/patient/patient.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       const buttons = document.querySelectorAll('.rating-buttons button');
@@ -141,7 +154,7 @@
 </html>
 
 <?php
-require_once "patient-dashboard-connect.php";
+require_once "../../includes/connections.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $sleepRating = $_POST['sleepRating'] ?: 0;
@@ -167,6 +180,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   $stmt->close();
-  $conn->close();
 }
+
+$journal = null;
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selectedDate'])) {
+      $selectedDate = $_POST['selectedDate'];
+
+      $sql = "SELECT title, details, moodLevel FROM journal WHERE dateCreated = ? ORDER BY id DESC LIMIT 1";
+      $stmt = $conn->prepare($sql);
+      $stmt->bind_param("s", $selectedDate);
+      $stmt->execute();
+      $result = $stmt->get_result();
+
+      if ($result->num_rows > 0) {
+        $journal = $result->fetch_assoc();
+      }
+    }
+
+    $conn->close();
 ?>

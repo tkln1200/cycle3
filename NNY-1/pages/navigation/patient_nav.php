@@ -6,6 +6,7 @@
     <li>
       <a href="../patient/affirmations.php">Affirmation</a>
     </li>
+    <li><a href="../../index.php">Logout</a></li>
     <li><img src="../../assets/images/patient.png" alt="#" /></li>
   </ul>
 </nav>

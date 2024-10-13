@@ -18,10 +18,13 @@ if ($_SERVER['REQUEST_METHOD']=='POST')
     $sql_notes_update = "UPDATE notes SET notes = '$notes' WHERE patient_id = '$patient_id'";
     $sql_search_patient  = "SELECT * FROM notes where patient_id = $patient_id";
 
+    
     $sql_search_obj =  mysqli_query($conn,$sql_search_patient) Or die("Failed to query " . mysqli_error($conn));
-
+    echo "hello";
     if(mysqli_num_rows($sql_search_obj)>0)
     {
+
+
         if(!mysqli_query($conn,$sql_notes_update))
         {
             die("Failed to query " . mysqli_error($conn));

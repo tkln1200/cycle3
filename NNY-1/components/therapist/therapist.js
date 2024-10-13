@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Get and join patient IDs
     const patientIds = selectedPatients.map(checkbox => checkbox.value).join(",");
+
     document.getElementById("patientIds").value = patientIds;
 
     // Get and join patient names

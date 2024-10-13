@@ -14,8 +14,8 @@
   <header>
     <?php
     include_once("../navigation/therapist_nav.php");
-
-    require_once "../patient/patient-dashboard-connect.php";
+    require_once "../../includes/connections.php";
+    session_start();
 
     // Query to fetch all patients
     $sql = "SELECT id, fName, lName, dob, gender, contactNo, diagnosis, status FROM Patient";
@@ -115,10 +115,11 @@
         </div>
     </div>
     </div>
-    <footer>
+    
+  </div>
+  <footer>
       <?php include_once("../footer/therapist_footer.php") ?>
     </footer>
-  </div>
   <script src="../../components/therapist/therapist.js"></script>
 </body>
 

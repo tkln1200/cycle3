@@ -13,7 +13,8 @@
     <header>
         <?php
         include_once("../navigation/straff_nav.php");
-        require_once "./patient_db_connect.php";
+        require_once "../../includes/connections.php";
+        $staffId = 1; //Testing for staffId = 1 Johny J
 
         $sql = "SELECT id, fName, lName, contactNo, email, dob, height, weight, status FROM patient";
         $result = $conn->query($sql);

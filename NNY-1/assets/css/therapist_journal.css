@@ -185,7 +185,8 @@ div.journal-title:hover {
 }
 
 .journal-details img {
-  max-width: 100px;
+  max-width: 50%;
+  margin: auto;
 }
 
 .search-bar {
@@ -532,4 +533,11 @@ div.journal-title:hover {
 
 .day.empty {
   visibility: hidden;
+}
+
+.journal-details img {
+  display: block;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
