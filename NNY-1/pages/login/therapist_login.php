@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="login-container">
       <div class="login-box">
         <h2>Login as a Therapist</h2>
-        <form action="../therapist/patient_list.php" method="get">
+        <form action="../therapist/patient_list.php" method="post">
           <div class="input-group">
             <input type="email" name="email" placeholder="Email" required />
           </div>

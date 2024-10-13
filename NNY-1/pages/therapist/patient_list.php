@@ -47,7 +47,6 @@
           </form>
         </div>
       </div>
-      <form action="create_group.php" method="post" id = "groupForm">
       <table id="myTable">
         <thead>
           <tr>
@@ -72,8 +71,8 @@
                 <td><?php echo htmlspecialchars($patient['contactNo']); ?></td>
                 <td><?php echo htmlspecialchars($patient['diagnosis']); ?></td>
                 <td><?php echo htmlspecialchars($patient['status']); ?></td>
-                <td><input type="checkbox" name="patient_ids[]" value="<?php echo htmlspecialchars($patient['id']); ?>"></td>
-              
+                <!-- <td><input type="checkbox" name="patient_ids[]" value="<?php echo htmlspecialchars($patient['id']); ?>"></td> -->
+                <td><input type="checkbox" name="patient" class="select-patient" value = "<?php echo htmlspecialchars($patient['id']); ?>"></td>
               </tr>
             <?php endforeach; ?>
           <?php else: ?>
@@ -84,10 +83,37 @@
         </tbody>
       </table>
       <br>
-      <input type="hidden" name="selected_patients" id="selectedPatients">
 
-
-      </form>
+      <div id="groupFormModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create Group</h2>
+            <form id="groupForm" action="create_group.php" method = "post">
+                <input type="hidden" id="patientIds" name="patientIds" />
+                <label for="groupName">Group Name:</label>
+                <input type="text" id="groupName" name="groupName" required />
+    
+                <!-- <label for="participants">Participants:</label>
+                <input type="text" id="participants" name="participants" readonly /> -->
+    
+                <label for="availableSpace">Available Space:</label>
+                <input type="number" id="availableSpace" name="availableSpace" required />
+    
+                <label for="time">Start Time:</label>
+                <input type="time" id="time" name="sTime" required />
+                <label for="time">End Time:</label>
+                <input type="time" id="time" name="eTime" required />
+    
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required />
+    
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required />
+    
+                <button type="submit" class="save-group-btn">Save Group</button>
+            </form>
+        </div>
+    </div>
     </div>
     <footer>
       <?php include_once("../footer/therapist_footer.php") ?>
