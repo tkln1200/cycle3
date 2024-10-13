@@ -2,9 +2,9 @@
 require_once "./login_connect.php"; // Replace with your actual database connection file
 
 // Define your data
-$email = 'johny.j@care.com';
+$email = 'staff_vip_pr0@gmail.com';
 $fname = 'Johnny';
-$lname = 'Jullian';
+$lname = 'Johnny';
 $password = '123456';
 
 // Hash the password

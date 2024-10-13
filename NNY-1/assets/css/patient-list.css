@@ -1,17 +1,17 @@
 .main-content {
   padding: 20px;
-  margin-left: 5%;
+  margin-left: 20%;
 
   .header h2 {
     justify-self: start;
   }
   .content {
-    background-color: white;
-    width: 90%;
+    background-color: #f9f9f9;
+    width: 100%;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 100%;
+    max-width: 70%;
   }
 }
 
@@ -31,7 +31,7 @@ table td {
 }
 
 table th {
-  background-color: white;
+  background-color: #f2f2f2;
 }
 
 select {
@@ -41,7 +41,7 @@ select {
 }
 
 .journal-btn {
-  background-color: #a13295;
+  background-color: #6c63ff;
   color: white;
   border: none;
   padding: 5px 10px;
@@ -62,7 +62,7 @@ select {
 }
 
 .modal-content {
-  background-color: white;
+  background-color: #fff;
   margin: 5% auto;
   padding: 20px;
   border-radius: 10px;
@@ -121,7 +121,7 @@ select {
 }
 
 .save-group-btn {
-  background-color: #a13295;
+  background-color: #ff6b6b;
   color: white;
   border: none;
   padding: 10px;
@@ -175,7 +175,7 @@ textarea {
 }
 
 button[type="submit"] {
-  background-color: #a13295;
+  background-color: #3498db;
   color: white;
   border: none;
   padding: 10px;
@@ -184,15 +184,15 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #a13295;
+  background-color: #2980b9;
 }
 
 .save-group-btn:hover {
-  background-color: #a13295;
+  background-color: #ff5252;
 }
 
 .save-group-btn:focus {
-  background-color: #a13295;
+  background-color: #ff3838;
   outline: none;
 }
 
@@ -208,7 +208,7 @@ button[type="submit"]:hover {
 }
 
 .create-group-btn {
-  background-color: #a13295;
+  background-color: #ff6b6b;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -219,7 +219,7 @@ button[type="submit"]:hover {
 }
 
 .create-group-btn:hover {
-  background-color: #a13295;
+  background-color: #ff5252;
 }
 
 .search-container {
@@ -240,12 +240,12 @@ button[type="submit"]:hover {
   padding: 8px 15px;
   font-size: 14px;
   border: none;
-  background-color: #a13295;
+  background-color: #4a90e2;
   color: white;
   cursor: pointer;
   border-radius: 0 5px 5px 0;
 }
 
 .search-container button:hover {
-  background-color: #a13295;
+  background-color: #357abd;
 }

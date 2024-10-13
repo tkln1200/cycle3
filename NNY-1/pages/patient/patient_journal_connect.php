@@ -1,6 +1,6 @@
-<?php 
+<?php
 define("DB_HOST", "localhost");
-define("DB_NAME", "care_db");
+define("DB_NAME", "care_db"); 
 define("DB_USER", "root");
 define("DB_PASS", "");
 
@@ -15,5 +15,5 @@ if (!$conn) {
     echo "Debugging error: " . mysqli_connect_error() . "<br>";
     exit;
 }
-?>
 
+?>
