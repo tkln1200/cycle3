@@ -17,14 +17,13 @@ document.addEventListener("DOMContentLoaded", function () {
     groupFormModal.style.display = "block";
 
     // Get and join patient IDs
-    const patientIds = selectedPatients
-      .map((checkbox) => checkbox.value)
-      .join(",");
+    const patientIds = selectedPatients.map(checkbox => checkbox.value).join(",");
+
     document.getElementById("patientIds").value = patientIds;
 
     // Get and join patient names
     const participants = selectedPatients
-      .map((checkbox) => {
+      .map(checkbox => {
         const row = checkbox.closest("tr");
         return row.querySelector("td:nth-child(3)").textContent;
       })
@@ -50,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
 
 // Close modal if clicking outside of it
 window.addEventListener("click", function (event) {
