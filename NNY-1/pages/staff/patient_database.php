@@ -14,6 +14,7 @@
         <?php
         include_once("../navigation/straff_nav.php");
         require_once "./patient_db_connect.php";
+        $staffId = 1; //Testing for therapistId 1 Dr. Lauren Li
 
         $sql = "SELECT id, fName, lName, contactNo, email, dob, height, weight, status FROM patient";
         $result = $conn->query($sql);

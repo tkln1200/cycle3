@@ -6,3 +6,4 @@ CREATE TABLE `staff` (
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`staffId`)
 );
+

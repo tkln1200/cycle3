@@ -2,16 +2,16 @@
 require_once "./login_connect.php"; // Replace with your actual database connection file
 
 // Define your data
-$email = 'johny.j@care.com';
-$fname = 'Johnny';
-$lname = 'Jullian';
+$email = 'amanda.a@care.com';
+$fname = 'Amanda';
+$lname = 'Auditor';
 $password = '123456';
 
 // Hash the password
 $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
 // Prepare the SQL statement
-$sql = "INSERT INTO staff (email, fname, lname, password) VALUES (?, ?, ?, ?)";
+$sql = "INSERT INTO auditor (email, fname, lname, password) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 
 if ($stmt === false) {
@@ -22,7 +22,7 @@ if ($stmt === false) {
 $stmt->bind_param("ssss", $email, $fname, $lname, $hashed_password);
 
 if ($stmt->execute()) {
-    echo "Staff record added successfully!";
+    echo "Auditor record added successfully!";
 } else {
     echo "Error adding record: " . $conn->error;
 }

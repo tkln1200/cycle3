@@ -9,7 +9,9 @@
 
     $sql_patient_obj = mysqli_query($conn,$sql_patient) Or die("Failed to query " . mysqli_error($conn));
     $sql_patient_details_obj = mysqli_query($conn,$sql_patient_details) Or die("Failed to query " . mysqli_error($conn));
+
     $sql_patient_notes_obj = mysqli_query($conn,$sql_patient_notes) Or die("Failed to query " . mysqli_error($conn));
+
     $sql_patient_journal_obj = mysqli_query($conn,$sql_journals) Or die("Failed to query " . mysqli_error($conn));
 
     $count_patients = mysqli_num_rows($sql_patient_obj);
@@ -28,7 +30,7 @@
        {
           $journals = [];
           while ($row = mysqli_fetch_assoc($sql_patient_journal_obj)) {
-              $journals[] = $row['details'];
+              $journals[] = $row['title'];
           }
        }
        else

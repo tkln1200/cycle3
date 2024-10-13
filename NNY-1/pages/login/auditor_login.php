@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $password = $_POST['password'];
 
   $sql = "SELECT auditorId, password FROM auditor WHERE email = ?";
+
   $stmt = $conn->prepare($sql);
 
   if ($stmt === false) {
@@ -19,13 +20,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // Verify if a user with the given email exists
   if ($stmt->num_rows > 0) {
-    $stmt->bind_result($staffId, $hashed_password);
+
+    $stmt->bind_result($auditorId, $hashed_password);
     $stmt->fetch();
 
     // Verify the password
     if (password_verify($password, $hashed_password)) {
       // Password is correct, start the session
-      $_SESSION['auditorId'] = $staffId;
+
+      $_SESSION['auditorId'] = $auditorId;
       $_SESSION['email'] = $email;
 
       // Redirect to patient database
@@ -58,6 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="login-box">
       <h2>Login as a Auditor</h2>
       <form action="" method="post">
+
         <div class="input-group">
           <input type="email" id="email" name="email" placeholder="Email" required />
         </div>

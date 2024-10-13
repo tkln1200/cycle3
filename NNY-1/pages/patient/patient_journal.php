@@ -10,7 +10,7 @@
   </head>
   <body>
     <header>
-    <?php 
+    <?php
       session_start();
       include_once ("../navigation/patient_nav.php");
       require_once "patient_journal_connect.php";
@@ -34,9 +34,8 @@
         while ($row = $result->fetch_assoc()) {
             $journals[] = $row;
         }
+        echo '<script> populateJournalList(' . json_encode($journals) . ');</script>';
       } 
-  
-      echo '<script> populateJournalList(' . json_encode($journals) . ');</script>';
       
       // Fetching therapistID for logged in user to automatically add into Journal entry
       $query = "SELECT therapistId FROM Patient WHERE id = ?";
@@ -88,8 +87,21 @@
     
         if ($insertStmt->execute()) {
           // header("Location: patient_journal.php");
-          echo "form submitted!";
-          exit();
+          // exit();
+          $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
+          $stmt = $conn->prepare($query);
+          $stmt->bind_param("i", $patientId);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          $journals = [];
+
+          if ($result->num_rows > 0) {
+              while ($row = $result->fetch_assoc()) {
+                  $journals[] = $row;
+              }
+          }
+          echo '<script> populateJournalList(' . json_encode($journals) . ');</script>';
+
         }
         else {
             echo "Error: " . $insertStmt->error;
@@ -97,18 +109,18 @@
 
         $insertStmt->close();
         
-        $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $patientId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $journals = [];
+        // $query = "SELECT * FROM Journal WHERE patientId = ? ORDER BY dateCreated DESC";      
+        // $stmt = $conn->prepare($query);
+        // $stmt->bind_param("i", $patientId);
+        // $stmt->execute();
+        // $result = $stmt->get_result();
+        // $journals = [];
 
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $journals[] = $row;
-            }
-        }
+        // if ($result->num_rows > 0) {
+        //     while ($row = $result->fetch_assoc()) {
+        //         $journals[] = $row;
+        //     }
+        // }
         $conn->close();
       }
       
@@ -130,7 +142,6 @@
             $journal = $result->fetch_assoc();
           }
       }
-
     ?>
 
 
@@ -237,7 +248,7 @@
               </div>
                              
               <div id="line"></div>
-                  <input type="submit" name="formsubmitted" value="Publish" />
+                  <input type="submit" name="formSubmitted" value="Publish" />
               </div>  
             </form>
           </div>
