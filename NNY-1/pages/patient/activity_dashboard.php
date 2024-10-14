@@ -1,5 +1,5 @@
 <?php
-require_once "patient-dashboard-connect.php";
+require_once "../../includes/connections.php";
 
 $todayDate = date('Y-m-d');
 

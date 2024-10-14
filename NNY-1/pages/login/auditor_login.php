@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "./login_connect.php"; // Update to your actual database connection file
+require_once "../../includes/connections.php"; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $email = $_POST['email'];
@@ -17,15 +17,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $stmt->execute();
   $stmt->store_result();
 
-  // Verify if a user with the given email exists
   if ($stmt->num_rows > 0) {
     $stmt->bind_result($staffId, $hashed_password);
     $stmt->fetch();
 
-    // Verify the password
     if (password_verify($password, $hashed_password)) {
+<<<<<<< HEAD
       // Password is correct, start the session
       $_SESSION['auditorId'] = $staffId;
+=======
+
+      $_SESSION['auditorId'] = $auditorId;
+>>>>>>> 3125bf7 (Change db on all file)
       $_SESSION['email'] = $email;
 
       // Redirect to patient database

@@ -1,3 +1,49 @@
+<<<<<<< HEAD
+=======
+<?php
+session_start();
+require_once "../../includes/connections.php"; 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+
+  $sql = "SELECT therapistId, password FROM therapist WHERE email = ?";
+  $stmt = $conn->prepare($sql);
+
+  if ($stmt === false) {
+    die("Error preparing the statement: " . $conn->error);
+  }
+
+  $stmt->bind_param("s", $email);
+  $stmt->execute();
+  $stmt->store_result();
+
+  // Verify if a user with the given email exists
+  if ($stmt->num_rows > 0) {
+    $stmt->bind_result($therapistID, $hashed_password);
+    $stmt->fetch();
+
+    // Verify the password
+    if (password_verify($password, $hashed_password)) {
+      // Password is correct, start the session
+      $_SESSION['therapistId'] = $therapistId;
+      $_SESSION['email'] = $email;
+
+      // Redirect to patient database
+      header("Location: ../therapist/patient_list.php");
+      exit();
+    } else {
+      echo "<script>alert('Invalid password. Please try again.');</script>";
+    }
+  } else {
+    echo "<script>alert('No user found with this email. Please try again.');</script>";
+  }
+
+  $stmt->close();
+  $conn->close();
+}
+?>
+>>>>>>> 3125bf7 (Change db on all file)
 <!DOCTYPE html>
 <html lang="en">
   <head>
