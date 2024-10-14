@@ -12,6 +12,7 @@
 
     <header>
         <?php
+        session_start();
         include_once("../navigation/straff_nav.php");
         require_once "../../includes/connections.php";
         $staffId = 1; //Testing for staffId = 1 Johny J
@@ -46,10 +47,10 @@
             $endDate = $_POST['endDate'];
             $diagnosis = $_POST['diagnosis'];
             $status = $_POST['status'];
-            //$password = $_POST['password'];
+            // $password = $_POST['password'];
 
             // Hash the password
-            $hashed_password = password_hash('FlytotheSky96', PASSWORD_BCRYPT);
+            $hashed_password = password_hash('FlytotheSky96', PASSWORD_BCRYPT); //Default password FlytotheSky96
 
             // Insert data into the Patient table
             $sql = "INSERT INTO patient (therapistId, title, fName, lName, dob, gender, contactNo, email, streetAddress, postCode, height, weight, startDate, endDate, diagnosis, status, password)

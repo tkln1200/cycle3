@@ -138,11 +138,9 @@
           <div class="notes-container">
             <div class="header-with-btn">
               <h2>Notes</h2>
-              <button class="edit-btn" id="notesBtn">
-                 <i class="fas fa-edit"></i>
-                 <a href="patient_note.php?id=<?php echo $patient_id?>"><img src="/assets/images/note-btn.png" alt="Edit Notes" /></a>
-
-                </button>
+              <button class="edit-btn" id="notesBtn" onclick="window.location.href='patient_note.php?id=<?php echo $patient_id; ?>'">Edit Note
+              <img src="../../assets/images/note-btn.png" alt="Edit Notes" />
+              </button>
               </div>
               <ul class ="notes-details">
                 <?php foreach ($notes_array as $note): ?>

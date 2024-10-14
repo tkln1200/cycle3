@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 require_once "../../includes/connections.php"; 
 
 $therapistId = 5;
@@ -41,5 +41,4 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-?>
-
+?> -->

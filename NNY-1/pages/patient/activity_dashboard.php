@@ -78,7 +78,7 @@ $resultRecent = $conn->query($sqlRecent);
   </header>
 
   <main class="activity-tracker-main">
-    <h2>Activity Dashboard</h2>
+    <h2 style="padding-left:20px">Activity Dashboard</h2>
 
     <div class="content-container">
       <div class="form-section">
@@ -178,7 +178,7 @@ $resultRecent = $conn->query($sqlRecent);
         </div>
       </div>
 
-      <div class="side-section">
+      <!-- <div class="side-section">
         <div class="calendar-container">
           <div class="calendar-header">
             <button id="prevMonth" onclick="prevMonth()">&lt;</button>
@@ -215,7 +215,7 @@ $resultRecent = $conn->query($sqlRecent);
             ?>
           </p>
         </div>
-      </div>
+      </div> -->
     </div>
   </main>
 

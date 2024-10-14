@@ -20,7 +20,7 @@
 
   <main class="activity-tracker-main">
     <div class="activity-header">
-      <h2 id="pageheader">Activity Tracker</h2>
+      <h2 style = "padding-left: 20px;">Activity Tracker</h2>
       <button class="view-list-btn" onclick="window.location.href='activity_dashboard.php'">View List</button>
     </div>
 
@@ -73,7 +73,7 @@
         <button class="publish-btn" type="submit">Publish</button>
       </form>
 
-      <div class="side-section">
+      <!-- <div class="side-section">
       <div class="calendar-container">
           <div class="calendar-header">
             <button id="prevMonth" onclick="prevMonth()">&lt;</button>
@@ -121,7 +121,7 @@
             ?>
           </p>
         </div>
-      </div>
+      </div> -->
     </div>
   </main>
 
