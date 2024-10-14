@@ -1,9 +1,9 @@
 <?php
 require_once "../../includes/connections.php"; 
 
-$email = 'auditor_vip_pr0@gmail.com';
-$fname = 'Johnny';
-$lname = 'Johnny';
+$email = 'amanda.a@care.com';
+$fname = 'Amanda';
+$lname = 'Auditor';
 $password = '123456';
 
 $hashed_password = password_hash($password, PASSWORD_BCRYPT);

@@ -12,13 +12,12 @@
 <body>
   <header>
     <?php
-    require_once "patient-dashboard-connect.php";
+    require_once "../../includes/connections.php";
 
     if ($conn->connect_error) {
       die("Connection failed: " . $conn->connect_error);
     }
 
-    // Handle form submission to add a new affirmation
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['affirmationInput'])) {
       $affirmation = $_POST['affirmationInput'];
       $stmt = $conn->prepare("INSERT INTO affirmation (description) VALUES (?)");

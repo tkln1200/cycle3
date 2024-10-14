@@ -10,7 +10,7 @@
     <header>
       <?php
       session_start();
-      require_once "login_connect.php";
+      require_once "../../includes/connections.php";
       if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Get email and password from the form
         $email = $_POST['email'];

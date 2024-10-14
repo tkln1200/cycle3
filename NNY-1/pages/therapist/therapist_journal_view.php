@@ -16,7 +16,11 @@
       require_once "../patient/patient_journal_connect.php";
            
            
+<<<<<<< HEAD
       $therapistId = 1; //Testing for therapistId 1 Dr. Lauren Li
+=======
+      $therapistId=$_SESSION['therapist_id'];
+>>>>>>> 125aaa9 (update therapist create note + groups)
 
       //Fetching journals for logged in therapist
       $query = "SELECT j.*, p.fname, p.lname 
@@ -160,6 +164,7 @@
 
         <!-- Main panel with journal details -->
         <div class="journal-main-panel">
+<<<<<<< HEAD
           <div class="add-new-note">
             <button id="addNewNoteBtn" onclick="addNewNote()">New Note</button>
           </div>
@@ -246,6 +251,11 @@
           </div>
         
 
+=======
+          <!-- <div class="add-new-note">
+            <button id="addNewNoteBtn" href="save_notes.php">New Note</button>
+          </div> -->
+>>>>>>> 6a8bb12 (final check)
           <div class="journal-details">
             <h2 style="color: rgb(161, 50, 149);">Journal Details</h2>
             

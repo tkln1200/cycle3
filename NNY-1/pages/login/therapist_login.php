@@ -1,3 +1,49 @@
+<<<<<<< HEAD
+=======
+<?php
+session_start();
+require_once "../../includes/connections.php"; 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // Get email and password from the form
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  
+  // Prepare and bind
+  $stmt = $conn->prepare("SELECT id, password FROM therapist WHERE email = ?");
+  $stmt->bind_param("s", $email);
+  
+  // Execute the query
+  $stmt->execute();
+  
+  // Store the result
+  $stmt->store_result();
+
+  // Check if email exists
+  if ($stmt->num_rows > 0) {
+      // Bind result variables
+      $stmt->bind_result($id, $hashed_password);
+      $stmt->fetch();
+
+      // Verify the password
+      if (password_verify($password, $hashed_password)) {
+          // Password is correct, start session and redirect
+          $_SESSION['therapist_id'] = $id;
+          header("Location: ../therapist/patient_list.php"); // Redirect therapist's patient list
+          exit();
+      } else {
+          // Password is incorrect
+          $error = "Invalid password.";
+      }
+  } else {
+      // Email not found
+      $error = "No account found with that email.";
+  }
+  
+  // Close statement
+  $stmt->close();
+}
+?>
+>>>>>>> 3125bf7 (Change db on all file)
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,7 +56,11 @@
     <div class="login-container">
       <div class="login-box">
         <h2>Login as a Therapist</h2>
+<<<<<<< HEAD
         <form action="../therapist/patient_list.php" method="get">
+=======
+        <form action="" method="post">
+>>>>>>> 125aaa9 (update therapist create note + groups)
           <div class="input-group">
             <input type="email" name="email" placeholder="Email" required />
           </div>

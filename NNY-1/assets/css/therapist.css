@@ -80,14 +80,13 @@ body {
 #edit_save {
   margin: 0px;
   padding: 10px 20px;
-  background-color: rgb(60, 255, 0);
-  color: black;
+  background-color: #a13295;
+  color: white;
   border: none;
   border-radius: 5px;
   transition: background-color 0.3s ease, transform 0.3s ease;
-
 }
-#edit_save:hover{
+#edit_save:hover {
   cursor: pointer;
   transform: scale(1.1);
 }

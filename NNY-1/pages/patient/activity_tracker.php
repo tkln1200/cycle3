@@ -20,7 +20,11 @@
 
   <main class="activity-tracker-main">
     <div class="activity-header">
+<<<<<<< HEAD
       <h2>Activity Tracker</h2>
+=======
+      <h2 style = "padding-left: 20px;">Activity Tracker</h2>
+>>>>>>> 6a8bb12 (final check)
       <button class="view-list-btn" onclick="window.location.href='activity_dashboard.php'">View List</button>
     </div>
 
@@ -73,8 +77,13 @@
         <button class="publish-btn" type="submit">Publish</button>
       </form>
 
+<<<<<<< HEAD
       <div class="side-section">
         <div class="calendar-container">
+=======
+      <!-- <div class="side-section">
+      <div class="calendar-container">
+>>>>>>> 6a8bb12 (final check)
           <div class="calendar-header">
             <button id="prevMonth" onclick="prevMonth()">&lt;</button>
             <h2 id="month-name">September 2024</h2>
@@ -97,7 +106,7 @@
           <h2>Your goal for this week:</h2>
           <p id="weeklyGoalText">
             <?php
-            require_once "patient-dashboard-connect.php";
+            require_once "../../includes/connections.php";
             $sql = "SELECT title FROM GOAL ORDER BY goalId DESC LIMIT 1";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
@@ -109,7 +118,7 @@
             ?>
           </p>
         </div>
-      </div>
+      </div> -->
     </div>
   </main>
 
