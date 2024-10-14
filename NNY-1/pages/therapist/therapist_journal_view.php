@@ -16,7 +16,11 @@
       require_once "../patient/patient_journal_connect.php";
            
            
+<<<<<<< HEAD
       $therapistId = 1; //Testing for therapistId 1 Dr. Lauren Li
+=======
+      $therapistId=$_SESSION['therapist_id'];
+>>>>>>> 125aaa9 (update therapist create note + groups)
 
       //Fetching journals for logged in therapist
       $query = "SELECT j.*, p.fname, p.lname 

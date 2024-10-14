@@ -6,12 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Consultation Dashboard</title>
     <link rel="stylesheet" href="../../assets/css/auditor.css">
+<<<<<<< HEAD
+=======
+    <link rel="stylesheet" href="../../assets/css/shared.css">
+    <link rel="stylesheet" href="../../styles/staff_page.css">
+>>>>>>> 125aaa9 (update therapist create note + groups)
 </head>
 
 <body>
+    <header>
+        <?php
+        include_once("../navigation/auditor_nav.php");
+        ?>
+    </header>
     <div class="dashboard">
         <?php
+<<<<<<< HEAD
         require_once "../patient/patient-dashboard-connect.php";
+=======
+        
+        require_once "../../includes/connections.php";
+>>>>>>> 125aaa9 (update therapist create note + groups)
 
         // Set pagination variables
         $records_per_page = 10;

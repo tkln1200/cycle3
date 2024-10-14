@@ -1,60 +1,75 @@
 <?php
 session_start();
-require_once '../../includes/connections.php';
+include_once '../../includes/connections.php';
+
+// Display errors for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Decode the selected patients JSON string
-    $selected_patients = json_decode($_POST['selected_patients'], true);
-    
-    // Retrieve other POST data
-    $group_name = $_POST['groupName'];
-    $space = $_POST['availableSpace'];
+    // Ensure patientIds and groupName are set and valid
+    if (!empty($_POST['patientIds']) && !empty($_POST['groupName'])) {
+        $patient_ids = explode(',', $_POST['patientIds']);
+        $group_name = mysqli_real_escape_string($conn, $_POST['groupName']);
+        $space = (int)$_POST['availableSpace'];
+        $location = mysqli_real_escape_string($conn, $_POST['location']);
+        $date = mysqli_real_escape_string($conn, $_POST['date']);
+        $sTime = mysqli_real_escape_string($conn, $_POST['sTime']);
+        $eTime = mysqli_real_escape_string($conn, $_POST['eTime']);
+        $therapist_id = $_SESSION['therapist_id'] ?? null;
 
-    $patient_ids = explode(',',$_POST['patientIds']);
-    // Sanitize each patient ID and prepare it for the SQL query
-    $patient_ids = array_map('intval', $patient_ids);
-
-    // Create a comma-separated list of patient IDs for the IN clause
-    $patient_ids_list = implode(',', $patient_ids);
-    echo $patient_ids_list;
-    $query = "SELECT fName FROM patient WHERE id IN ($patient_ids_list)";
-    $result = mysqli_query($conn, $query);
-
-    if ($result) {
-        $patient_names = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $patient_names[] = $row['name'];
+        if (!$therapist_id) {
+            die("Therapist not logged in or session expired.");
         }
-        // Now $patient_names contains the names of the selected patients
-        print_r($patient_names); // Output or further process the names as needed
-    } else {
-        echo "Error: " . mysqli_error($db);
-    }
-    $patient_names_string = implode(', ', $patient_names);
-    $location = $_POST['location'];
-    $date = $_POST['date'];
-    $sTime = $_POST['sTime'];
-    $eTime = $_POST['eTime'];
-    $therapist_id = $_SESSION['therapist_id'];
-    $occupied_space = 0;
-    $group_progression = 0;
-    $pID = $_POST['patientIds'];
 
-    $sql = "INSERT INTO groups (group_name, space, participants, location, date, sTime, eTime, therapist_id, occupied_space, group_progress) VALUES ('$group_name', '$space', '$pID', '$location', '$date', '$sTime', '$eTime', '$therapist_id', '$occupied_space', '$group_progression')";
-    
-    if (mysqli_query($conn, $sql)) {
-        $group_id = mysqli_insert_id($conn);
+        $occupied_space = count($patient_ids);
+        $group_progression = 0;
 
-        foreach ($selected_patients as $patient_id) {
-            $patient_sql = "INSERT INTO group_patients (group_id, patient_id) VALUES ('$group_id', '$patient_id')";
-            if (!mysqli_query($conn, $patient_sql)) { 
-                die("Failed to insert patient association: " . mysqli_error($conn));
+        // Insert the group into the database using prepared statement
+        $sql = "INSERT INTO groups (group_name, space, participants, location, date, sTime, eTime, therapist_id, occupied_space, group_progress)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($conn, $sql);
+        if ($stmt) {
+            $participants = implode(",", $patient_ids);
+            mysqli_stmt_bind_param($stmt, 'sissssssii', $group_name, $space, $participants, $location, $date, $sTime, $eTime, $therapist_id, $occupied_space, $group_progression);
+            mysqli_stmt_execute($stmt);
+
+            // Check if the insertion was successful
+            $group_id = mysqli_insert_id($conn);
+            if ($group_id) {
+                echo "Group ID: $group_id<br>";
+                echo "Patient IDs: " . implode(",", $patient_ids) . "<br>";
+
+                // Insert into group_patients for each patient_id
+                foreach ($patient_ids as $patient_id) {
+                    $patient_id = (int)$patient_id;
+                    $patient_sql = "INSERT INTO group_patients (group_id, patient_id) VALUES (?, ?)";
+                    $patient_stmt = mysqli_prepare($conn, $patient_sql);
+                    if ($patient_stmt) {
+                        mysqli_stmt_bind_param($patient_stmt, 'ii', $group_id, $patient_id);
+                        if (!mysqli_stmt_execute($patient_stmt)) {
+                            echo "Failed to insert patient association for patient ID $patient_id: " . mysqli_error($conn) . "<br>";
+                        }
+                    } else {
+                        echo "Failed to prepare statement for patient association: " . mysqli_error($conn);
+                    }
+                }
+
+                echo "<script>
+                        alert('Group created successfully!');
+                        window.location.href = 'patient_list.php';
+                      </script>";
+                exit();
+            } else {
+                die("Failed to insert the group: " . mysqli_error($conn));
             }
+        } else {
+            die("Failed to prepare SQL statement: " . mysqli_error($conn));
         }
-
-        header("Location:patient_list.php");
     } else {
-        die("Failed to insert the data in groups table: " . mysqli_error($conn));
+        echo "<script>alert('Please ensure all required fields are filled.');</script>";
     }
+} else {
+    echo "Invalid request method.";
 }
-?>
