@@ -5,12 +5,30 @@
     $_SESSION['therapistId'] = $therapistId;
     $patient_id = $_GET['id'];
     $sql_patient  = "SELECT * FROM patient where id = $patient_id";
-    // $sql_patient_details  = "SELECT * FROM patient_details where patient_id = $patient_id";   
+    $sql_groups  = "SELECT 
+                    gp.patient_id,
+                    g.id AS group_id,
+                    g.group_name,
+                    g.space,
+                    g.participants,
+                    g.location,
+                    g.date,
+                    g.sTime,
+                    g.eTime,
+                    g.therapist_id,
+                    g.occupied_space,
+                    g.group_progress
+                FROM 
+                    group_patients gp
+                JOIN 
+                    groups g ON gp.group_id = g.id
+                WHERE 
+                    gp.patient_id = $patient_id";   
     $sql_patient_notes  = "SELECT * FROM notes where patient_id = $patient_id";
     $sql_journals = "SELECT * FROM journal where patientId = $patient_id";
 
     $sql_patient_obj = mysqli_query($conn,$sql_patient) Or die("Failed to query " . mysqli_error($conn));
-    // $sql_patient_details_obj = mysqli_query($conn,$sql_patient_details) Or die("Failed to query " . mysqli_error($conn));
+    $sql_groups_obj = mysqli_query($conn,$sql_groups) Or die("Failed to query " . mysqli_error($conn));
 
     $sql_patient_notes_obj = mysqli_query($conn,$sql_patient_notes) Or die("Failed to query " . mysqli_error($conn));
 
@@ -39,6 +57,11 @@
        {
         $journals = ["Not Available", "Not Available","Not Available","Not Available","Not Available"];
 
+       }
+       //getting group details
+       $groups = [];
+       while ($group_row = mysqli_fetch_assoc($sql_groups_obj)) {
+           $groups[] = $group_row;
        }
     }
     
@@ -96,16 +119,27 @@
                 <!-- <button class="edit-btn">
                   <i class="fas fa-edit"></i>
                 </button> -->
-              <p class="patient-details">Group: <?php echo isset($patient_details['group_no']) ? htmlspecialchars($patient_details['group_no']) : 'Not available'; ?></p>
-              <p class="patient-details">Sessions Completed: <?php echo isset($patient_details['completed_session']) ? htmlspecialchars($patient_details['completed_session']) : 'Not available'; ?></p>
-              <p class="patient-details">Sessions Left: <?php echo isset($patient_details['total_session']) ? htmlspecialchars($patient_details['total_session']-$patient_details['completed_session']) : 'Not available'; ?></p>
-              <p class="patient-details">Personal Progression: <?php echo isset($patient_details['progression']) ? htmlspecialchars($patient_details['progression']) : 'Not available'; ?></p>
+                <?php if (count($groups) > 0): ?>
+                <?php foreach ($groups as $group): ?>
+                    <div class="group-details">
+                        <p class="patient-details">Group Name: <?php echo htmlspecialchars($group['group_name']); ?></p>
+                        <p class="patient-details">Location: <?php echo htmlspecialchars($group['location']); ?></p>
+                        <p class="patient-details">Date: <?php echo htmlspecialchars($group['date']); ?></p>
+                        <p class="patient-details">Start Time: <?php echo htmlspecialchars($group['sTime']); ?></p>
+                        <p class="patient-details">End Time: <?php echo htmlspecialchars($group['eTime']); ?></p>
+                        <p class="patient-details">Occupied Space: <?php echo htmlspecialchars($group['occupied_space']) . '/' . htmlspecialchars($group['space']); ?></p>
+                        <p class="patient-details">Group Progress: <?php echo htmlspecialchars($group['group_progress']) . '%'; ?></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="patient-details">No group information available for this patient.</p>
+            <?php endif; ?>
           </div>
           <div class="notes-container">
             <div class="header-with-btn">
               <h2>Notes</h2>
               <button class="edit-btn" id="notesBtn">
-                 <!-- <i class="fas fa-edit"></i> -->
+                 <i class="fas fa-edit"></i>
                  <a href="patient_note.php?id=<?php echo $patient_id?>"><img src="/assets/images/note-btn.png" alt="Edit Notes" /></a>
 
                 </button>

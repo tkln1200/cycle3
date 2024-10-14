@@ -7,13 +7,18 @@
     <title>Doctor Consultation Dashboard</title>
     <link rel="stylesheet" href="../../assets/css/auditor.css">
     <link rel="stylesheet" href="../../assets/css/shared.css">
-
+    <link rel="stylesheet" href="../../styles/staff_page.css">
 </head>
 
 <body>
+    <header>
+        <?php
+        include_once("../navigation/auditor_nav.php");
+        ?>
+    </header>
     <div class="dashboard">
         <?php
-        include_once("../navigation/straff_nav.php");
+        
         require_once "../../includes/connections.php";
 
         // Set pagination variables

@@ -16,7 +16,7 @@
       require_once "../../includes/connections.php";
            
            
-      $therapistId = 5; 
+      $therapistId=$_SESSION['therapist_id'];
 
       //Fetching journals for logged in therapist
       $query = "SELECT j.*, p.fname, p.lname 

@@ -6,7 +6,7 @@
         </ul>
         <div class="nav-right">
             <div class="profile">
-                <img src="../../assets/images/profile.png" alt="Profile Picture" class="profile-pic">
+                <!-- <img src="../../assets/images/profile.png" alt="Profile Picture" class="profile-pic"> -->
             </div>
         </div>
     </nav>

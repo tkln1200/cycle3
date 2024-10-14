@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "./login_connect.php"; // Update to your actual database connection file
+require_once "../../includes/connections.php"; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $email = $_POST['email'];
