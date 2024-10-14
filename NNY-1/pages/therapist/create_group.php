@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once '../../includes/connections.php';
+require_once '../../includes/connections.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Decode the selected patients JSON string
