@@ -1,5 +1,5 @@
 <?php
-require_once "./patient_db_connect.php";
+require_once "../../includes/connections.php";
 
 header('Content-Type: text/csv');
 header('Content-Disposition: attachment;filename=patients.csv');

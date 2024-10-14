@@ -109,7 +109,7 @@
           <h2>Your goal for this week:</h2>
           <p id="weeklyGoalText">
             <?php
-            require_once "patient-dashboard-connect.php";
+            require_once "../../includes/connections.php";
             $sql = "SELECT title FROM GOAL ORDER BY goalId DESC LIMIT 1";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {

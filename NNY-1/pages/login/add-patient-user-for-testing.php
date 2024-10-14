@@ -1,7 +1,6 @@
 <?php
-require_once "./login_connect.php"; // Replace with your actual database connection file
+require_once "../../includes/connections.php"; 
 
-// Define your data
 $therapistId = 5;
 $email = 'zoe.glasson@gmail.com';
 $title = 'Ms';
@@ -21,7 +20,6 @@ $status = 'Active';
 $profile = NULL;
 $password = 'ZoeGlasson1';
 
-// Hash the password
 $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
 $sql = "INSERT INTO patient (therapistId, title, fName, lName, dob, gender, contactNo, email, streetAddress, postCode, height, weight, startDate, endDate, diagnosis, status, password)
@@ -33,10 +31,8 @@ if ($stmt === false) {
     die("Error preparing the statement: " . $conn->error);
     }
 
-// Bind parameters
 $stmt->bind_param("isssssssssdssssss", $therapistId, $title, $fName, $lName, $dob, $gender, $contactNo, $email, $streetAddress, $postCode, $height, $weight, $startDate, $endDate, $diagnosis, $status, $hashed_password);
 
-// Execute the statement
 if ($stmt->execute()) {
     echo "Patient record added successfully!";
 } else {
